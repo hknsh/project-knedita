@@ -1,0 +1,6 @@
+.git
+node_modules
+.env
+prisma/*.db
+.DS_Store
+prisma/migrations/dev

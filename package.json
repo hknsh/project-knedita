@@ -1,0 +1,46 @@
+{
+  "name": "social-media-app",
+  "version": "0.0.1",
+  "description": "A social media",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "dev:start": "nodemon src/server.js",
+    "docker": "docker compose up -d",
+    "docker:build": "docker build -t api . && docker compose up -d",
+    "docker:db": "docker compose -f docker-compose.db.yml up -d",
+    "docker:seed": "docker exec -it api npm run prisma:seed",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:dev:create": "prisma migrate dev --create-only",
+    "migrate:reset": "prisma migrate reset",
+    "prisma:generate": "npx prisma generate",
+    "prisma:seed": "prisma db seed",
+    "prisma:studio": "npx prisma studio",
+    "prod:start": "pm2-runtime start src/server.js",
+    "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js"
+  },
+  "standard": {
+    "ignore": [
+      "/src/tests/*.spec.js"
+    ]
+  },
+  "author": "Cookie",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "nodemon": "^2.0.22",
+    "pm2": "^5.3.0",
+    "prisma": "^4.16.0",
+    "standard": "^17.1.0",
+    "supertest": "^6.3.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.16.0",
+    "bcrypt": "^5.1.0",
+    "compression": "^1.7.4",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "validator": "^13.9.0"
+  }
+}
