@@ -1,6 +1,6 @@
 import request from 'supertest'
-import prisma from '../../prisma/client.js'
-import app from '../app.js'
+import prisma from '../../../prisma/client'
+import app from '../../app'
 
 describe('POST /user/auth', () => {
   beforeAll(async () => {

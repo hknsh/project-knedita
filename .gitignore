@@ -4,3 +4,5 @@ node_modules
 prisma/*.db
 .DS_Store
 prisma/migrations/dev
+client
+dist

@@ -1,11 +1,9 @@
-import prisma from '../../prisma/client.js'
+import prisma from '../../../prisma/client'
 
-async function userInfoService (req) {
-  const userId = req.user.id
-
+async function userInfoService (id: string): Promise<Object> {
   const user = await prisma.user.findFirst({
     where: {
-      id: userId
+      id
     },
     select: {
       id: true,
@@ -14,6 +12,10 @@ async function userInfoService (req) {
       createdAt: true
     }
   })
+
+  if (user === null) {
+    return new Error('User not found')
+  }
 
   return user
 }

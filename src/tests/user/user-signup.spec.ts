@@ -1,6 +1,6 @@
 import request from 'supertest'
-import prisma from '../../prisma/client.js'
-import app from '../app.js'
+import prisma from '../../../prisma/client'
+import app from '../../app'
 
 const mockUser = {
   username: 'username11',
@@ -12,7 +12,7 @@ describe('POST /user/create', () => {
   it('should respond with a 200 status code', async () => {
     const response = await request(app).post('/user/create').send(mockUser).expect(200)
 
-    expect(response.body).toHaveProperty('id')
+    expect(response.body).toHaveProperty('displayName')
     expect(response.body).toHaveProperty('username')
     expect(response.body).toHaveProperty('createdAt')
   })
