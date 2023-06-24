@@ -1,4 +1,4 @@
-import prisma from '../../../prisma/client'
+import prisma from '../../db'
 
 async function userInfoService (id: string): Promise<Object> {
   const user = await prisma.user.findFirst({

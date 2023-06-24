@@ -6,3 +6,4 @@ prisma/*.db
 prisma/migrations/dev
 client
 dist
+pnpm-lock.yaml

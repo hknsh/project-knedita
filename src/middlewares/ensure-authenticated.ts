@@ -1,5 +1,5 @@
 import { verify } from 'jsonwebtoken'
-import prisma from '../../prisma/client'
+import prisma from '../db'
 import { Response, Request, NextFunction } from 'express'
 import jwtPayload from '../interfaces/jwt'
 

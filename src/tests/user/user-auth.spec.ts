@@ -1,12 +1,12 @@
 import request from 'supertest'
-import prisma from '../../../prisma/client'
+import prisma from '../../db'
 import app from '../../app'
 
 describe('POST /user/auth', () => {
   beforeAll(async () => {
     await prisma.user.create({
       data: {
-        username: 'test',
+        username: 'dummmyuser6',
         email: 'test@test.com',
         password: 'pass'
       }
@@ -16,7 +16,7 @@ describe('POST /user/auth', () => {
   afterAll(async () => {
     await prisma.user.deleteMany({
       where: {
-        username: 'test'
+        username: 'dummmyuser6'
       }
     })
     await prisma.$disconnect()

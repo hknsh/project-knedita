@@ -1,9 +1,9 @@
 import request from 'supertest'
-import prisma from '../../../prisma/client'
+import prisma from '../../db'
 import app from '../../app'
 
 const mockUser = {
-  username: 'username11',
+  username: 'dummmyuser1',
   email: 'random@email.com',
   password: 'totallysafepass'
 }
@@ -28,14 +28,14 @@ describe('POST /user/create', () => {
   it('should respond with a 400 status code for an existing username', async () => {
     await prisma.user.create({
       data: {
-        username: 'username12',
+        username: 'dummmyuser2',
         email: 'user@email.com',
         password: 'reallystrongpass'
       }
     })
 
     const response = await request(app).post('/user/create').send({
-      username: 'username12',
+      username: 'dummmyuser2',
       email: 'user1@email.com',
       password: 'reallystrongpass'
     }).expect(400)
@@ -46,14 +46,14 @@ describe('POST /user/create', () => {
   it('should respond with a 400 status code for an existing email', async () => {
     await prisma.user.create({
       data: {
-        username: 'username13',
+        username: 'dummmyuser3',
         email: 'user13@email.com',
         password: '1234'
       }
     })
 
     const response = await request(app).post('/user/create').send({
-      username: 'heythatscool',
+      username: 'dummmyuser4',
       email: 'user13@email.com',
       password: '12345'
     }).expect(400)
@@ -69,7 +69,7 @@ describe('POST /user/create', () => {
 })
 
 afterAll(async () => {
-  const usersToDelete = ['username11', 'username12', 'username13']
+  const usersToDelete = ['dummmyuser1', 'dummmyuser2', 'dummmyuser3', 'dummmyuser4']
 
   await prisma.user.deleteMany({
     where: {

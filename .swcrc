@@ -1,0 +1,21 @@
+{
+    "jsc": {
+        "parser": {
+            "syntax": "typescript",
+            "tsx": false,
+            "decorators": true,
+            "dynamicImport": true
+        },
+        "target": "es2020",
+        "baseUrl": "./"
+    },
+    "exclude": [
+        "tests/",
+        "@types/",
+        "interfaces/"
+    ],
+    "module": {
+        "type": "commonjs"
+    },
+    "minify": true
+}

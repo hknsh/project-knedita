@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt'
 import validator from 'validator'
-import prisma from '../../../prisma/client'
+import prisma from '../../db'
 
 async function userSignupService (username: string, email: string, password: string): Promise<Object | Error> {
   if (username === undefined || email === undefined || password === undefined) {

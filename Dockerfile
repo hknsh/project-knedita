@@ -1,4 +1,4 @@
-FROM node:16 as builder
+FROM node:18 as builder
 
 # Create app dir
 WORKDIR /app
@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma/
 
-RUN npm install pm2 -g
+RUN npm install -D @swc/cli @swc/core
 RUN npm install
 
 COPY . .
@@ -14,9 +14,11 @@ COPY . .
 RUN npm run build
 
 # Stage 2
-FROM node:16
+FROM node:18
 
 WORKDIR /app
+
+RUN npm i pm2 -g
 
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/prisma ./prisma/
