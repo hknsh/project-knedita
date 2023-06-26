@@ -28,7 +28,7 @@ async function userSignupService (username: string, email: string, password: str
 
   const user = await prisma.user.create({
     data: {
-      username,
+      username: username.toLowerCase(),
       email,
       password: hashedPassword
     },

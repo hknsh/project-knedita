@@ -2,24 +2,7 @@ import prisma from '../../db'
 import app from '../../app'
 import request from 'supertest'
 
-let token = ''
-
 describe('POST /user/info', () => {
-  beforeAll(async () => {
-    await request(app).post('/user/create').send({
-      username: 'dummmyuser5',
-      email: 'random3@email.com',
-      password: 'pass'
-    })
-
-    const response = await request(app).post('/user/auth').send({
-      email: 'random3@email.com',
-      password: 'pass'
-    }).expect(200)
-
-    token = response.body.token
-  })
-
   afterAll(async () => {
     await prisma.user.deleteMany({
       where: {
@@ -30,16 +13,24 @@ describe('POST /user/info', () => {
   })
 
   it('should respond with 200 status code and return the user data', async () => {
-    const response = await request(app).get('/user/info').set('Authorization', `Bearer ${token}`).expect(200)
+    await prisma.user.create({
+      data: {
+        username: 'dummmyuser5',
+        email: 'random3@email.com',
+        password: 'pass'
+      }
+    })
 
-    expect(response.body).toHaveProperty('id')
+    const response = await request(app).get('/user/info?u=dummmyuser5').expect(200)
+
     expect(response.body).toHaveProperty('displayName')
     expect(response.body).toHaveProperty('username')
     expect(response.body).toHaveProperty('createdAt')
+    expect(response.body).toHaveProperty('posts')
   })
 
-  it('should respond with 400 status code if the user send no token', async () => {
-    const response = await request(app).get('/user/info').expect(401)
+  it('should respond with 400 status code if the user send no username', async () => {
+    const response = await request(app).get('/user/info?u=').expect(400)
 
     expect(response.body).toHaveProperty('error')
   })

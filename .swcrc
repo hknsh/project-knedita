@@ -10,7 +10,6 @@
         "baseUrl": "./"
     },
     "exclude": [
-        "tests/",
         "@types/",
         "interfaces/"
     ],

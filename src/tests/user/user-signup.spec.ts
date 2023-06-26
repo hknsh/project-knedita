@@ -8,9 +8,9 @@ const mockUser = {
   password: 'totallysafepass'
 }
 
-describe('POST /user/create', () => {
+describe('POST /user/signup', () => {
   it('should respond with a 200 status code', async () => {
-    const response = await request(app).post('/user/create').send(mockUser).expect(200)
+    const response = await request(app).post('/user/signup').send(mockUser).expect(200)
 
     expect(response.body).toHaveProperty('displayName')
     expect(response.body).toHaveProperty('username')
@@ -18,7 +18,7 @@ describe('POST /user/create', () => {
   })
 
   it('should respond with a 400 status code if sent any invalid data', async () => {
-    await request(app).post('/user/create').send({
+    await request(app).post('/user/signup').send({
       username: 'username12@',
       email: mockUser.email,
       password: mockUser.password
@@ -34,7 +34,7 @@ describe('POST /user/create', () => {
       }
     })
 
-    const response = await request(app).post('/user/create').send({
+    const response = await request(app).post('/user/signup').send({
       username: 'dummmyuser2',
       email: 'user1@email.com',
       password: 'reallystrongpass'
@@ -52,7 +52,7 @@ describe('POST /user/create', () => {
       }
     })
 
-    const response = await request(app).post('/user/create').send({
+    const response = await request(app).post('/user/signup').send({
       username: 'dummmyuser4',
       email: 'user13@email.com',
       password: '12345'
@@ -62,7 +62,7 @@ describe('POST /user/create', () => {
   })
 
   it('should respond with a 400 status code if receive an empty body', async () => {
-    const response = await request(app).post('/user/create').send({}).expect(400)
+    const response = await request(app).post('/user/signup').send({}).expect(400)
 
     expect(response.body).toHaveProperty('error')
   })

@@ -1,15 +1,22 @@
 import prisma from '../../db'
 
-async function userInfoService (id: string): Promise<Object> {
+async function userInfoService (username: string): Promise<Object> {
   const user = await prisma.user.findFirst({
     where: {
-      id
+      username
     },
     select: {
-      id: true,
       displayName: true,
       username: true,
-      createdAt: true
+      createdAt: true,
+      posts: {
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+          updatedAt: true
+        }
+      }
     }
   })
 

@@ -1,10 +1,10 @@
-import userAuthService from '../../services/user/user-auth'
+import { users } from '../../services/index'
 import type { Request, Response } from 'express'
 
 async function userAuthController (req: Request, res: Response): Promise<void> {
   const { email, password } = req.body
 
-  const result = await userAuthService(email, password)
+  const result = await users.userAuth(email, password)
 
   if (result instanceof Error) {
     res.status(400).json({

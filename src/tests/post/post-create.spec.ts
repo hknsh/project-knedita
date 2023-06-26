@@ -6,7 +6,7 @@ let token = ''
 
 describe('POST /post/create', () => {
   beforeAll(async () => {
-    await request(app).post('/user/create').send({
+    await request(app).post('/user/signup').send({
       username: 'dummmyuser7',
       email: 'random1@email.com',
       password: 'pass'

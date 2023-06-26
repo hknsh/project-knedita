@@ -1,6 +1,6 @@
 import prisma from '../../db'
 
-async function createPostService (content: string, authorId: string): Promise<Object | Error> {
+async function postCreateService (content: string, authorId: string): Promise<Object | Error> {
   const user = await prisma.user.findFirst({ where: { id: authorId } })
 
   if (user === null) {
@@ -17,4 +17,4 @@ async function createPostService (content: string, authorId: string): Promise<Ob
   return post
 }
 
-export default createPostService
+export default postCreateService

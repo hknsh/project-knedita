@@ -1,10 +1,17 @@
-import userInfoService from '../../services/user/user-info'
+import { users } from '../../services'
 import type { Request, Response } from 'express'
 
 async function userInfoController (req: Request, res: Response): Promise<void> {
-  const id = req.user?.id ?? ''
+  const username = req.query.u as string
 
-  const result = await userInfoService(id)
+  if (username === undefined) {
+    res.status(400).json({
+      error: 'Missing username'
+    })
+    return
+  }
+
+  const result = await users.userInfo(username.toLowerCase())
 
   if (result instanceof Error) {
     res.status(400).json({
