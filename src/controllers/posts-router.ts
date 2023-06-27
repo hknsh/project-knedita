@@ -17,6 +17,6 @@ const postsRouter = Router()
 postsRouter.post('/create', ensureAuthenticated, postCreateController)
 postsRouter.post('/delete', ensureAuthenticated, postDeleteController)
 postsRouter.get('/info', postInfoController)
-postsRouter.put('/update', postUpdateController)
+postsRouter.put('/update', ensureAuthenticated, postUpdateController)
 
 export default postsRouter

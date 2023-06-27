@@ -10,20 +10,20 @@ import postInfoService from './posts/post-info'
 import postUpdateService from './posts/post-update'
 
 // User services
-const users = {
-  userAuth: userAuthService,
-  userDelete: userDeleteService,
-  userInfo: userInfoService,
-  userSignup: userSignupService,
-  userUpdate: userUpdateService
+const user = {
+  auth: userAuthService,
+  delete: userDeleteService,
+  info: userInfoService,
+  signup: userSignupService,
+  update: userUpdateService
 }
 
 // Post services
-const posts = {
-  postCreate: postCreateService,
-  postDelete: postDeleteService,
-  postInfo: postInfoService,
-  postUpdate: postUpdateService
+const post = {
+  create: postCreateService,
+  delete: postDeleteService,
+  info: postInfoService,
+  update: postUpdateService
 }
 
-export { users, posts }
+export { user, post }

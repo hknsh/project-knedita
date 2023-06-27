@@ -3,8 +3,6 @@ import prisma from '../../db'
 async function postDeleteService (postId: string, userId: string): Promise<Object | Error> {
   const post = await prisma.post.findFirst({ where: { id: postId } })
 
-  console.log(postId, userId)
-
   if (post === null) {
     return new Error('Post not found')
   }

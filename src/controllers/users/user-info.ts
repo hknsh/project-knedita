@@ -1,4 +1,4 @@
-import { users } from '../../services'
+import { user } from '../../services'
 import type { Request, Response } from 'express'
 
 async function userInfoController (req: Request, res: Response): Promise<void> {
@@ -11,7 +11,7 @@ async function userInfoController (req: Request, res: Response): Promise<void> {
     return
   }
 
-  const result = await users.userInfo(username.toLowerCase())
+  const result = await user.info(username.toLowerCase())
 
   if (result instanceof Error) {
     res.status(400).json({

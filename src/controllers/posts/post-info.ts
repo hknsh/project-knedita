@@ -1,4 +1,4 @@
-import { posts } from '../../services/index'
+import { post } from '../../services/index'
 import { Request, Response } from 'express'
 
 async function postInfoController (req: Request, res: Response): Promise<void> {
@@ -11,7 +11,7 @@ async function postInfoController (req: Request, res: Response): Promise<void> {
     return
   }
 
-  const result = await posts.postInfo(id)
+  const result = await post.info(id)
 
   if (result instanceof Error) {
     res.status(400).json({

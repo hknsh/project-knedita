@@ -1,23 +1,16 @@
 import prisma from '../../db'
 import app from '../../app'
 import request from 'supertest'
+import signUpNewUser from '../utils/create-user'
 
-let token = ''
+let token = ''; let username = ''
 
 describe('POST /post/create', () => {
   beforeAll(async () => {
-    await request(app).post('/user/signup').send({
-      username: 'dummmyuser7',
-      email: 'random1@email.com',
-      password: 'pass'
-    })
+    const user = await signUpNewUser()
 
-    const response = await request(app).post('/user/auth').send({
-      email: 'random1@email.com',
-      password: 'pass'
-    }).expect(200)
-
-    token = response.body.token
+    token = user.token ?? ''
+    username = user.username ?? ''
   })
 
   afterAll(async () => {
@@ -29,7 +22,7 @@ describe('POST /post/create', () => {
 
     await prisma.user.deleteMany({
       where: {
-        username: 'dummmyuser7'
+        username
       }
     })
     await prisma.$disconnect()

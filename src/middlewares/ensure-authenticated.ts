@@ -49,7 +49,7 @@ async function ensureAuthenticated (req: Request, res: Response, next: NextFunct
     return next()
   } catch (error) {
     res.status(401).json({
-      error: (error as Error).message
+      error: `JWT Error: ${(error as Error).message}`
     })
   }
 }
