@@ -22,7 +22,6 @@ A simple social media created with React Native and Express.
 ## Known problems
 
 - Tests taking too long
-- Some tests will give error 401, for now just try until it works
 
 ## License
 

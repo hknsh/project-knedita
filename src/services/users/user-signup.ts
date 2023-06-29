@@ -7,8 +7,8 @@ async function userSignupService (username: string, email: string, password: str
     return new Error('Missing fields')
   }
 
-  if (!/^[a-zA-Z0-9_]{5,15}$/.test(username)) {
-    return new Error('Username not allowed. Only alphanumerics characters (uppercase and lowercase words), underscore and it must be between 5 and 15 characters')
+  if (!/^[a-zA-Z0-9_.]{5,15}$/.test(username)) {
+    return new Error('Username not allowed. Only alphanumerics characters (uppercase and lowercase words), underscore, dot and it must be between 5 and 15 characters')
   }
 
   if (!validator.isEmail(email)) {

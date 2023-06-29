@@ -8,7 +8,6 @@ let token = ''
 describe('DELETE /user/delete', () => {
   beforeAll(async () => {
     const user = await signUpNewUser()
-    console.log(user)
     token = user.token ?? ''
   })
 

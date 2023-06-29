@@ -5,8 +5,8 @@ import userPayload from '../../interfaces/user'
 
 async function signUpNewUser (): Promise<userPayload> {
   // To avoid conflicts with existing usernames or emails
-  const username = faker.internet.userName().toLowerCase()
-  const email = faker.internet.email().toLowerCase()
+  const username = faker.internet.userName({ lastName: 'doe' }).toLowerCase()
+  const email = faker.internet.email()
   const password = faker.internet.password()
 
   await request(app).post('/user/signup').send({
