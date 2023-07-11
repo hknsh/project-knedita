@@ -16,7 +16,9 @@ describe('POST /post/create', () => {
   afterAll(async () => {
     await prisma.post.deleteMany({
       where: {
-        content: '4764ba063310b6f8bab31e8348b2188a'
+        author: {
+          username
+        }
       }
     })
 
@@ -33,11 +35,13 @@ describe('POST /post/create', () => {
       content: '4764ba063310b6f8bab31e8348b2188a'
     }).set('Authorization', `Bearer ${token}`).expect(200)
 
-    expect(response.body).toHaveProperty('id')
-    expect(response.body).toHaveProperty('content')
-    expect(response.body).toHaveProperty('authorId')
-    expect(response.body).toHaveProperty('createdAt')
-    expect(response.body).toHaveProperty('updatedAt')
+    expect(response.body).toEqual(expect.objectContaining({
+      id: expect.any(String),
+      content: expect.any(String),
+      authorId: expect.any(String),
+      createdAt: expect.any(String),
+      updatedAt: expect.any(String)
+    }))
   })
 
   it('should respond with 400 status code if the user send no token', async () => {

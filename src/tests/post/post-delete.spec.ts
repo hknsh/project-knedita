@@ -1,19 +1,41 @@
 import prisma from '../../db'
 import app from '../../app'
 import request from 'supertest'
+import signUpNewUser from '../utils/create-user'
 
-// Post id at the body
-// User token at the header
-
-// Create new post
-// Create new user
-// Auth the user
-// Create the post with the token
-// Send the request with the post id and the token
-// Should delete the post successfully
+let token = ''; let username = ''
 
 describe('DELETE /post/delete', () => {
+  beforeAll(async () => {
+    const user = await signUpNewUser()
+
+    token = user.token ?? ''
+    username = user.username ?? ''
+  })
+
+  afterAll(async () => {
+    await prisma.user.deleteMany({
+      where: {
+        username
+      }
+    })
+
+    await prisma.$disconnect()
+  })
+
   it('should delete the post successfully', async () => {
-    expect(1 + 1).toBe(2)
+    const response = await request(app)
+      .post('/post/create')
+      .send({
+        content: 'lorem ipsum'
+      })
+      .set('Authorization', `Bearer ${token}`).expect(200)
+
+    await request(app)
+      .post('/post/delete')
+      .send({
+        postId: response.body.id
+      })
+      .set('Authorization', `Bearer ${token}`).expect(200)
   })
 })

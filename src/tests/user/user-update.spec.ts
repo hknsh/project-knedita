@@ -9,8 +9,8 @@ describe('PUT /user/update', () => {
   beforeAll(async () => {
     const user = await signUpNewUser()
 
-    username = user.username
-    token = user.token
+    username = user.username ?? ''
+    token = user.token ?? ''
   })
 
   afterAll(async () => {
@@ -33,8 +33,10 @@ describe('PUT /user/update', () => {
       .send(fieldsToUpdate)
       .set('Authorization', `Bearer ${token}`).expect(200)
 
-    expect(response.body).toHaveProperty('displayName')
-    expect(response.body).toHaveProperty('username')
-    expect(response.body).toHaveProperty('createdAt')
+    expect(response.body).toEqual(expect.objectContaining({
+      displayName: expect.any(String),
+      username: expect.any(String),
+      createdAt: expect.any(String)
+    }))
   })
 })
