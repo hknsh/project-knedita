@@ -11,13 +11,14 @@ import userUpdateController from './users/user-update'
 
 // Middlewares
 import ensureAuthenticated from '../middlewares/ensure-authenticated'
+import limiter from '../middlewares/rate-limit'
 
 const usersRouter = Router()
 
 // Users related
 usersRouter.post('/auth', userAuthController)
 usersRouter.post('/delete', ensureAuthenticated, userDeleteController)
-usersRouter.get('/info', userInfoController)
+usersRouter.get('/info', limiter, userInfoController)
 usersRouter.post('/signup', userSignupController)
 usersRouter.put('/update', ensureAuthenticated, userUpdateController)
 

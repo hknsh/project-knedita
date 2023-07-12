@@ -17,7 +17,7 @@ async function userAuthService (email: string, password: string): Promise<Object
     return new Error('Missing fields')
   }
 
-  const validPassword = await bcrypt.compare(password, user.password)
+  const validPassword = await bcrypt.compare(password.replace(/ /g, ''), user.password)
 
   if (!validPassword) {
     return new Error('Invalid email or password')

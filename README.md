@@ -7,7 +7,7 @@ An open-source social media.
 
 **Client**: React, TailwindCSS and Radix UI (Primitives and Icons)
 
-**Server**: ExpressJS, Jest, Docker, Postgresql, Prisma, Localstack, SWC and Typescript
+**Server**: ExpressJS, Jest, Docker, Postgresql, Redis, Prisma, Localstack, SWC and Typescript
 
 ## To-do - Backend
 
@@ -21,9 +21,9 @@ An open-source social media.
 - Like posts
 - Probably pinned posts
 - Authentication ✅
-  - Add more verification (like, if the password is too short)
+  - Add more verification (like, if the password is too short) ✅
 - Set display name ✅
-- Add rate limit
+- Add rate limit ✅
 
 ## Known problems
 
