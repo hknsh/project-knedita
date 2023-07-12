@@ -1,7 +1,13 @@
 
-# Social Media - Unnamed
+# Project Knedita
 
-A simple social media created with React Native and Express.
+An open-source social media.
+
+## Stack
+
+**Client**: React, TailwindCSS and Radix UI (Primitives and Icons)
+
+**Server**: ExpressJS, Jest, Docker, Postgresql, Prisma, Localstack, SWC and Typescript
 
 ## To-do - Backend
 
