@@ -7,7 +7,7 @@ An open-source social media.
 
 **Client**: React, TailwindCSS and Radix UI (Primitives and Icons)
 
-**Server**: ExpressJS, Jest, Docker, Postgresql, Redis, Prisma, Localstack, SWC and Typescript
+**Server**: ExpressJS, Jest, Docker, Postgresql, Redis, Prisma, AWS, SWC and Typescript
 
 ## To-do - Backend
 
