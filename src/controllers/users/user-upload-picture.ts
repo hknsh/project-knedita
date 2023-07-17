@@ -1,4 +1,4 @@
-import userUploadPictureService from '../../services/users/upload-picture'
+import userUploadPictureService from '../../services/users/user-upload-picture'
 import { Request, Response } from 'express'
 import { badRequest } from '../../lib/http-errors'
 
