@@ -1,5 +1,10 @@
 version: '3.8'
 
+networks:
+  localstack-net:
+    name: localstack-net
+    driver: bridge
+
 services:
   api:
     container_name: api
@@ -12,6 +17,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - localstack
     env_file:
       - .env
 
@@ -25,6 +31,21 @@ services:
       - .env
     volumes:
       - postgres:/var/lib/postgresql/data
+  
+  localstack:
+    image: localstack/localstack
+    container_name: localstack_main
+    restart: unless-stopped
+    networks:
+      - localstack-net
+    ports:
+      - 4566:4566
+      - 4572:4572
+    env_file:
+      - .env
+    volumes:
+      - localstack:/data
+      - "/var/run/docker.sock:/var/run/docker.sock"
 
   redis:
     image: redis:alpine
@@ -41,3 +62,4 @@ volumes:
     name: backend-db
   redis:
     driver: local
+  localstack:

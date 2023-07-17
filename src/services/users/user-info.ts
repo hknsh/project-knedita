@@ -6,6 +6,7 @@ async function userInfoService (username: string): Promise<Object> {
       username
     },
     select: {
+      profileImage: true,
       displayName: true,
       username: true,
       createdAt: true,

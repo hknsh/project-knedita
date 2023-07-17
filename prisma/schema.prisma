@@ -11,13 +11,14 @@ datasource db {
 }
 
 model User {
-  id            String  @id  @default(uuid())
-  displayName   String?
-  username      String  @unique
-  email         String  @unique
-  password      String
-  posts         Post[]
-  createdAt     DateTime     @default(now())
+  id              String  @id  @default(uuid())
+  displayName     String?
+  username        String  @unique
+  email           String  @unique
+  password        String
+  posts           Post[]
+  profileImage    String?
+  createdAt       DateTime     @default(now())
 }
 
 model Post {
