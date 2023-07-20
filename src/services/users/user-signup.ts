@@ -1,8 +1,8 @@
 import * as bcrypt from 'bcrypt'
 import validator from 'validator'
-import prisma from '../../db'
+import prisma from '../../clients/prisma-client'
 
-const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/
+const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*_])[a-zA-Z0-9!@#$%^&*_]{8,}$/
 const usernameRegex = /^[a-zA-Z0-9_.]{5,15}$/
 
 async function userSignupService (username: string, email: string, password: string): Promise<Object | Error> {
@@ -11,7 +11,7 @@ async function userSignupService (username: string, email: string, password: str
   }
 
   if (!passwordRegex.test(password)) {
-    return new Error('Password must have 8 characters, one number and one special character.')
+    return new Error('Password must have at least 8 characters, one number and one special character.')
   }
 
   if (password.trim().length < 8) {

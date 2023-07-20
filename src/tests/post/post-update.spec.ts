@@ -1,40 +1,24 @@
-import prisma from '../../db'
 import app from '../../app'
 import request from 'supertest'
 import signUpNewUser from '../utils/create-user'
+import deleteUser from '../utils/delete-user'
+import userPayload from '../../interfaces/user'
 
-let token = ''; let username = ''
+let user: userPayload
 
 describe('PUT /post/update', () => {
   beforeAll(async () => {
-    const user = await signUpNewUser()
-
-    username = user.username ?? ''
-    token = user.token ?? ''
+    user = await signUpNewUser()
   })
 
   afterAll(async () => {
-    await prisma.post.deleteMany({
-      where: {
-        author: {
-          username
-        }
-      }
-    })
-
-    await prisma.user.deleteMany({
-      where: {
-        username
-      }
-    })
-
-    await prisma.$disconnect()
+    await deleteUser(user.username ?? '')
   })
 
   it('should create a new post and update the content of it', async () => {
     const post = await request(app).post('/post/create').send({
       content: 'Lorem'
-    }).set('Authorization', `Bearer ${token}`).expect(200)
+    }).set('Authorization', `Bearer ${user.token ?? ''}`).expect(200)
 
     expect(post.body).toHaveProperty('id')
 
@@ -46,7 +30,7 @@ describe('PUT /post/update', () => {
     const response = await request(app)
       .put('/post/update')
       .send(fieldsToUpdate)
-      .set('Authorization', `Bearer ${token}`).expect(200)
+      .set('Authorization', `Bearer ${user.token ?? ''}`).expect(200)
 
     // Post content should be Lorem Ipsum
     if (post.body.content === response.body.content) {

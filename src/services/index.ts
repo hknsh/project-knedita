@@ -3,6 +3,7 @@ import userDeleteService from './users/user-delete'
 import userInfoService from './users/user-info'
 import userSignupService from './users/user-signup'
 import userUpdateService from './users/user-update'
+import userUploadPictureService from './users/user-upload-picture'
 
 import postCreateService from './posts/post-create'
 import postDeleteService from './posts/post-delete'
@@ -15,7 +16,8 @@ const user = {
   delete: userDeleteService,
   info: userInfoService,
   signup: userSignupService,
-  update: userUpdateService
+  update: userUpdateService,
+  uploadPicture: userUploadPictureService
 }
 
 // Post services

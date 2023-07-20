@@ -1,5 +1,6 @@
 import { user } from '../../services'
-import { Request, Response } from 'express'
+import type { Request, Response } from 'express'
+import { badRequest } from '../../lib/http-errors'
 
 async function userUpdateController (req: Request, res: Response): Promise<void> {
   const { email, displayName, username } = req.body
@@ -8,10 +9,7 @@ async function userUpdateController (req: Request, res: Response): Promise<void>
   const result = await user.update({ id, email, displayName, username })
 
   if (result instanceof Error) {
-    res.status(400).json({
-      error: result.message
-    })
-    return
+    return badRequest(res, result.message)
   }
 
   res.json(result)

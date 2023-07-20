@@ -1,7 +1,7 @@
 import multer from 'multer'
 import { Request } from 'express'
 import path from 'path'
-import s3 from './clients/s3-client'
+import s3 from '../clients/s3-client'
 import multerS3 from 'multer-s3'
 
 const tempFolder = path.resolve(__dirname, '..', '..', 'temp', 'uploads')

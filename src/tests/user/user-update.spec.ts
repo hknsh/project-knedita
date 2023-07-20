@@ -1,26 +1,18 @@
 import request from 'supertest'
 import app from '../../app'
-import prisma from '../../db'
 import signUpNewUser from '../utils/create-user'
+import deleteUser from '../utils/delete-user'
+import userPayload from '../../interfaces/user'
 
-let token = ''; let username = ''
+let user: userPayload
 
 describe('PUT /user/update', () => {
   beforeAll(async () => {
-    const user = await signUpNewUser()
-
-    username = user.username ?? ''
-    token = user.token ?? ''
+    user = await signUpNewUser()
   })
 
   afterAll(async () => {
-    await prisma.user.deleteMany({
-      where: {
-        username
-      }
-    })
-
-    await prisma.$disconnect()
+    await deleteUser(user.username ?? '')
   })
 
   it('should update the user successfully', async () => {
@@ -31,7 +23,7 @@ describe('PUT /user/update', () => {
     const response = await request(app)
       .put('/user/update')
       .send(fieldsToUpdate)
-      .set('Authorization', `Bearer ${token}`).expect(200)
+      .set('Authorization', `Bearer ${user.token ?? ''}`).expect(200)
 
     expect(response.body).toEqual(expect.objectContaining({
       displayName: expect.any(String),

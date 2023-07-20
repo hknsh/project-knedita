@@ -1,50 +1,37 @@
 import request from 'supertest'
-import prisma from '../../db'
 import app from '../../app'
+import deleteUser from '../utils/delete-user'
+import signUpNewUser from '../utils/create-user'
+import userPayload from '../../interfaces/user'
+
+let user: userPayload
 
 describe('POST /user/auth', () => {
   beforeAll(async () => {
-    await prisma.user.create({
-      data: {
-        username: 'dummmyuser6',
-        email: 'test@test.com',
-        password: 'pass'
-      }
-    })
+    user = await signUpNewUser()
   })
 
   afterAll(async () => {
-    await prisma.user.deleteMany({
-      where: {
-        username: 'dummmyuser6'
-      }
-    })
-    await prisma.$disconnect()
+    await deleteUser(user.username ?? '')
   })
 
   it('should respond with a error if the user does not exists', async () => {
-    const response = await request(app)
-      .post('/user/auth')
-      .send({
-        email: 'mm@mm.com',
-        password: 'aa'
-      }).expect(400)
+    const response = await request(app).post('/user/auth').send({ email: 'mm@mm.com', password: 'aa' }).expect(400)
+
     expect(response.body).toHaveProperty('error')
     expect(response.body.error).toBe('User does not exists')
   })
 
   it('should respond with a error if receive an invalid email or password', async () => {
-    const response = await request(app)
-      .post('/user/auth').send({
-        email: 'test@test.com',
-        password: 'haha'
-      }).expect(400)
+    const response = await request(app).post('/user/auth').send({ email: user.email, password: 'fake_pass' }).expect(400)
+
     expect(response.body).toHaveProperty('error')
     expect(response.body.error).toBe('Invalid email or password')
   })
 
   it('should respond with a error if receive an empty body', async () => {
     const response = await request(app).post('/user/auth').send({}).expect(400)
+
     expect(response.body).toHaveProperty('error')
     expect(response.body.error).toBe('Missing fields')
   })

@@ -1,4 +1,4 @@
-import prisma from '../../db'
+import prisma from '../../clients/prisma-client'
 
 async function postUpdateService (postId: string, content: string, userId: string): Promise<Object | Error> {
   const post = await prisma.post.findFirst({ where: { id: postId } })

@@ -1,23 +1,18 @@
 import { user } from '../../services'
 import type { Request, Response } from 'express'
+import { badRequest } from '../../lib/http-errors'
 
 async function userInfoController (req: Request, res: Response): Promise<void> {
   const username = req.query.u as string
 
   if (username === undefined) {
-    res.status(400).json({
-      error: 'Missing username'
-    })
-    return
+    return badRequest(res, 'Missing username')
   }
 
   const result = await user.info(username.toLowerCase())
 
   if (result instanceof Error) {
-    res.status(400).json({
-      error: result.message
-    })
-    return
+    return badRequest(res, result.message)
   }
 
   res.json(result)

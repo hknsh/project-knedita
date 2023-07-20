@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as express from 'express'
 import jwtPayload from '../interfaces/jwt'
 

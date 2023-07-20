@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt'
 import jsonwebtoken from 'jsonwebtoken'
-import prisma from '../../db'
+import prisma from '../../clients/prisma-client'
 
 async function userAuthService (email: string, password: string): Promise<Object | Error> {
   const user = await prisma.user.findFirst({

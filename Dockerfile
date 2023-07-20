@@ -26,6 +26,8 @@ COPY --from=builder /app/dist ./dist/
 
 RUN npm ci
 
+RUN npm run prisma:deploy
+
 EXPOSE 8080
 
 CMD ["npm", "run", "prod:start"]

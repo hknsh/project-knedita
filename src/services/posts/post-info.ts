@@ -1,4 +1,4 @@
-import prisma from '../../db'
+import prisma from '../../clients/prisma-client'
 
 async function postInfoService (id: string): Promise<Object | Error> {
   const post = await prisma.post.findFirst({

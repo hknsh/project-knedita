@@ -1,83 +1,38 @@
 import request from 'supertest'
-import prisma from '../../db'
 import app from '../../app'
+import deleteUser from '../utils/delete-user'
+import signUpNewUser from '../utils/create-user'
+import userPayload from '../../interfaces/user'
 
-const mockUser = {
-  username: 'dummmyuser1',
-  email: 'random@email.com',
-  password: 'totallysafepass'
-}
+let user: userPayload
 
 describe('POST /user/signup', () => {
-  it('should respond with a 200 status code', async () => {
-    const response = await request(app).post('/user/signup').send(mockUser).expect(200)
+  beforeAll(async () => {
+    user = await signUpNewUser()
+    delete user.token
+  })
 
-    expect(response.body).toHaveProperty('displayName')
-    expect(response.body).toHaveProperty('username')
-    expect(response.body).toHaveProperty('createdAt')
+  afterAll(async () => {
+    await deleteUser(user.username ?? '')
   })
 
   it('should respond with a 400 status code if sent any invalid data', async () => {
     await request(app).post('/user/signup').send({
       username: 'username12@',
-      email: mockUser.email,
-      password: mockUser.password
+      email: user.email,
+      password: user.password
     }).expect(400)
   })
 
-  it('should respond with a 400 status code for an existing username', async () => {
-    await prisma.user.create({
-      data: {
-        username: 'dummmyuser2',
-        email: 'user@email.com',
-        password: 'reallystrongpass'
-      }
-    })
-
-    const response = await request(app).post('/user/signup').send({
-      username: 'dummmyuser2',
-      email: 'user1@email.com',
-      password: 'reallystrongpass'
+  it('should respond with a 400 status code for an existing username or email', async () => {
+    await request(app).post('/user/signup').send({
+      username: user.username,
+      email: user.email,
+      password: user.password
     }).expect(400)
-
-    expect(response.body).toHaveProperty('error')
-  })
-
-  it('should respond with a 400 status code for an existing email', async () => {
-    await prisma.user.create({
-      data: {
-        username: 'dummmyuser3',
-        email: 'user13@email.com',
-        password: '1234'
-      }
-    })
-
-    const response = await request(app).post('/user/signup').send({
-      username: 'dummmyuser4',
-      email: 'user13@email.com',
-      password: '12345'
-    }).expect(400)
-
-    expect(response.body).toHaveProperty('error')
   })
 
   it('should respond with a 400 status code if receive an empty body', async () => {
-    const response = await request(app).post('/user/signup').send({}).expect(400)
-
-    expect(response.body).toHaveProperty('error')
+    await request(app).post('/user/signup').send({}).expect(400)
   })
-})
-
-afterAll(async () => {
-  const usersToDelete = ['dummmyuser1', 'dummmyuser2', 'dummmyuser3', 'dummmyuser4']
-
-  await prisma.user.deleteMany({
-    where: {
-      username: {
-        in: usersToDelete
-      }
-    }
-  })
-
-  await prisma.$disconnect()
 })

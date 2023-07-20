@@ -7,11 +7,8 @@ import limiter from './middlewares/rate-limit'
 
 const app = express()
 
-// TODO: Disable image resize when it's a post attachment
-// TODO: Add user-upload-picture tests
-// TODO: Apply http-errors lib on the controllers
-// TODO: Automatically apply the newest migration when starting up the docker
-// TODO: Refactor some parts of the code
+// TODO: find a way to declare global variables for better refactor on test
+// TODO: must pass userMock as a global
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

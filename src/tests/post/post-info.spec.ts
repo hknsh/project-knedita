@@ -1,37 +1,28 @@
-import prisma from '../../db'
 import app from '../../app'
 import request from 'supertest'
 import signUpNewUser from '../utils/create-user'
+import deleteUser from '../utils/delete-user'
+import userPayload from '../../interfaces/user'
 
-let postId = ''; let username = ''
+let postId: string
+
+let user: userPayload
 
 describe('POST /post/info', () => {
   beforeAll(async () => {
-    const user = await signUpNewUser()
+    user = await signUpNewUser()
 
     const token = user.token ?? ''
 
     const post = await request(app).post('/post/create').send({
-      content: 'nothing to see here!'
+      content: 'Hello world'
     }).set('Authorization', `Bearer ${token}`).expect(200)
 
-    username = user.username ?? ''
     postId = post.body.id
   })
 
   afterAll(async () => {
-    await prisma.post.deleteMany({
-      where: {
-        id: postId
-      }
-    })
-
-    await prisma.user.deleteMany({
-      where: {
-        username
-      }
-    })
-    await prisma.$disconnect()
+    await deleteUser(user.username ?? '')
   })
 
   it('should respond with 200 status code and return some info about the post', async () => {
@@ -47,7 +38,7 @@ describe('POST /post/info', () => {
   })
 
   it('should respond with 400 status code if the post does not exists', async () => {
-    const response = await request(app).get('/post/info?id=randominfohere').expect(400)
+    const response = await request(app).get('/post/info?id=abc').expect(400)
 
     expect(response.body).toHaveProperty('error')
   })

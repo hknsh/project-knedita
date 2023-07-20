@@ -1,23 +1,18 @@
-import prisma from '../../db'
 import app from '../../app'
 import request from 'supertest'
 import signUpNewUser from '../utils/create-user'
+import userPayload from '../../interfaces/user'
 
-let token = ''
+let user: userPayload
 
 describe('DELETE /user/delete', () => {
   beforeAll(async () => {
-    const user = await signUpNewUser()
-    token = user.token ?? ''
-  })
-
-  afterAll(async () => {
-    await prisma.$disconnect()
+    user = await signUpNewUser()
   })
 
   it('should delete the user successfully', async () => {
     await request(app).post('/user/delete')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${user.token ?? ''}`)
       .expect(200)
   })
 })

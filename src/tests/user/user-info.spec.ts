@@ -1,28 +1,24 @@
-import prisma from '../../db'
 import app from '../../app'
 import request from 'supertest'
+import deleteUser from '../utils/delete-user'
+import signUpNewUser from '../utils/create-user'
+import userPayload from '../../interfaces/user'
+
+let user: userPayload
 
 describe('POST /user/info', () => {
+  beforeAll(async () => {
+    user = await signUpNewUser()
+  })
+
   afterAll(async () => {
-    await prisma.user.deleteMany({
-      where: {
-        username: 'dummmyuser5'
-      }
-    })
-    await prisma.$disconnect()
+    await deleteUser(user.username ?? '')
   })
 
   it('should respond with 200 status code and return the user data', async () => {
-    await prisma.user.create({
-      data: {
-        username: 'dummmyuser5',
-        email: 'random3@email.com',
-        password: 'pass'
-      }
-    })
+    const response = await request(app).get(`/user/info?u=${user.username ?? ''}`).expect(200)
 
-    const response = await request(app).get('/user/info?u=dummmyuser5').expect(200)
-
+    expect(response.body).toHaveProperty('profileImage')
     expect(response.body).toHaveProperty('displayName')
     expect(response.body).toHaveProperty('username')
     expect(response.body).toHaveProperty('createdAt')

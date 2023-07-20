@@ -1,5 +1,5 @@
 import userPayload from '../../interfaces/user'
-import prisma from '../../db'
+import prisma from '../../clients/prisma-client'
 
 async function userUpdateService ({ id, email, displayName, username }: userPayload): Promise<Object | Error> {
   const user = await prisma.user.findFirst({ where: { id } })

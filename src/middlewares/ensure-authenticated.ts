@@ -1,14 +1,12 @@
 import { verify } from 'jsonwebtoken'
-import prisma from '../db'
-import { Response, Request, NextFunction } from 'express'
+import prisma from '../clients/prisma-client'
+import type { Response, Request, NextFunction } from 'express'
 import jwtPayload from '../interfaces/jwt'
+import { unauthorized } from '../lib/http-errors'
 
 async function ensureAuthenticated (req: Request, res: Response, next: NextFunction): Promise<void> {
   if (req.headers.authorization === undefined || req.headers.authorization.length === 0) {
-    res.status(401).json({
-      error: 'Missing token'
-    })
-    return
+    return unauthorized(res, 'Missing token')
   }
 
   const token = req.headers.authorization.split(' ')[1]
@@ -25,10 +23,7 @@ async function ensureAuthenticated (req: Request, res: Response, next: NextFunct
     })
 
     if (decoded == null) {
-      res.status(401).json({
-        error: 'Invalid token'
-      })
-      return
+      return unauthorized(res, 'Invalid token')
     }
 
     const user = await prisma.user.findFirst({
@@ -38,19 +33,14 @@ async function ensureAuthenticated (req: Request, res: Response, next: NextFunct
     })
 
     if (user == null) {
-      res.status(401).json({
-        error: 'Invalid user'
-      })
-      return
+      return unauthorized(res, 'User does not exists')
     }
 
     req.user = decoded
 
     return next()
   } catch (error) {
-    res.status(401).json({
-      error: `JWT Error: ${(error as Error).message}`
-    })
+    unauthorized(res, `JWT Error: ${(error as Error).message}`)
   }
 }
 

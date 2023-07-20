@@ -1,12 +1,6 @@
 import rateLimit from 'express-rate-limit'
 import RedisStore from 'rate-limit-redis'
-import RedisClient from 'ioredis'
-
-const redisPassword = process.env.REDIS_PASSWORD ?? ''
-const redisHost = process.env.REDIS_HOST ?? ''
-const redisPort = process.env.REDIS_PORT ?? ''
-
-const client = new RedisClient(`redis://:${redisPassword}@${redisHost}:${redisPort}/0`)
+import redis from '../clients/redis-client'
 
 let maxConnections
 
@@ -26,7 +20,7 @@ const limiter = rateLimit({
   // Store configuration
   store: new RedisStore({
     // @ts-expect-error - `call` function is not present in @types/ioredis
-    sendCommand: async (...args: string[]) => await client.call(...args)
+    sendCommand: async (...args: string[]) => await redis.call(...args)
   })
 })
 
