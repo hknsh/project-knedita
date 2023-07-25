@@ -2,14 +2,14 @@ import { post } from '../../services/index'
 import type { Request, Response } from 'express'
 import { badRequest } from '../../lib/http-errors'
 
-async function postInfoController (req: Request, res: Response): Promise<void> {
+async function postFetchLikesController (req: Request, res: Response): Promise<void> {
   const id = req.query.id as string
 
   if (id === undefined) {
     return badRequest(res, 'Missing post id')
   }
 
-  const result = await post.info(id)
+  const result = await post.fetchLikes(id)
 
   if (result instanceof Error) {
     return badRequest(res, result.message)
@@ -18,4 +18,4 @@ async function postInfoController (req: Request, res: Response): Promise<void> {
   res.json(result)
 }
 
-export default postInfoController
+export default postFetchLikesController

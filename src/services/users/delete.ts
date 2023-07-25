@@ -11,12 +11,6 @@ async function userDeleteService (userId: string): Promise<Object | Error> {
     return new Error('Forbidden')
   }
 
-  await prisma.post.deleteMany({
-    where: {
-      authorId: user.id
-    }
-  })
-
   await prisma.user.deleteMany({
     where: {
       id: userId

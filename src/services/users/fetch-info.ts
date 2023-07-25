@@ -1,6 +1,6 @@
 import prisma from '../../clients/prisma-client'
 
-async function userInfoService (username: string): Promise<Object> {
+async function userFetchInfoService (username: string): Promise<Object | Error> {
   const user = await prisma.user.findFirst({
     where: {
       username
@@ -33,4 +33,4 @@ async function userInfoService (username: string): Promise<Object> {
   return user
 }
 
-export default userInfoService
+export default userFetchInfoService

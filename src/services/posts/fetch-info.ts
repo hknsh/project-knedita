@@ -1,6 +1,6 @@
 import prisma from '../../clients/prisma-client'
 
-async function postInfoService (id: string): Promise<Object | Error> {
+async function postFetchInfoService (id: string): Promise<Object | Error> {
   const post = await prisma.post.findFirst({
     where: {
       id
@@ -10,13 +10,13 @@ async function postInfoService (id: string): Promise<Object | Error> {
       content: true,
       createdAt: true,
       updatedAt: true,
+      likes: true,
       author: {
         select: {
           displayName: true,
           username: true
         }
-      },
-      likes: true
+      }
     }
   })
 
@@ -27,4 +27,4 @@ async function postInfoService (id: string): Promise<Object | Error> {
   return post
 }
 
-export default postInfoService
+export default postFetchInfoService

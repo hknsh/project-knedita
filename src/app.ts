@@ -7,8 +7,7 @@ import limiter from './middlewares/rate-limit'
 
 const app = express()
 
-// TODO: find a way to declare global variables for better refactor on test
-// TODO: must pass userMock as a global
+// TODO: Create a documentation page or create the client because this is getting really big
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
