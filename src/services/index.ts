@@ -1,14 +1,16 @@
-import userAuthService from './users/user-auth'
-import userDeleteService from './users/user-delete'
-import userInfoService from './users/user-info'
-import userSignupService from './users/user-signup'
-import userUpdateService from './users/user-update'
-import userUploadPictureService from './users/user-upload-picture'
+import userAuthService from './users/auth'
+import userDeleteService from './users/delete'
+import userFollowService from './users/follow-user'
+import userInfoService from './users/get-info'
+import userLikePostService from './users/like-post'
+import userSignupService from './users/signup'
+import userUpdateService from './users/update'
+import userUploadPictureService from './users/upload-picture'
 
-import postCreateService from './posts/post-create'
-import postDeleteService from './posts/post-delete'
-import postInfoService from './posts/post-info'
-import postUpdateService from './posts/post-update'
+import postCreateService from './posts/create'
+import postDeleteService from './posts/delete'
+import postInfoService from './posts/get-info'
+import postUpdateService from './posts/update'
 
 // User services
 const user = {
@@ -17,7 +19,9 @@ const user = {
   info: userInfoService,
   signup: userSignupService,
   update: userUpdateService,
-  uploadPicture: userUploadPictureService
+  uploadPicture: userUploadPictureService,
+  likePost: userLikePostService,
+  follow: userFollowService
 }
 
 // Post services

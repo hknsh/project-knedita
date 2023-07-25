@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -18,6 +15,9 @@ model User {
   password        String
   posts           Post[]
   profileImage    String?
+  likedPosts      Like[]
+  followers       Follows[] @relation("following")
+  following       Follows[] @relation("follower")
   createdAt       DateTime     @default(now())
 }
 
@@ -26,6 +26,24 @@ model Post {
   content   String
   authorId  String
   author    User      @relation(fields: [authorId], references: [id])
+  likes     Like[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+}
+
+model Like {
+  id        String    @id @default(uuid())
+  postId    String
+  post      Post      @relation(fields: [postId], references: [id])
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+}
+model Follows {
+  follower    User @relation("follower", fields: [followerId], references: [id])
+  followerId  String
+  following   User @relation("following", fields: [followingId], references: [id])
+  followingId String
+
+  @@id([followerId, followingId])
 }

@@ -8,6 +8,9 @@ async function userUpdateService ({ id, email, displayName, username }: userPayl
     return new Error('User not found')
   }
 
+  // Check if the provided email or username is different from the current user's data
+  // if they are different, additional queries are made to check if the new email or username is already in use.
+
   if (email !== undefined && email.trim() !== user.email) {
     const existingUser = await prisma.user.findFirst({ where: { email } })
     if ((existingUser != null) && existingUser.email !== user.email) {

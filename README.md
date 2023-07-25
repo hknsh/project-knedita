@@ -19,8 +19,8 @@ An open-source social media.
 - Able to choose a profile picture✅
   - Probably gonna use LocalStack to mock Amazon S3✅
   - Image compression ✅
-- Following/unfollowing features
-- Like posts
+- Following/unfollowing features ✅
+- Like posts ✅
 - Probably pinned posts
 - Authentication ✅
   - Add more verification (like, if the password is too short) ✅

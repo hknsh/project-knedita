@@ -15,18 +15,7 @@ async function userUploadPictureService (authorId: string, url: string): Promise
       profileImage: url
     },
     select: {
-      profileImage: true,
-      displayName: true,
-      username: true,
-      createdAt: true,
-      posts: {
-        select: {
-          id: true,
-          content: true,
-          createdAt: true,
-          updatedAt: true
-        }
-      }
+      profileImage: true
     }
   })
 

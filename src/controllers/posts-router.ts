@@ -3,10 +3,10 @@
 import { Router } from 'express'
 
 // Controllers
-import postCreateController from './posts/post-create'
-import postDeleteController from './posts/post-delete'
-import postInfoController from './posts/post-info'
-import postUpdateController from './posts/post-update'
+import postCreateController from './posts/create'
+import postDeleteController from './posts/delete'
+import postInfoController from './posts/get-info'
+import postUpdateController from './posts/update'
 
 // Middlewares
 import ensureAuthenticated from '../middlewares/ensure-authenticated'

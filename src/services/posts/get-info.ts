@@ -15,7 +15,8 @@ async function postInfoService (id: string): Promise<Object | Error> {
           displayName: true,
           username: true
         }
-      }
+      },
+      likes: true
     }
   })
 

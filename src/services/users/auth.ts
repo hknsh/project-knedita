@@ -10,7 +10,7 @@ async function userAuthService (email: string, password: string): Promise<Object
   })
 
   if (user == null) {
-    return new Error('User does not exists')
+    return new Error('Invalid email or password')
   }
 
   if (email === undefined || password === undefined) {

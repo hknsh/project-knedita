@@ -17,6 +17,11 @@ async function userInfoService (username: string): Promise<Object> {
           createdAt: true,
           updatedAt: true
         }
+      },
+      likedPosts: {
+        select: {
+          postId: true
+        }
       }
     }
   })
