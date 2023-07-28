@@ -1,4 +1,4 @@
-import post from '../../services/posts/index'
+import post from '../../services/posts'
 import type { Request, Response } from 'express'
 import { badRequest } from '../../lib/http-errors'
 
@@ -9,7 +9,7 @@ async function postFetchInfoController (req: Request, res: Response): Promise<vo
     return badRequest(res, 'Missing post id')
   }
 
-  const result = await post.info(id)
+  const result = await post.fetch(id)
 
   if (result instanceof Error) {
     return badRequest(res, result.message)

@@ -3,22 +3,22 @@
 import { Router } from 'express'
 
 // Controllers
-import postCreateController from './posts/create'
-import postDeleteController from './posts/delete'
-import postFetchInfoController from './posts/fetch-info'
-import postUpdateController from './posts/update'
+import post from './posts'
 
 // Middlewares
-import ensureAuthenticated from '../middlewares/ensure-authenticated'
-import postFetchLikesController from './posts/fetch-likes'
+import authenticated from '../middlewares/authenticated'
 
 const postsRouter = Router()
 
-// Posts related
-postsRouter.post('/create', ensureAuthenticated, postCreateController)
-postsRouter.post('/delete', ensureAuthenticated, postDeleteController)
-postsRouter.get('/info', postFetchInfoController)
-postsRouter.put('/update', ensureAuthenticated, postUpdateController)
-postsRouter.get('/fetch-likes', postFetchLikesController)
+// GET
+postsRouter.get('/fetch-likes', post.fetchLikes)
+postsRouter.get('/info', post.fetch)
+
+// POST
+postsRouter.post('/create', authenticated, post.create)
+postsRouter.post('/delete', authenticated, post.delete)
+
+// PUT
+postsRouter.put('/update', authenticated, post.update)
 
 export default postsRouter

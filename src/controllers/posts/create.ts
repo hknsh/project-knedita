@@ -1,4 +1,4 @@
-import post from '../../services/posts/index'
+import post from '../../services/posts'
 import type { Request, Response } from 'express'
 import { badRequest } from '../../lib/http-errors'
 

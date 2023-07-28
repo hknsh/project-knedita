@@ -4,7 +4,7 @@ import type { Response, Request, NextFunction } from 'express'
 import jwtPayload from '../interfaces/jwt'
 import { unauthorized } from '../lib/http-errors'
 
-async function ensureAuthenticated (req: Request, res: Response, next: NextFunction): Promise<void> {
+async function authenticated (req: Request, res: Response, next: NextFunction): Promise<void> {
   if (req.headers.authorization === undefined || req.headers.authorization.length === 0) {
     return unauthorized(res, 'Missing token')
   }
@@ -44,4 +44,4 @@ async function ensureAuthenticated (req: Request, res: Response, next: NextFunct
   }
 }
 
-export default ensureAuthenticated
+export default authenticated

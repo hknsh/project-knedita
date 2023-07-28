@@ -7,8 +7,8 @@ import postUpdateService from './update'
 const post = {
   create: postCreateService,
   delete: postDeleteService,
+  fetch: postFetchInfoService,
   fetchLikes: postFetchLikesService,
-  info: postFetchInfoService,
   update: postUpdateService
 }
 
