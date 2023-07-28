@@ -1,9 +1,9 @@
 import prisma from '../../clients/prisma-client'
 
-async function postFetchLikesService (id: string): Promise<Object | Error> {
-  const post = await prisma.postLike.findMany({
+async function commentFetchLikesService (id: string): Promise<Object | Error> {
+  const post = await prisma.commentLike.findMany({
     where: {
-      postId: id
+      commentId: id
     },
     select: {
       user: {
@@ -17,10 +17,10 @@ async function postFetchLikesService (id: string): Promise<Object | Error> {
   })
 
   if (post === null) {
-    return new Error('Post not found')
+    return new Error('Comment not found')
   }
 
   return post
 }
 
-export default postFetchLikesService
+export default commentFetchLikesService

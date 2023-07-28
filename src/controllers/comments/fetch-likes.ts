@@ -2,15 +2,14 @@ import comment from '../../services/comments/index'
 import type { Request, Response } from 'express'
 import { badRequest } from '../../lib/http-errors'
 
-async function commentDeleteController (req: Request, res: Response): Promise<void> {
-  const { commentId } = req.body
-  const id = req.user?.id ?? ''
+async function commentFetchLikesController (req: Request, res: Response): Promise<void> {
+  const commentId = req.query.id as string
 
   if (commentId === undefined) {
     return badRequest(res, 'Expected comment id')
   }
 
-  const result = await comment.delete(commentId, id)
+  const result = await comment.fetchLikes(commentId)
 
   if (result instanceof Error) {
     return badRequest(res, result.message)
@@ -19,4 +18,4 @@ async function commentDeleteController (req: Request, res: Response): Promise<vo
   res.json(result)
 }
 
-export default commentDeleteController
+export default commentFetchLikesController

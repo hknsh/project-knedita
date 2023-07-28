@@ -1,4 +1,4 @@
-import { comment } from '../../services'
+import comment from '../../services/comments/index'
 import type { Request, Response } from 'express'
 import { badRequest } from '../../lib/http-errors'
 
@@ -6,7 +6,7 @@ async function commentFetchController (req: Request, res: Response): Promise<voi
   const commentId = req.query.id as string
 
   if (commentId === undefined) {
-    return badRequest(res, 'Expected post id')
+    return badRequest(res, 'Expected comment id')
   }
 
   const result = await comment.fetch(commentId)

@@ -1,4 +1,4 @@
-import { comment } from '../../services'
+import comment from '../../services/comments/index'
 import type { Request, Response } from 'express'
 import { badRequest } from '../../lib/http-errors'
 

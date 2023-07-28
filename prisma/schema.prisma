@@ -15,7 +15,8 @@ model User {
   password            String
   posts               Post[]
   profileImage        String?
-  likedPosts          Like[]
+  likedPosts          PostLike[]
+  likedComments       CommentLike[]
   followers           Follows[]         @relation("following")
   following           Follows[]         @relation("follower")
   postComments        Comments[]
@@ -29,18 +30,27 @@ model Post {
   content   String
   authorId  String
   author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  likes     Like[]
+  likes     PostLike[]
   comments  Comments[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
 
-model Like {
+model PostLike {
   id        String    @id @default(uuid())
   postId    String
   post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId    String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+}
+
+model CommentLike {
+  id  String  @id @default(uuid())
+  commentId String
+  comment   Comments  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  userId  String
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime  @default(now())
 }
 
@@ -60,6 +70,7 @@ model Comments {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   postId     String
   post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  likes      CommentLike[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt  @default(now())
 }
@@ -77,5 +88,5 @@ model Notifications {
 
 enum NotificationType {
   WARNING
-  FRIEND
+  INFO
 }

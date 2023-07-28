@@ -8,6 +8,7 @@ import userDeleteController from './users/delete'
 import userFollowController from './users/follow-user'
 import userFetchInfoController from './users/fetch-info'
 import userFetchPostsController from './users/fetch-posts'
+import userLikeCommentController from './users/like-comment'
 import userLikePostController from './users/like-post'
 import userSearchController from './users/search-user'
 import userSignupController from './users/signup'
@@ -31,5 +32,6 @@ usersRouter.post('/like-post', ensureAuthenticated, userLikePostController)
 usersRouter.post('/follow-user', ensureAuthenticated, userFollowController)
 usersRouter.get('/fetch-posts', userFetchPostsController)
 usersRouter.get('/search', userSearchController)
+usersRouter.post('/like-comment', ensureAuthenticated, userLikeCommentController)
 
 export default usersRouter

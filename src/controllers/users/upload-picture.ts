@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import { user } from '../../services/index'
+import user from '../../services/users'
 import type { Request, Response } from 'express'
 import { badRequest } from '../../lib/http-errors'
 

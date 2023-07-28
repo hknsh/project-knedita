@@ -25,7 +25,7 @@ async function userLikePostService (postId: string, userId: string): Promise<Obj
     return new Error('User not found')
   }
 
-  const alreadyLiked = await prisma.like.findFirst({
+  const alreadyLiked = await prisma.postLike.findFirst({
     where: {
       postId: post.id,
       userId: user.id
@@ -33,7 +33,7 @@ async function userLikePostService (postId: string, userId: string): Promise<Obj
   })
 
   if (alreadyLiked !== null) {
-    await prisma.like.deleteMany({
+    await prisma.postLike.deleteMany({
       where: {
         postId: post.id,
         userId: user.id
@@ -42,7 +42,7 @@ async function userLikePostService (postId: string, userId: string): Promise<Obj
     return {}
   }
 
-  const like = await prisma.like.create({
+  const like = await prisma.postLike.create({
     data: {
       postId: post.id,
       userId: user.id

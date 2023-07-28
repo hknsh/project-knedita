@@ -18,6 +18,10 @@ function uploadImage (req: Request, res: Response, next: NextFunction) {
       return badRequest(res, cb.message)
     }
 
+    if (req.file === undefined) {
+      return badRequest(res, 'Expected file')
+    }
+
     // @ts-expect-error property `key` does not exists in types
     await compressImage(req.file?.key)
 
