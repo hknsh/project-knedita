@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from 'express'
 
 // Controllers
 import comments from './comments'
 
 // Middlewares
-import authenticated from '../middlewares/authenticated'
+import authenticated from 'middlewares/authenticated'
 
 const commentsRouter = Router()
 

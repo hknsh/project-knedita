@@ -45,6 +45,8 @@ model PostLike {
   createdAt DateTime  @default(now())
 }
 
+// I should join these two up? Yeah, but I will not do it since it didn't work on the first time.
+
 model CommentLike {
   id  String  @id @default(uuid())
   commentId String

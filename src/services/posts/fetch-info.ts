@@ -1,6 +1,6 @@
-import prisma from '../../clients/prisma-client'
+import prisma from 'clients/prisma-client'
 
-async function postFetchInfoService (id: string): Promise<Object | Error> {
+async function postFetchInfoService (id: string): Promise<Record<string, unknown> | Error> {
   const post = await prisma.post.findFirst({
     where: {
       id

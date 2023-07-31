@@ -1,8 +1,12 @@
 import * as bcrypt from 'bcrypt'
 import jsonwebtoken from 'jsonwebtoken'
-import prisma from '../../clients/prisma-client'
+import prisma from 'clients/prisma-client'
+import type userPayload from 'interfaces/user'
 
-async function userAuthService (email: string, password: string): Promise<Object | Error> {
+async function userAuthService ({
+  email,
+  password
+}: userPayload): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({
     where: {
       email
@@ -17,7 +21,10 @@ async function userAuthService (email: string, password: string): Promise<Object
     return new Error('Missing fields')
   }
 
-  const validPassword = await bcrypt.compare(password.replace(/ /g, ''), user.password)
+  const validPassword = await bcrypt.compare(
+    password.replace(/ /g, ''),
+    user.password
+  )
 
   if (!validPassword) {
     return new Error('Invalid email or password')
@@ -25,7 +32,11 @@ async function userAuthService (email: string, password: string): Promise<Object
 
   const { id } = user
 
-  const bearer = jsonwebtoken.sign({ id }, process.env.JWT_ACCESS_SECRET ?? '', { expiresIn: '1d' })
+  const bearer = jsonwebtoken.sign(
+    { id },
+    process.env.JWT_ACCESS_SECRET ?? '',
+    { expiresIn: '1d' }
+  )
 
   return {
     token: bearer

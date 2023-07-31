@@ -1,6 +1,9 @@
-import prisma from '../../clients/prisma-client'
+import prisma from 'clients/prisma-client'
 
-async function userUploadPictureService (authorId: string, url: string): Promise<Object | Error> {
+async function userUploadPictureService (
+  authorId: string,
+  url: string
+): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({ where: { id: authorId } })
 
   if (user == null) {

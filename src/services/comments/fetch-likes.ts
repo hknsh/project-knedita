@@ -1,6 +1,6 @@
-import prisma from '../../clients/prisma-client'
+import prisma from 'clients/prisma-client'
 
-async function commentFetchLikesService (id: string): Promise<Object | Error> {
+async function commentFetchLikesService (id: string): Promise<unknown | Error> {
   const post = await prisma.commentLike.findMany({
     where: {
       commentId: id

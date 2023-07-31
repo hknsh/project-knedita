@@ -1,6 +1,10 @@
-import { Response } from 'express'
+import { type Response } from 'express'
 
-const sendErrorResponse = (res: Response, status: number, message: string): void => {
+const sendErrorResponse = (
+  res: Response,
+  status: number,
+  message: string
+): void => {
   res.status(status).json({ error: message })
 }
 
@@ -16,6 +20,9 @@ export const forbidden = (res: Response, message = 'Forbidden'): void => {
   sendErrorResponse(res, 403, message)
 }
 
-export const internalServerError = (res: Response, message = 'Internal Server Error'): void => {
+export const internalServerError = (
+  res: Response,
+  message = 'Internal Server Error'
+): void => {
   sendErrorResponse(res, 500, message)
 }

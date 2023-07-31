@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import user from '../../services/users'
+import user from 'services/users'
 import type { Request, Response } from 'express'
-import { badRequest } from '../../lib/http-errors'
+import { badRequest } from 'lib/http-errors'
 
 let url
 
-async function userUploadPictureController (req: Request, res: Response): Promise<void> {
+async function userUploadPictureController (
+  req: Request,
+  res: Response
+): Promise<void> {
   if (req.file === undefined) {
-    return badRequest(res, 'Expected a JPG or PNG file')
+    badRequest(res, 'Expected a JPG or PNG file'); return
   }
 
   const userId = req.user?.id ?? ''
@@ -23,7 +26,7 @@ async function userUploadPictureController (req: Request, res: Response): Promis
   const result = await user.uploadPicture(userId, url)
 
   if (result instanceof Error) {
-    return badRequest(res, result.message)
+    badRequest(res, result.message); return
   }
 
   res.json(result)

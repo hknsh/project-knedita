@@ -1,6 +1,8 @@
-import prisma from '../../clients/prisma-client'
+import prisma from 'clients/prisma-client'
 
-async function userFetchPostsService (username: string): Promise<Object | Error> {
+async function userFetchPostsService (
+  username: string
+): Promise<unknown | Error> {
   const posts = await prisma.post.findMany({
     where: {
       author: {

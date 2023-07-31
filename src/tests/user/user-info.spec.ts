@@ -2,7 +2,7 @@ import app from '../../app'
 import request from 'supertest'
 import deleteUser from '../utils/delete-user'
 import signUpNewUser from '../utils/create-user'
-import userPayload from '../../interfaces/user'
+import type userPayload from '../../interfaces/user'
 
 let user: userPayload
 
@@ -16,7 +16,9 @@ describe('POST /user/info', () => {
   })
 
   it('should respond with 200 status code and return the user data', async () => {
-    const response = await request(app).get(`/user/info?u=${user.username ?? ''}`).expect(200)
+    const response = await request(app)
+      .get(`/user/info?u=${user.username ?? ''}`)
+      .expect(200)
 
     expect(response.body).toHaveProperty('profileImage')
     expect(response.body).toHaveProperty('displayName')

@@ -1,20 +1,17 @@
 {
-    "jsc": {
-        "parser": {
-            "syntax": "typescript",
-            "tsx": false,
-            "decorators": true,
-            "dynamicImport": true
-        },
-        "target": "es2020",
-        "baseUrl": "./"
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": false,
+      "decorators": true,
+      "dynamicImport": true
     },
-    "exclude": [
-        "@types/",
-        "interfaces/"
-    ],
-    "module": {
-        "type": "commonjs"
-    },
-    "minify": true
+    "target": "es2020",
+    "baseUrl": "./"
+  },
+  "exclude": ["@types/", "interfaces/"],
+  "module": {
+    "type": "commonjs"
+  },
+  "minify": true
 }

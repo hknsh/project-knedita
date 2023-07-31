@@ -1,23 +1,26 @@
-import comment from '../../services/comments'
+import comment from 'services/comments'
 import type { Request, Response } from 'express'
-import { badRequest } from '../../lib/http-errors'
+import { badRequest } from 'lib/http-errors'
 
-async function commentCreateController (req: Request, res: Response): Promise<void> {
+async function commentCreateController (
+  req: Request,
+  res: Response
+): Promise<void> {
   const { content, postId } = req.body
   const id = req.user?.id ?? ''
 
   if (postId === undefined) {
-    return badRequest(res, 'Expected post id')
+    badRequest(res, 'Expected post id'); return
   }
 
   if (content === undefined) {
-    return badRequest(res, 'Expected comment content')
+    badRequest(res, 'Expected comment content'); return
   }
 
   const result = await comment.create(postId, content, id)
 
   if (result instanceof Error) {
-    return badRequest(res, result.message)
+    badRequest(res, result.message); return
   }
 
   res.json(result)

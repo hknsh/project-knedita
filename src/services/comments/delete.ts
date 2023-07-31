@@ -1,6 +1,9 @@
-import prisma from '../../clients/prisma-client'
+import prisma from 'clients/prisma-client'
 
-async function commentDeleteService (commentId: string, authorId: string): Promise<Object | Error> {
+async function commentDeleteService (
+  commentId: string,
+  authorId: string
+): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({
     where: {
       id: authorId

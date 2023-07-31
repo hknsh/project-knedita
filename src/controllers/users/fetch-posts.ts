@@ -1,12 +1,15 @@
-import user from '../../services/users'
+import user from 'services/users'
 import type { Request, Response } from 'express'
-import { badRequest } from '../../lib/http-errors'
+import { badRequest } from 'lib/http-errors'
 
-async function userFetchPostsController (req: Request, res: Response): Promise<void> {
+async function userFetchPostsController (
+  req: Request,
+  res: Response
+): Promise<void> {
   const username = req.query.u as string
 
   if (username === undefined) {
-    return badRequest(res, 'Missing username')
+    badRequest(res, 'Missing username'); return
   }
 
   const result = await user.fetchPosts(username)

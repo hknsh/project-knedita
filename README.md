@@ -1,4 +1,3 @@
-
 # Project Knedita
 
 An open-source social media.
@@ -21,7 +20,6 @@ An open-source social media.
   - Image compression ✅
 - Following/unfollowing features ✅
 - Like posts ✅
-- Probably pinned posts
 - Authentication ✅
   - Add more verification (like, if the password is too short) ✅
 - Set display name ✅

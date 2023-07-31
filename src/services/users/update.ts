@@ -1,7 +1,12 @@
-import userPayload from '../../interfaces/user'
-import prisma from '../../clients/prisma-client'
+import type userPayload from 'interfaces/user'
+import prisma from 'clients/prisma-client'
 
-async function userUpdateService ({ id, email, displayName, username }: userPayload): Promise<Object | Error> {
+async function userUpdateService ({
+  id,
+  email,
+  displayName,
+  username
+}: userPayload): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({ where: { id } })
 
   if (user === null) {
@@ -13,14 +18,14 @@ async function userUpdateService ({ id, email, displayName, username }: userPayl
 
   if (email !== undefined && email.trim() !== user.email) {
     const existingUser = await prisma.user.findFirst({ where: { email } })
-    if ((existingUser != null) && existingUser.email !== user.email) {
+    if (existingUser != null && existingUser.email !== user.email) {
       return new Error('Email already in use')
     }
   }
 
   if (username !== undefined && username.trim() !== user.username) {
     const existingUser = await prisma.user.findFirst({ where: { username } })
-    if ((existingUser != null) && existingUser.username !== user.username) {
+    if (existingUser != null && existingUser.username !== user.username) {
       return new Error('Username already in use')
     }
   }

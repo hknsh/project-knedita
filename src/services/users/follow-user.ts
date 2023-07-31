@@ -1,6 +1,9 @@
-import prisma from '../../clients/prisma-client'
+import prisma from 'clients/prisma-client'
 
-async function userFollowService (userId: string, followingUsername: string): Promise<Object | Error> {
+async function userFollowService (
+  userId: string,
+  followingUsername: string
+): Promise<Record<string, unknown> | Error> {
   if (userId === undefined || followingUsername === undefined) {
     return new Error('Missing fields')
   }

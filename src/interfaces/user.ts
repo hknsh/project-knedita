@@ -2,8 +2,8 @@ interface userPayload {
   id?: string
   displayName?: string | null
   username?: string
-  password?: string
   email?: string
+  password?: string
   token?: string
 }
 

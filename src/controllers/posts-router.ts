@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from 'express'
 
 // Controllers
 import post from './posts'
 
 // Middlewares
-import authenticated from '../middlewares/authenticated'
+import authenticated from 'middlewares/authenticated'
 
 const postsRouter = Router()
 

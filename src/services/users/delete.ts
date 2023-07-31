@@ -1,6 +1,6 @@
-import prisma from '../../clients/prisma-client'
+import prisma from 'clients/prisma-client'
 
-async function userDeleteService (userId: string): Promise<Object | Error> {
+async function userDeleteService (userId: string): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({ where: { id: userId } })
 
   if (user === null) {

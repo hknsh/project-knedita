@@ -1,6 +1,6 @@
-import prisma from '../../clients/prisma-client'
+import prisma from 'clients/prisma-client'
 
-async function userFetchInfoService (username: string): Promise<Object | Error> {
+async function userFetchInfoService (username: string): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({
     where: {
       username

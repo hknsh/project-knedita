@@ -1,7 +1,7 @@
 import multer from 'multer'
-import { Request } from 'express'
+import { type Request } from 'express'
 import path from 'path'
-import s3 from '../clients/s3-client'
+import s3 from 'clients/s3-client'
 import multerS3 from 'multer-s3'
 
 const tempFolder = path.resolve(__dirname, '..', '..', 'temp', 'uploads')
@@ -18,7 +18,7 @@ const storageTypes = {
       const fileName: string = `${folder}/${req.user!.id}.webp`
 
       callback(null, fileName)
-    }
+    },
   }),
 
   s3: multerS3({
@@ -37,21 +37,22 @@ const storageTypes = {
 
       const fileName: string = `${folder}/${req.user!.id}.jpg`
       callback(null, fileName)
-    }
-  })
+    },
+  }),
 }
 
 const multerConfig = {
   dest: tempFolder,
   storage: storageTypes.s3,
   limits: {
-    fileSize: 15 * 1024 * 1024 // 1mb
+    fileSize: 15 * 1024 * 1024, // 1mb
   },
-  fileFilter: (req: Request, file: Express.Multer.File, callback: multer.FileFilterCallback) => {
-    const allowedMimes = [
-      'image/jpeg',
-      'image/png'
-    ]
+  fileFilter: (
+    req: Request,
+    file: Express.Multer.File,
+    callback: multer.FileFilterCallback,
+  ) => {
+    const allowedMimes = ['image/jpeg', 'image/png']
 
     if (allowedMimes.includes(file.mimetype)) {
       callback(null, true)

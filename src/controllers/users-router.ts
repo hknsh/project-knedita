@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from 'express'
 
 // Controllers
 import user from './users'
 
 // Middlewares
-import authenticated from '../middlewares/authenticated'
-import uploadFile from '../middlewares/upload-image'
+import authenticated from 'middlewares/authenticated'
+import uploadFile from 'middlewares/upload-image'
 
 const usersRouter = Router()
 
@@ -24,7 +23,12 @@ usersRouter.post('/like-post', authenticated, user.likePost)
 usersRouter.post('/signup', user.signup)
 
 // PUT
-usersRouter.put('/profile-picture/upload', authenticated, uploadFile, user.uploadPicture)
+usersRouter.put(
+  '/profile-picture/upload',
+  authenticated,
+  uploadFile,
+  user.uploadPicture
+)
 usersRouter.put('/update', authenticated, user.update)
 
 export default usersRouter

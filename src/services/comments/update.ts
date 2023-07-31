@@ -1,6 +1,10 @@
-import prisma from '../../clients/prisma-client'
+import prisma from 'clients/prisma-client'
 
-async function commentUpdateService (content: string, authorId: string, commentId: string): Promise<Object | Error> {
+async function commentUpdateService (
+  content: string,
+  authorId: string,
+  commentId: string
+): Promise<Record<string, unknown> | Error> {
   const comment = await prisma.comments.findFirst({
     where: {
       id: commentId,

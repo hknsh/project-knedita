@@ -1,7 +1,7 @@
 import app from '../../app'
 import request from 'supertest'
 import { faker } from '@faker-js/faker'
-import userPayload from '../../interfaces/user'
+import type userPayload from '../../interfaces/user'
 
 async function signUpNewUser (): Promise<userPayload> {
   // To avoid conflicts with existing usernames or emails
@@ -9,18 +9,22 @@ async function signUpNewUser (): Promise<userPayload> {
   const email = faker.internet.email()
   const password = faker.internet.password() + '@1'
 
-  await request(app).post('/user/signup').send({
-    username,
-    email,
-    password
-  }).expect(200)
+  await request(app)
+    .post('/user/signup')
+    .send({
+      username,
+      email,
+      password
+    })
+    .expect(200)
 
   const response = await request(app)
     .post('/user/auth')
     .send({
       email,
       password
-    }).expect(200)
+    })
+    .expect(200)
 
   return {
     username,

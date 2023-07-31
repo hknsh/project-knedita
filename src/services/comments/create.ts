@@ -1,6 +1,10 @@
-import prisma from '../../clients/prisma-client'
+import prisma from 'clients/prisma-client'
 
-async function commentCreateService (postId: string, content: string, authorId: string): Promise<Object | Error> {
+async function commentCreateService (
+  postId: string,
+  content: string,
+  authorId: string
+): Promise<Record<string, unknown> | Error> {
   const post = await prisma.post.findFirst({
     where: {
       id: postId

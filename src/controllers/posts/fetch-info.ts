@@ -1,18 +1,21 @@
-import post from '../../services/posts'
+import post from 'services/posts'
 import type { Request, Response } from 'express'
-import { badRequest } from '../../lib/http-errors'
+import { badRequest } from 'lib/http-errors'
 
-async function postFetchInfoController (req: Request, res: Response): Promise<void> {
+async function postFetchInfoController (
+  req: Request,
+  res: Response
+): Promise<void> {
   const id = req.query.id as string
 
   if (id === undefined) {
-    return badRequest(res, 'Missing post id')
+    badRequest(res, 'Missing post id'); return
   }
 
   const result = await post.fetch(id)
 
   if (result instanceof Error) {
-    return badRequest(res, result.message)
+    badRequest(res, result.message); return
   }
 
   res.json(result)

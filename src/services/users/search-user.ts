@@ -1,6 +1,6 @@
-import prisma from '../../clients/prisma-client'
+import prisma from 'clients/prisma-client'
 
-async function userSearchService (username: string): Promise<Object | Error> {
+async function userSearchService (username: string): Promise<unknown | Error> {
   const users = await prisma.user.findMany({
     where: {
       username: {
