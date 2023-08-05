@@ -1,9 +1,9 @@
 import { Router } from 'express'
 
 // Routers
-import usersRouter from './controllers/users-router'
-import postsRouter from './controllers/posts-router'
-import commentsRouter from './controllers/comments-router'
+import usersRouter from 'controllers/users-router'
+import postsRouter from 'controllers/posts-router'
+import commentsRouter from 'controllers/comments-router'
 
 const router = Router()
 

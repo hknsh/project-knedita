@@ -1,6 +1,6 @@
 import user from 'services/users'
 import type { Request, Response } from 'express'
-import { badRequest } from 'lib/http-errors'
+import handleResponse from 'helpers/handle-response'
 
 async function userSignupController (
   req: Request,
@@ -10,11 +10,7 @@ async function userSignupController (
 
   const result = await user.signup({ username, email, password })
 
-  if (result instanceof Error) {
-    badRequest(res, result.message); return
-  }
-
-  res.json(result)
+  handleResponse(res, result)
 }
 
 export default userSignupController

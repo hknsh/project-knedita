@@ -27,12 +27,11 @@
       ],
       "services/*": [
         "services/*"
-      ]
+      ],
     },
     "typeRoots": [
-      "src/@types/express.d.ts",
-      "src/@types/global.d.ts",
-      "node_modules/@types"
+      "./src/@types",
+      "./node_modules/@types"
     ],
     /* Emit */
     "outDir": "./dist",

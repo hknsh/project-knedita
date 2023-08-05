@@ -1,4 +1,4 @@
-import type userPayload from 'interfaces/user'
+import type User from 'interfaces/user'
 import prisma from 'clients/prisma-client'
 
 async function userUpdateService ({
@@ -6,7 +6,7 @@ async function userUpdateService ({
   email,
   displayName,
   username
-}: userPayload): Promise<Record<string, unknown> | Error> {
+}: User): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({ where: { id } })
 
   if (user === null) {

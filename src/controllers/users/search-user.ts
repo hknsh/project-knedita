@@ -1,6 +1,6 @@
 import user from 'services/users'
 import type { Request, Response } from 'express'
-import { badRequest } from 'lib/http-errors'
+import { badRequest } from 'helpers/http-errors'
 
 async function userSearchController (
   req: Request,

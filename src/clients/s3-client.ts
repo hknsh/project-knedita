@@ -1,9 +1,10 @@
 import { S3Client } from '@aws-sdk/client-s3'
+import logger from 'helpers/logger'
 
 let s3: S3Client
 
 if (process.env.NODE_ENV === 'development') {
-  console.log('Using Localstack services instead of AWS.')
+  logger.info('Using Localstack services instead of AWS.')
   s3 = new S3Client({
     credentials: {
       accessKeyId: process.env.AWS_ACCESS_KEY_ID ?? '',

@@ -1,11 +1,12 @@
 import rateLimit from 'express-rate-limit'
 import RedisStore from 'rate-limit-redis'
 import redis from 'clients/redis-client'
+import logger from 'helpers/logger'
 
 let maxConnections
 
 if (process.env.NODE_ENV === 'development') {
-  console.log('Detected Development environment, disabling rate limiter.')
+  logger.info('Development environment detected. Rate limit is now disabled.')
   maxConnections = 0
 } else {
   maxConnections = 5

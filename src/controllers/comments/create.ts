@@ -1,6 +1,7 @@
 import comment from 'services/comments'
 import type { Request, Response } from 'express'
-import { badRequest } from 'lib/http-errors'
+import { badRequest } from 'helpers/http-errors'
+import handleResponse from 'helpers/handle-response'
 
 async function commentCreateController (
   req: Request,
@@ -19,11 +20,7 @@ async function commentCreateController (
 
   const result = await comment.create(postId, content, id)
 
-  if (result instanceof Error) {
-    badRequest(res, result.message); return
-  }
-
-  res.json(result)
+  handleResponse(res, result)
 }
 
 export default commentCreateController

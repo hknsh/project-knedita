@@ -36,10 +36,12 @@
     "@swc/jest": "^0.2.26",
     "@types/bcrypt": "^5.0.0",
     "@types/compression": "^1.7.2",
+    "@types/cors": "^2.8.13",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",
     "@types/jsonwebtoken": "^9.0.2",
+    "@types/morgan": "^1.9.4",
     "@types/multer-s3": "^3.0.0",
     "@types/node": "^20.3.1",
     "@types/supertest": "^2.0.12",
@@ -68,15 +70,19 @@
     "aws-sdk": "^2.1414.0",
     "bcrypt": "^5.1.0",
     "compression": "^1.7.4",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-rate-limit": "^6.7.1",
     "ioredis": "^5.3.2",
     "jsonwebtoken": "^9.0.0",
+    "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "multer-s3": "^3.0.1",
     "rate-limit-redis": "^3.0.2",
     "sharp": "^0.32.3",
-    "validator": "^13.9.0"
+    "socket.io": "^4.7.2",
+    "validator": "^13.9.0",
+    "winston": "^3.10.0"
   }
 }

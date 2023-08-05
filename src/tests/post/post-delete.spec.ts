@@ -2,9 +2,9 @@ import app from '../../app'
 import request from 'supertest'
 import signUpNewUser from '../utils/create-user'
 import deleteUser from '../utils/delete-user'
-import type userPayload from '../../interfaces/user'
+import type User from '../../interfaces/user'
 
-let user: userPayload
+let user: User
 
 describe('DELETE /post/delete', () => {
   beforeAll(async () => {

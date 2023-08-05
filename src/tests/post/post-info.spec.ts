@@ -2,11 +2,11 @@ import app from '../../app'
 import request from 'supertest'
 import signUpNewUser from '../utils/create-user'
 import deleteUser from '../utils/delete-user'
-import type userPayload from '../../interfaces/user'
+import type User from '../../interfaces/user'
 
 let postId: string
 
-let user: userPayload
+let user: User
 
 describe('POST /post/info', () => {
   beforeAll(async () => {

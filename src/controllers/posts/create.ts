@@ -1,6 +1,7 @@
 import post from 'services/posts'
 import type { Request, Response } from 'express'
-import { badRequest } from 'lib/http-errors'
+import { badRequest } from 'helpers/http-errors'
+import handleResponse from 'helpers/handle-response'
 
 async function postCreateController (
   req: Request,
@@ -15,11 +16,7 @@ async function postCreateController (
 
   const result = await post.create(content, id)
 
-  if (result instanceof Error) {
-    badRequest(res, result.message); return
-  }
-
-  res.json(result)
+  handleResponse(res, result)
 }
 
 export default postCreateController

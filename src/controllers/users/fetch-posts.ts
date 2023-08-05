@@ -1,6 +1,7 @@
 import user from 'services/users'
 import type { Request, Response } from 'express'
-import { badRequest } from 'lib/http-errors'
+import { badRequest } from 'helpers/http-errors'
+import handleResponse from 'helpers/handle-response'
 
 async function userFetchPostsController (
   req: Request,
@@ -14,7 +15,7 @@ async function userFetchPostsController (
 
   const result = await user.fetchPosts(username)
 
-  res.json(result)
+  handleResponse(res, result)
 }
 
 export default userFetchPostsController

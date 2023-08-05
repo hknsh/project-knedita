@@ -1,6 +1,6 @@
 import post from 'services/posts'
 import type { Request, Response } from 'express'
-import { badRequest } from 'lib/http-errors'
+import handleResponse from 'helpers/handle-response'
 
 async function postUpdateController (
   req: Request,
@@ -11,11 +11,7 @@ async function postUpdateController (
 
   const result = await post.update(postId, content, userId)
 
-  if (result instanceof Error) {
-    badRequest(res, result.message); return
-  }
-
-  res.json(result)
+  handleResponse(res, result)
 }
 
 export default postUpdateController

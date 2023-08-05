@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt'
 import validator from 'validator'
 import prisma from 'clients/prisma-client'
-import type userPayload from 'interfaces/user'
+import type User from 'interfaces/user'
 
 const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*_])[a-zA-Z0-9!@#$%^&*_]{8,}$/
 const usernameRegex = /^[a-zA-Z0-9_.]{5,15}$/
@@ -10,7 +10,7 @@ async function userSignupService ({
   username,
   email,
   password
-}: userPayload): Promise<Record<string, unknown> | Error> {
+}: User): Promise<Record<string, unknown> | Error> {
   if (username === undefined || email === undefined || password === undefined) {
     return new Error('Missing fields')
   }

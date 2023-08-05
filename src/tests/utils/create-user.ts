@@ -1,9 +1,9 @@
 import app from '../../app'
 import request from 'supertest'
 import { faker } from '@faker-js/faker'
-import type userPayload from '../../interfaces/user'
+import type User from '../../interfaces/user'
 
-async function signUpNewUser (): Promise<userPayload> {
+async function signUpNewUser (): Promise<User> {
   // To avoid conflicts with existing usernames or emails
   const username = faker.internet.userName({ lastName: 'doe' }).toLowerCase()
   const email = faker.internet.email()

@@ -1,6 +1,6 @@
 import user from 'services/users'
 import type { Request, Response } from 'express'
-import { badRequest } from 'lib/http-errors'
+import handleResponse from 'helpers/handle-response'
 
 async function userUpdateController (
   req: Request,
@@ -11,11 +11,7 @@ async function userUpdateController (
 
   const result = await user.update({ id, email, displayName, username })
 
-  if (result instanceof Error) {
-    badRequest(res, result.message); return
-  }
-
-  res.json(result)
+  handleResponse(res, result)
 }
 
 export default userUpdateController

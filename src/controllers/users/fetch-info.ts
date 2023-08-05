@@ -1,6 +1,7 @@
 import user from 'services/users'
 import type { Request, Response } from 'express'
-import { badRequest } from 'lib/http-errors'
+import { badRequest } from 'helpers/http-errors'
+import handleResponse from 'helpers/handle-response'
 
 async function userFetchInfoController (
   req: Request,
@@ -14,11 +15,7 @@ async function userFetchInfoController (
 
   const result = await user.fetchInfo(username.toLowerCase())
 
-  if (result instanceof Error) {
-    badRequest(res, result.message); return
-  }
-
-  res.json(result)
+  handleResponse(res, result)
 }
 
 export default userFetchInfoController

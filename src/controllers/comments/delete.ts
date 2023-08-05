@@ -1,6 +1,7 @@
 import comment from 'services/comments'
 import type { Request, Response } from 'express'
-import { badRequest } from 'lib/http-errors'
+import { badRequest } from 'helpers/http-errors'
+import handleResponse from 'helpers/handle-response'
 
 async function commentDeleteController (
   req: Request,
@@ -15,11 +16,7 @@ async function commentDeleteController (
 
   const result = await comment.delete(commentId, id)
 
-  if (result instanceof Error) {
-    badRequest(res, result.message); return
-  }
-
-  res.json(result)
+  handleResponse(res, result)
 }
 
 export default commentDeleteController

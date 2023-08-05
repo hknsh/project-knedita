@@ -1,6 +1,7 @@
 import comment from 'services/comments'
 import type { Request, Response } from 'express'
-import { badRequest } from 'lib/http-errors'
+import { badRequest } from 'helpers/http-errors'
+import handleResponse from 'helpers/handle-response'
 
 async function commentFetchLikesController (
   req: Request,
@@ -14,11 +15,7 @@ async function commentFetchLikesController (
 
   const result = await comment.fetchLikes(commentId)
 
-  if (result instanceof Error) {
-    badRequest(res, result.message); return
-  }
-
-  res.json(result)
+  handleResponse(res, result)
 }
 
 export default commentFetchLikesController

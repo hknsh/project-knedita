@@ -2,7 +2,7 @@ import { verify } from 'jsonwebtoken'
 import prisma from 'clients/prisma-client'
 import type { Response, Request, NextFunction } from 'express'
 import type jwtPayload from 'interfaces/jwt'
-import { unauthorized } from 'lib/http-errors'
+import { unauthorized } from 'helpers/http-errors'
 
 async function authenticated (
   req: Request,

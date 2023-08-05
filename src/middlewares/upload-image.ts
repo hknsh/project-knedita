@@ -1,10 +1,10 @@
 import type { Response, Request, NextFunction } from 'express'
 import multer from 'multer'
 import multerConfig from 'config/multer'
-import compressImage from 'lib/compress-image'
-import { badRequest } from 'lib/http-errors'
+import compressImage from 'helpers/compress-image'
+import { badRequest } from 'helpers/http-errors'
 
-function uploadImage (req: Request, res: Response, next: NextFunction) {
+function uploadImage (req: Request, res: Response, next: NextFunction): void {
   const upload = multer(multerConfig).single('image')
 
   upload(req, res, async (cb: multer.MulterError | Error | any) => {
@@ -23,7 +23,6 @@ function uploadImage (req: Request, res: Response, next: NextFunction) {
       badRequest(res, 'Expected file'); return
     }
 
-    // @ts-expect-error property `key` does not exists in types
     await compressImage(req.file?.key, req.body.isProfilePicture)
 
     next()

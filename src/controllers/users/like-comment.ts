@@ -1,6 +1,6 @@
 import user from 'services/users'
 import type { Request, Response } from 'express'
-import { badRequest } from 'lib/http-errors'
+import handleResponse from 'helpers/handle-response'
 
 async function userLikeCommentController (
   req: Request,
@@ -11,11 +11,7 @@ async function userLikeCommentController (
 
   const result = await user.likeComment(commentId, userId)
 
-  if (result instanceof Error) {
-    badRequest(res, result.message); return
-  }
-
-  res.json(result)
+  handleResponse(res, result)
 }
 
 export default userLikeCommentController

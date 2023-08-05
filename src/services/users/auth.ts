@@ -1,12 +1,12 @@
 import * as bcrypt from 'bcrypt'
 import jsonwebtoken from 'jsonwebtoken'
 import prisma from 'clients/prisma-client'
-import type userPayload from 'interfaces/user'
+import type User from 'interfaces/user'
 
 async function userAuthService ({
   email,
   password
-}: userPayload): Promise<Record<string, unknown> | Error> {
+}: User): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({
     where: {
       email
