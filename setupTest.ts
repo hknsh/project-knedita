@@ -1,7 +1,9 @@
 import prisma from './src/clients/prisma-client'
 import redis from './src/clients/redis-client'
 
+process.env.NODE_ENV = 'development'
+
 afterAll(async () => {
-  redis.disconnect()
+  await redis.disconnect()
   await prisma.$disconnect()
 })

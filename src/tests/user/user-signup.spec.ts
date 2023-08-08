@@ -2,7 +2,7 @@ import request from 'supertest'
 import app from '../../app'
 import deleteUser from '../utils/delete-user'
 import signUpNewUser from '../utils/create-user'
-import type User from '../../interfaces/user'
+import type User from 'interfaces/user'
 
 let user: User
 

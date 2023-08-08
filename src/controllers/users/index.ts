@@ -22,6 +22,6 @@ const user = {
   signup: userSignupController,
   update: userUpdateController,
   uploadPicture: userUploadPictureController
-}
+} as const
 
 export default user

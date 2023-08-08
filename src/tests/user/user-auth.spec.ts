@@ -2,7 +2,7 @@ import request from 'supertest'
 import app from '../../app'
 import deleteUser from '../utils/delete-user'
 import signUpNewUser from '../utils/create-user'
-import type User from '../../interfaces/user'
+import type User from 'interfaces/user'
 
 let user: User
 
@@ -22,7 +22,7 @@ describe('POST /user/auth', () => {
       .expect(400)
 
     expect(response.body).toHaveProperty('error')
-    expect(response.body.error).toBe('User does not exists')
+    expect(response.body.error).toBe('Invalid email or password')
   })
 
   it('should respond with a error if receive an invalid email or password', async () => {

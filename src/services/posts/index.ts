@@ -10,6 +10,6 @@ const post = {
   fetch: postFetchInfoService,
   fetchLikes: postFetchLikesService,
   update: postUpdateService
-}
+} as const
 
 export default post

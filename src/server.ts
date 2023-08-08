@@ -1,7 +1,7 @@
 import app from './app'
 import { createServer } from 'http'
 import logger from 'helpers/logger'
-import createSocketIOInstance from 'socket'
+import createSocketIOInstance from './socket'
 
 const server = createServer(app)
 const io = createSocketIOInstance(server)

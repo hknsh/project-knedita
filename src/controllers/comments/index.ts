@@ -10,6 +10,6 @@ const comments = {
   fetch: commentFetchController,
   fetchLikes: commentFetchLikesController,
   update: commentUpdateController
-}
+} as const
 
 export default comments

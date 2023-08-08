@@ -19,7 +19,7 @@ services:
       - redis
       - localstack
     env_file:
-      - .env
+      - docker.env
 
   postgres:
     image: postgres:alpine
@@ -28,7 +28,7 @@ services:
     ports:
       - 5432:5432
     env_file:
-      - .env
+      - docker.env
     volumes:
       - postgres:/var/lib/postgresql/data
 
@@ -42,7 +42,7 @@ services:
       - 4566:4566
       - 4572:4572
     env_file:
-      - .env
+      - docker.env
     volumes:
       - localstack:/data
       - '/var/run/docker.sock:/var/run/docker.sock'

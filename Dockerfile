@@ -23,10 +23,11 @@ RUN npm i pm2 -g
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/prisma ./prisma/
 COPY --from=builder /app/dist ./dist/
+COPY --from=builder /app/docker.env ./
+
+RUN mv docker.env .env
 
 RUN npm ci
-
-RUN npm run prisma:deploy
 
 EXPOSE 8080
 

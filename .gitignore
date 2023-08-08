@@ -9,3 +9,4 @@ dist
 pnpm-lock.yaml
 package_backup.json
 logs/
+docker.env

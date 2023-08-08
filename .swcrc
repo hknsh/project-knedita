@@ -7,7 +7,16 @@
       "dynamicImport": true
     },
     "target": "es2020",
-    "baseUrl": "./"
+    "baseUrl": "./src",
+    "paths": {
+      "clients/*": ["clients/*"],
+      "config/*": ["config/*"],
+      "controllers/*": ["controllers/*"],
+      "interfaces/*": ["interfaces/*"],
+      "helpers/*": ["helpers/*"],
+      "middlewares/*": ["middlewares/*"],
+      "services/*": ["services/*"]
+    }
   },
   "exclude": ["@types/", "interfaces/"],
   "module": {

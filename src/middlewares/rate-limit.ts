@@ -20,8 +20,7 @@ const limiter = rateLimit({
 
   // Store configuration
   store: new RedisStore({
-    // @ts-expect-error - `call` function is not present in @types/ioredis
-    sendCommand: async (...args: string[]) => await redis.call(...args)
+    sendCommand: async (...args: string[]) => await redis.sendCommand(args)
   })
 })
 

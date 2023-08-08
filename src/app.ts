@@ -9,6 +9,8 @@ import router from './routes'
 
 const app = express()
 
+// TODO: test socket io, emit notifications when create one.
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(morganMiddleware)
@@ -23,7 +25,7 @@ app.use(cors({
 
 app.use((_req, res) => {
   res.status(404).json({
-    error: 'Not found'
+    error: 'Endpoint not found'
   })
 })
 

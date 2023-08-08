@@ -1,46 +1,25 @@
 {
   "compilerOptions": {
-    /* Language and Environment */
-    "target": "es2016",
-    /* Modules */
+    "target": "ESNext",
     "module": "commonjs",
     "rootDir": "./",
     "baseUrl": "./src",
     "paths": {
-      "clients/*": [
-        "clients/*"
-      ],
-      "config/*": [
-        "config/*"
-      ],
-      "controllers/*": [
-        "controllers/*"
-      ],
-      "interfaces/*": [
-        "interfaces/*"
-      ],
-      "lib/*": [
-        "lib/*"
-      ],
-      "middlewares/*": [
-        "middlewares/*"
-      ],
-      "services/*": [
-        "services/*"
-      ],
+      "clients/*": ["clients/*"],
+      "config/*": ["config/*"],
+      "controllers/*": ["controllers/*"],
+      "interfaces/*": ["interfaces/*"],
+      "helpers/*": ["helpers/*"],
+      "middlewares/*": ["middlewares/*"],
+      "services/*": ["services/*"]
     },
-    "typeRoots": [
-      "./src/@types",
-      "./node_modules/@types"
-    ],
-    /* Emit */
+    "typeRoots": ["./src/@types", "./node_modules/@types"],
     "outDir": "./dist",
     "removeComments": true,
-    /* Interop Constraints */
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    /* Type Checking */
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true
   }
 }

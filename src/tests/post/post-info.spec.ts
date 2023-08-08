@@ -2,7 +2,7 @@ import app from '../../app'
 import request from 'supertest'
 import signUpNewUser from '../utils/create-user'
 import deleteUser from '../utils/delete-user'
-import type User from '../../interfaces/user'
+import type User from 'interfaces/user'
 
 let postId: string
 
