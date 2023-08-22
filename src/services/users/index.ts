@@ -7,7 +7,9 @@ import userLikeCommentService from './like-comment'
 import userLikePostService from './like-post'
 import userSearchService from './search-user'
 import userSignupService from './signup'
-import userUpdateService from './update'
+import userUpdateEmailService from './update-email'
+import userUpdateNameService from './update-name'
+import userUpdatePasswordService from './update-password'
 import userUploadPictureService from './upload-picture'
 
 const user = {
@@ -20,7 +22,9 @@ const user = {
   likePost: userLikePostService,
   searchUser: userSearchService,
   signup: userSignupService,
-  update: userUpdateService,
+  updateEmail: userUpdateEmailService,
+  updateName: userUpdateNameService,
+  updatePassword: userUpdatePasswordService,
   uploadPicture: userUploadPictureService
 } as const
 

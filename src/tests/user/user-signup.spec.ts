@@ -13,7 +13,8 @@ describe('POST /user/signup', () => {
   })
 
   afterAll(async () => {
-    await deleteUser(user.username ?? '')
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    await deleteUser(user.username!)
   })
 
   it('should respond with a 400 status code if sent any invalid data', async () => {

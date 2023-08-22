@@ -21,10 +21,6 @@ async function userSignupService ({
     )
   }
 
-  if (password.trim().length < 8) {
-    return new Error('Password too short')
-  }
-
   if (!usernameRegex.test(username)) {
     return new Error(
       'Username not allowed. Only alphanumerics characters (uppercase and lowercase words), underscore, dots and it must be between 5 and 15 characters'

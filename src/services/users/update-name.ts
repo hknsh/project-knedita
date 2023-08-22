@@ -1,9 +1,8 @@
 import type User from 'interfaces/user'
 import prisma from 'clients/prisma-client'
 
-async function userUpdateService ({
+async function userUpdateNameService ({
   id,
-  email,
   displayName,
   username
 }: User): Promise<Record<string, unknown> | Error> {
@@ -13,15 +12,8 @@ async function userUpdateService ({
     return new Error('User not found')
   }
 
-  // Check if the provided email or username is different from the current user's data
-  // if they are different, additional queries are made to check if the new email or username is already in use.
-
-  if (email !== undefined && email.trim() !== user.email) {
-    const existingUser = await prisma.user.findFirst({ where: { email } })
-    if (existingUser != null && existingUser.email !== user.email) {
-      return new Error('Email already in use')
-    }
-  }
+  // Check if the provided username is different from the current user's data
+  // if different, queries are made to check if the new username is already in use.
 
   if (username !== undefined && username.trim() !== user.username) {
     const existingUser = await prisma.user.findFirst({ where: { username } })
@@ -34,14 +26,11 @@ async function userUpdateService ({
     return new Error('Forbidden')
   }
 
-  // TODO: /user/change-password | /user/change-email
-
   const updatedUser = await prisma.user.update({
     where: {
       id
     },
     data: {
-      email: email ?? user.email,
       displayName: displayName ?? user.displayName,
       username: username ?? user.username
     },
@@ -55,4 +44,4 @@ async function userUpdateService ({
   return updatedUser
 }
 
-export default userUpdateService
+export default userUpdateNameService

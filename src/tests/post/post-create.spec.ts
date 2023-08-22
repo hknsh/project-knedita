@@ -12,7 +12,8 @@ describe('POST /post/create', () => {
   })
 
   afterAll(async () => {
-    await deleteUser(user.username ?? '')
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    await deleteUser(user.username!)
   })
 
   it('should respond with 200 status code if the user send the token and the content', async () => {

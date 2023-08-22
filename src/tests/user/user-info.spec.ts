@@ -12,7 +12,8 @@ describe('POST /user/info', () => {
   })
 
   afterAll(async () => {
-    await deleteUser(user.username ?? '')
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    await deleteUser(user.username!)
   })
 
   it('should respond with 200 status code and return the user data', async () => {

@@ -12,7 +12,8 @@ describe('PUT /post/update', () => {
   })
 
   afterAll(async () => {
-    await deleteUser(user.username ?? '')
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    await deleteUser(user.username!)
   })
 
   it('should create a new post and update the content of it', async () => {

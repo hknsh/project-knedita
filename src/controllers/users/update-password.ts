@@ -2,16 +2,16 @@ import user from 'services/users'
 import type { Request, Response } from 'express'
 import handleResponse from 'helpers/handle-response'
 
-async function userUpdateController (
+async function userUpdatePasswordController (
   req: Request,
   res: Response
 ): Promise<void> {
-  const { email, displayName, username } = req.body
+  const { currentPassword, newPassword } = req.body
   const id = req.user?.id ?? ''
 
-  const result = await user.update({ id, email, displayName, username })
+  const result = await user.updatePassword(id, currentPassword, newPassword)
 
   handleResponse(res, result)
 }
 
-export default userUpdateController
+export default userUpdatePasswordController

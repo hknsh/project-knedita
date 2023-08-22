@@ -12,7 +12,8 @@ describe('POST /user/auth', () => {
   })
 
   afterAll(async () => {
-    await deleteUser(user.username ?? '')
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    await deleteUser(user.username!)
   })
 
   it('should respond with a error if the user does not exists', async () => {

@@ -29,6 +29,8 @@ usersRouter.put(
   uploadFile,
   user.uploadPicture
 )
-usersRouter.put('/update', authenticated, user.update)
+usersRouter.put('/update-email', authenticated, user.updateEmail)
+usersRouter.put('/update-name', authenticated, user.updateName)
+usersRouter.put('/update-password', authenticated, user.updatePassword)
 
 export default usersRouter

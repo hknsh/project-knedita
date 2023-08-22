@@ -12,7 +12,8 @@ describe('DELETE /post/delete', () => {
   })
 
   afterAll(async () => {
-    await deleteUser(user.username ?? '')
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    await deleteUser(user.username!)
   })
 
   it('should delete the post successfully', async () => {

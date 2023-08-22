@@ -7,7 +7,9 @@ import userLikeCommentController from './like-comment'
 import userLikePostController from './like-post'
 import userSearchController from './search-user'
 import userSignupController from './signup'
-import userUpdateController from './update'
+import userUpdateEmailController from './update-email'
+import userUpdateNameController from './update-name'
+import userUpdatePasswordController from './update-password'
 import userUploadPictureController from './upload-picture'
 
 const user = {
@@ -20,7 +22,9 @@ const user = {
   likePost: userLikePostController,
   searchUser: userSearchController,
   signup: userSignupController,
-  update: userUpdateController,
+  updateEmail: userUpdateEmailController,
+  updateName: userUpdateNameController,
+  updatePassword: userUpdatePasswordController,
   uploadPicture: userUploadPictureController
 } as const
 
