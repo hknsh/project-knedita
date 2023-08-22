@@ -1,9 +1,11 @@
 import prisma from 'clients/prisma-client'
 
-async function commentFetchService (commentId: string): Promise<Record<string, unknown> | Error> {
+async function commentFetchService(
+  commentId: string,
+): Promise<Record<string, unknown> | Error> {
   const comment = await prisma.comments.findFirst({
     where: {
-      id: commentId
+      id: commentId,
     },
     select: {
       id: true,
@@ -15,10 +17,10 @@ async function commentFetchService (commentId: string): Promise<Record<string, u
           id: true,
           displayName: true,
           username: true,
-          profileImage: true
-        }
-      }
-    }
+          profileImage: true,
+        },
+      },
+    },
   })
 
   if (comment === null) {

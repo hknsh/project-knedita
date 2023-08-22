@@ -3,14 +3,14 @@ import jsonwebtoken from 'jsonwebtoken'
 import prisma from 'clients/prisma-client'
 import type User from 'interfaces/user'
 
-async function userAuthService ({
+async function userAuthService({
   email,
-  password
+  password,
 }: User): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({
     where: {
-      email
-    }
+      email,
+    },
   })
 
   if (user == null) {
@@ -23,7 +23,7 @@ async function userAuthService ({
 
   const validPassword = await bcrypt.compare(
     password.replace(/ /g, ''),
-    user.password
+    user.password,
   )
 
   if (!validPassword) {
@@ -35,11 +35,11 @@ async function userAuthService ({
   const bearer = jsonwebtoken.sign(
     { id },
     process.env.JWT_ACCESS_SECRET ?? '',
-    { expiresIn: '1d' }
+    { expiresIn: '1d' },
   )
 
   return {
-    token: bearer
+    token: bearer,
   }
 }
 

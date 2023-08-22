@@ -9,7 +9,7 @@ const post = {
   delete: postDeleteService,
   fetch: postFetchInfoService,
   fetchLikes: postFetchLikesService,
-  update: postUpdateService
+  update: postUpdateService,
 } as const
 
 export default post

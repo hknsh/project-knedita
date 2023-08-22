@@ -1,8 +1,8 @@
 import prisma from 'clients/prisma-client'
 
-async function userLikeCommentService (
+async function userLikeCommentService(
   commentId: string,
-  userId: string
+  userId: string,
 ): Promise<Record<string, unknown> | Error> {
   if (commentId === undefined || userId === undefined) {
     return new Error('Missing fields')
@@ -10,8 +10,8 @@ async function userLikeCommentService (
 
   const comment = await prisma.comments.findFirst({
     where: {
-      id: commentId
-    }
+      id: commentId,
+    },
   })
 
   if (comment === null) {
@@ -20,8 +20,8 @@ async function userLikeCommentService (
 
   const user = await prisma.user.findFirst({
     where: {
-      id: userId
-    }
+      id: userId,
+    },
   })
 
   if (user === null) {
@@ -31,16 +31,16 @@ async function userLikeCommentService (
   const alreadyLiked = await prisma.commentLike.findFirst({
     where: {
       commentId: comment.id,
-      userId: user.id
-    }
+      userId: user.id,
+    },
   })
 
   if (alreadyLiked !== null) {
     await prisma.commentLike.deleteMany({
       where: {
         commentId: comment.id,
-        userId: user.id
-      }
+        userId: user.id,
+      },
     })
     return {}
   }
@@ -48,8 +48,8 @@ async function userLikeCommentService (
   const like = await prisma.commentLike.create({
     data: {
       commentId: comment.id,
-      userId: user.id
-    }
+      userId: user.id,
+    },
   })
 
   return like

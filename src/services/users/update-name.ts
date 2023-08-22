@@ -1,10 +1,10 @@
 import type User from 'interfaces/user'
 import prisma from 'clients/prisma-client'
 
-async function userUpdateNameService ({
+async function userUpdateNameService({
   id,
   displayName,
-  username
+  username,
 }: User): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({ where: { id } })
 
@@ -28,17 +28,17 @@ async function userUpdateNameService ({
 
   const updatedUser = await prisma.user.update({
     where: {
-      id
+      id,
     },
     data: {
       displayName: displayName ?? user.displayName,
-      username: username ?? user.username
+      username: username ?? user.username,
     },
     select: {
       displayName: true,
       username: true,
-      createdAt: true
-    }
+      createdAt: true,
+    },
   })
 
   return updatedUser

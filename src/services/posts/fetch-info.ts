@@ -1,9 +1,11 @@
 import prisma from 'clients/prisma-client'
 
-async function postFetchInfoService (id: string): Promise<Record<string, unknown> | Error> {
+async function postFetchInfoService(
+  id: string,
+): Promise<Record<string, unknown> | Error> {
   const post = await prisma.post.findFirst({
     where: {
-      id
+      id,
     },
     select: {
       id: true,
@@ -14,10 +16,10 @@ async function postFetchInfoService (id: string): Promise<Record<string, unknown
       author: {
         select: {
           displayName: true,
-          username: true
-        }
-      }
-    }
+          username: true,
+        },
+      },
+    },
   })
 
   if (post === null) {

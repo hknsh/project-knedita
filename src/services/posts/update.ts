@@ -1,9 +1,9 @@
 import prisma from 'clients/prisma-client'
 
-async function postUpdateService (
+async function postUpdateService(
   postId: string,
   content: string,
-  userId: string
+  userId: string,
 ): Promise<Record<string, unknown> | Error> {
   const post = await prisma.post.findFirst({ where: { id: postId } })
 
@@ -25,10 +25,10 @@ async function postUpdateService (
 
   const updatedPost = await prisma.post.update({
     where: {
-      id: postId
+      id: postId,
     },
     data: {
-      content
+      content,
     },
     select: {
       id: true,
@@ -38,10 +38,10 @@ async function postUpdateService (
       author: {
         select: {
           displayName: true,
-          username: true
-        }
-      }
-    }
+          username: true,
+        },
+      },
+    },
   })
 
   return updatedPost

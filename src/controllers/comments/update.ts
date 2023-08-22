@@ -3,19 +3,21 @@ import type { Request, Response } from 'express'
 import { badRequest } from 'helpers/http-errors'
 import handleResponse from 'helpers/handle-response'
 
-async function commentUpdateController (
+async function commentUpdateController(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const { commentId, content } = req.body
   const id = res.locals.user.id
 
   if (commentId === undefined) {
-    badRequest(res, 'Expected comment content'); return
+    badRequest(res, 'Expected comment content')
+    return
   }
 
   if (content === undefined) {
-    badRequest(res, 'Expected content to update'); return
+    badRequest(res, 'Expected content to update')
+    return
   }
 
   const result = await comment.update(content, id, commentId)

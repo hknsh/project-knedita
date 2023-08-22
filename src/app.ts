@@ -20,15 +20,17 @@ app.use(morganMiddleware)
 app.use(limiter)
 app.use(router)
 app.use(compression({ level: 9 }))
-app.use(cors({
-  credentials: true,
-  origin: '*', // TODO: Add client development (and production too) url
-  optionsSuccessStatus: 200
-}))
+app.use(
+  cors({
+    credentials: true,
+    origin: '*', // TODO: Add client development (and production too) url
+    optionsSuccessStatus: 200,
+  }),
+)
 
 app.use((_req, res) => {
   res.status(404).json({
-    error: 'Endpoint not found'
+    error: 'Endpoint not found',
   })
 })
 

@@ -4,12 +4,13 @@ import type { Request, Response } from 'express'
 import { badRequest } from 'helpers/http-errors'
 import handleResponse from 'helpers/handle-response'
 
-async function userUploadPictureController (
+async function userUploadPictureController(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   if (req.file === undefined) {
-    badRequest(res, 'Expected a JPG or PNG file'); return
+    badRequest(res, 'Expected a JPG or PNG file')
+    return
   }
 
   const userId = res.locals.user.id
@@ -17,7 +18,9 @@ async function userUploadPictureController (
   let url: string
 
   if (process.env.NODE_ENV === 'development') {
-    url = `http://${process.env.AWS_BUCKET ?? ''}.s3.localhost.localstack.cloud:4566/${req.file.key}`
+    url = `http://${
+      process.env.AWS_BUCKET ?? ''
+    }.s3.localhost.localstack.cloud:4566/${req.file.key}`
   } else {
     url = req.file.location
   }

@@ -1,8 +1,8 @@
 import prisma from 'clients/prisma-client'
 
-async function postCreateService (
+async function postCreateService(
   content: string,
-  authorId: string
+  authorId: string,
 ): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({ where: { id: authorId } })
 
@@ -13,8 +13,8 @@ async function postCreateService (
   const post = await prisma.post.create({
     data: {
       content,
-      authorId
-    }
+      authorId,
+    },
   })
 
   return post

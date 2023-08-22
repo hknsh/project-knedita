@@ -1,14 +1,14 @@
 import prisma from 'clients/prisma-client'
 
-async function commentCreateService (
+async function commentCreateService(
   postId: string,
   content: string,
-  authorId: string
+  authorId: string,
 ): Promise<Record<string, unknown> | Error> {
   const post = await prisma.post.findFirst({
     where: {
-      id: postId
-    }
+      id: postId,
+    },
   })
 
   if (post === null) {
@@ -17,8 +17,8 @@ async function commentCreateService (
 
   const user = await prisma.user.findFirst({
     where: {
-      id: authorId
-    }
+      id: authorId,
+    },
   })
 
   if (user === null) {
@@ -29,8 +29,8 @@ async function commentCreateService (
     data: {
       content,
       postId,
-      userId: authorId
-    }
+      userId: authorId,
+    },
   })
 
   return comment

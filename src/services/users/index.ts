@@ -25,7 +25,7 @@ const user = {
   updateEmail: userUpdateEmailService,
   updateName: userUpdateNameService,
   updatePassword: userUpdatePasswordService,
-  uploadPicture: userUploadPictureService
+  uploadPicture: userUploadPictureService,
 } as const
 
 export default user

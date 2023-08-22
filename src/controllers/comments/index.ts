@@ -9,7 +9,7 @@ const comments = {
   delete: commentDeleteController,
   fetch: commentFetchController,
   fetchLikes: commentFetchLikesController,
-  update: commentUpdateController
+  update: commentUpdateController,
 } as const
 
 export default comments

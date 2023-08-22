@@ -6,10 +6,10 @@ import type User from 'interfaces/user'
 const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*_])[a-zA-Z0-9!@#$%^&*_]{8,}$/
 const usernameRegex = /^[a-zA-Z0-9_.]{5,15}$/
 
-async function userSignupService ({
+async function userSignupService({
   username,
   email,
-  password
+  password,
 }: User): Promise<Record<string, unknown> | Error> {
   if (username === undefined || email === undefined || password === undefined) {
     return new Error('Missing fields')
@@ -17,13 +17,13 @@ async function userSignupService ({
 
   if (!passwordRegex.test(password)) {
     return new Error(
-      'Password must have at least 8 characters, one number and one special character.'
+      'Password must have at least 8 characters, one number and one special character.',
     )
   }
 
   if (!usernameRegex.test(username)) {
     return new Error(
-      'Username not allowed. Only alphanumerics characters (uppercase and lowercase words), underscore, dots and it must be between 5 and 15 characters'
+      'Username not allowed. Only alphanumerics characters (uppercase and lowercase words), underscore, dots and it must be between 5 and 15 characters',
     )
   }
 
@@ -46,13 +46,13 @@ async function userSignupService ({
     data: {
       username: username.toLowerCase(),
       email,
-      password: hashedPassword
+      password: hashedPassword,
     },
     select: {
       displayName: true,
       username: true,
-      createdAt: true
-    }
+      createdAt: true,
+    },
   })
 
   return user

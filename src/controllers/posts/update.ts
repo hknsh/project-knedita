@@ -2,9 +2,9 @@ import post from 'services/posts'
 import type { Request, Response } from 'express'
 import handleResponse from 'helpers/handle-response'
 
-async function postUpdateController (
+async function postUpdateController(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const { postId, content } = req.body
   const userId = res.locals.user.id

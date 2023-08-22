@@ -1,8 +1,8 @@
 import prisma from 'clients/prisma-client'
 
-async function userUploadPictureService (
+async function userUploadPictureService(
   authorId: string,
-  url: string
+  url: string,
 ): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({ where: { id: authorId } })
 
@@ -12,14 +12,14 @@ async function userUploadPictureService (
 
   const updatedUser = await prisma.user.update({
     where: {
-      id: authorId
+      id: authorId,
     },
     data: {
-      profileImage: url
+      profileImage: url,
     },
     select: {
-      profileImage: true
-    }
+      profileImage: true,
+    },
   })
 
   return updatedUser

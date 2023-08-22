@@ -1,8 +1,8 @@
 import prisma from 'clients/prisma-client'
 
-async function userLikePostService (
+async function userLikePostService(
   postId: string,
-  userId: string
+  userId: string,
 ): Promise<Record<string, unknown> | Error> {
   if (postId === undefined || userId === undefined) {
     return new Error('Missing fields')
@@ -10,8 +10,8 @@ async function userLikePostService (
 
   const post = await prisma.post.findFirst({
     where: {
-      id: postId
-    }
+      id: postId,
+    },
   })
 
   if (post === null) {
@@ -20,8 +20,8 @@ async function userLikePostService (
 
   const user = await prisma.user.findFirst({
     where: {
-      id: userId
-    }
+      id: userId,
+    },
   })
 
   if (user === null) {
@@ -31,16 +31,16 @@ async function userLikePostService (
   const alreadyLiked = await prisma.postLike.findFirst({
     where: {
       postId: post.id,
-      userId: user.id
-    }
+      userId: user.id,
+    },
   })
 
   if (alreadyLiked !== null) {
     await prisma.postLike.deleteMany({
       where: {
         postId: post.id,
-        userId: user.id
-      }
+        userId: user.id,
+      },
     })
     return {}
   }
@@ -48,8 +48,8 @@ async function userLikePostService (
   const like = await prisma.postLike.create({
     data: {
       postId: post.id,
-      userId: user.id
-    }
+      userId: user.id,
+    },
   })
 
   return like

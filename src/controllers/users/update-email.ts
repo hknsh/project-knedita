@@ -2,9 +2,9 @@ import user from 'services/users'
 import type { Request, Response } from 'express'
 import handleResponse from 'helpers/handle-response'
 
-async function userUpdateEmailController (
+async function userUpdateEmailController(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const { email } = req.body
   const id = res.locals.user.id

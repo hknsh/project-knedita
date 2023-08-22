@@ -9,7 +9,7 @@ const comment = {
   delete: commentDeleteService,
   fetch: commentFetchService,
   fetchLikes: commentFetchLikesService,
-  update: commentUpdateService
+  update: commentUpdateService,
 } as const
 
 export default comment

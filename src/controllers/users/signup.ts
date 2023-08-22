@@ -2,9 +2,9 @@ import user from 'services/users'
 import type { Request, Response } from 'express'
 import handleResponse from 'helpers/handle-response'
 
-async function userSignupController (
+async function userSignupController(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const { username, email, password } = req.body
 

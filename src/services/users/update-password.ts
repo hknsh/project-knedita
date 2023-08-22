@@ -3,14 +3,14 @@ import prisma from 'clients/prisma-client'
 
 const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*_])[a-zA-Z0-9!@#$%^&*_]{8,}$/
 
-async function userUpdatePasswordService (
+async function userUpdatePasswordService(
   id: string,
   currentPassword: string,
-  newPassword: string
+  newPassword: string,
 ): Promise<Record<string, unknown> | Error> {
   if (!passwordRegex.test(newPassword)) {
     return new Error(
-      'New password must have at least 8 characters, one number and one special character.'
+      'New password must have at least 8 characters, one number and one special character.',
     )
   }
 
@@ -26,7 +26,7 @@ async function userUpdatePasswordService (
 
   const validPassword = await bcrypt.compare(
     currentPassword.replace(/ /g, ''),
-    user.password
+    user.password,
   )
 
   if (!validPassword) {
@@ -38,16 +38,16 @@ async function userUpdatePasswordService (
 
   await prisma.user.update({
     where: {
-      id
+      id,
     },
     data: {
-      password: hashedPassword
+      password: hashedPassword,
     },
     select: {
       displayName: true,
       username: true,
-      createdAt: true
-    }
+      createdAt: true,
+    },
   })
 
   return { message: 'Successfully updated user password' }

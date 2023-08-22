@@ -1,8 +1,8 @@
 import prisma from 'clients/prisma-client'
 
-async function postDeleteService (
+async function postDeleteService(
   postId: string,
-  userId: string
+  userId: string,
 ): Promise<Record<string, unknown> | Error> {
   const post = await prisma.post.findFirst({ where: { id: postId } })
 
@@ -20,8 +20,8 @@ async function postDeleteService (
 
   await prisma.post.deleteMany({
     where: {
-      id: postId
-    }
+      id: postId,
+    },
   })
 
   return {}

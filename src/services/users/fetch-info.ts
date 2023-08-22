@@ -1,9 +1,11 @@
 import prisma from 'clients/prisma-client'
 
-async function userFetchInfoService (username: string): Promise<Record<string, unknown> | Error> {
+async function userFetchInfoService(
+  username: string,
+): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({
     where: {
-      username
+      username,
     },
     select: {
       profileImage: true,
@@ -15,15 +17,15 @@ async function userFetchInfoService (username: string): Promise<Record<string, u
           id: true,
           content: true,
           createdAt: true,
-          updatedAt: true
-        }
+          updatedAt: true,
+        },
       },
       likedPosts: {
         select: {
-          postId: true
-        }
-      }
-    }
+          postId: true,
+        },
+      },
+    },
   })
 
   if (user === null) {

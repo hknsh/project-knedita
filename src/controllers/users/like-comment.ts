@@ -2,9 +2,9 @@ import user from 'services/users'
 import type { Request, Response } from 'express'
 import handleResponse from 'helpers/handle-response'
 
-async function userLikeCommentController (
+async function userLikeCommentController(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const userId = res.locals.user.id
   const { commentId } = req.body

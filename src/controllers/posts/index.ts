@@ -9,7 +9,7 @@ const post = {
   delete: postDeleteController,
   fetch: postFetchInfoController,
   fetchLikes: postFetchLikesController,
-  update: postUpdateController
+  update: postUpdateController,
 } as const
 
 export default post

@@ -1,13 +1,13 @@
 import prisma from 'clients/prisma-client'
 
-async function commentDeleteService (
+async function commentDeleteService(
   commentId: string,
-  authorId: string
+  authorId: string,
 ): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({
     where: {
-      id: authorId
-    }
+      id: authorId,
+    },
   })
 
   if (user === null) {
@@ -17,8 +17,8 @@ async function commentDeleteService (
   const comment = await prisma.comments.findFirst({
     where: {
       id: commentId,
-      userId: user.id
-    }
+      userId: user.id,
+    },
   })
 
   if (comment === null) {
@@ -28,8 +28,8 @@ async function commentDeleteService (
   await prisma.comments.deleteMany({
     where: {
       id: comment.id,
-      userId: user.id
-    }
+      userId: user.id,
+    },
   })
 
   return {}

@@ -1,9 +1,9 @@
 import type User from 'interfaces/user'
 import prisma from 'clients/prisma-client'
 
-async function userUpdateEmailService ({
+async function userUpdateEmailService({
   id,
-  email
+  email,
 }: User): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({ where: { id } })
 
@@ -24,16 +24,16 @@ async function userUpdateEmailService ({
 
   await prisma.user.update({
     where: {
-      id
+      id,
     },
     data: {
-      email: email ?? user.email
+      email: email ?? user.email,
     },
     select: {
       displayName: true,
       username: true,
-      createdAt: true
-    }
+      createdAt: true,
+    },
   })
 
   return { message: 'Successfully updated user email' }

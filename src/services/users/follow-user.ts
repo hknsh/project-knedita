@@ -1,8 +1,8 @@
 import prisma from 'clients/prisma-client'
 
-async function userFollowService (
+async function userFollowService(
   userId: string,
-  followingUsername: string
+  followingUsername: string,
 ): Promise<Record<string, unknown> | Error> {
   if (userId === undefined || followingUsername === undefined) {
     return new Error('Missing fields')
@@ -10,8 +10,8 @@ async function userFollowService (
 
   const user = await prisma.user.findFirst({
     where: {
-      username: followingUsername
-    }
+      username: followingUsername,
+    },
   })
 
   if (user === null) {
@@ -20,8 +20,8 @@ async function userFollowService (
 
   const userToFollow = await prisma.user.findFirst({
     where: {
-      id: userId
-    }
+      id: userId,
+    },
   })
 
   if (userToFollow === null) {
@@ -31,16 +31,16 @@ async function userFollowService (
   const alreadyFollow = await prisma.follows.findFirst({
     where: {
       followerId: user.id,
-      followingId: userToFollow.id
-    }
+      followingId: userToFollow.id,
+    },
   })
 
   if (alreadyFollow !== null) {
     await prisma.follows.deleteMany({
       where: {
         followerId: user.id,
-        followingId: userToFollow.id
-      }
+        followingId: userToFollow.id,
+      },
     })
     return {}
   }
@@ -48,8 +48,8 @@ async function userFollowService (
   const follow = await prisma.follows.create({
     data: {
       followerId: user.id,
-      followingId: userToFollow.id
-    }
+      followingId: userToFollow.id,
+    },
   })
 
   return follow

@@ -1,18 +1,18 @@
 import prisma from 'clients/prisma-client'
 
-async function userSearchService (username: string): Promise<unknown | Error> {
+async function userSearchService(username: string): Promise<unknown | Error> {
   const users = await prisma.user.findMany({
     where: {
       username: {
-        contains: username
-      }
+        contains: username,
+      },
     },
     select: {
       displayName: true,
       username: true,
-      profileImage: true
+      profileImage: true,
     },
-    take: 10
+    take: 10,
   })
   return users
 }

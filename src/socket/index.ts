@@ -3,11 +3,11 @@ import logger from 'helpers/logger'
 import { Server } from 'socket.io'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export default function createSocketIOInstance (httpServer: any) {
+export default function createSocketIOInstance(httpServer: any) {
   const io = new Server(httpServer, {
     cors: {
-      origin: process.env.CORS_ORIGIN ?? '*'
-    }
+      origin: process.env.CORS_ORIGIN ?? '*',
+    },
   })
 
   io.use(async (socket, next) => {
@@ -20,11 +20,11 @@ export default function createSocketIOInstance (httpServer: any) {
 
     await prisma.user.update({
       where: {
-        id: socket.handshake.auth.id
+        id: socket.handshake.auth.id,
       },
       data: {
-        socketId: socket.id
-      }
+        socketId: socket.id,
+      },
     })
 
     next()
@@ -36,7 +36,7 @@ export default function createSocketIOInstance (httpServer: any) {
   }
   */
 
-  io.on('connection', (_) => {
+  io.on('connection', _ => {
     logger.info('Placeholder')
   })
 

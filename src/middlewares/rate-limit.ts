@@ -20,8 +20,8 @@ const limiter = rateLimit({
 
   // Store configuration
   store: new RedisStore({
-    sendCommand: async (...args: string[]) => await redis.sendCommand(args)
-  })
+    sendCommand: async (...args: string[]) => await redis.sendCommand(args),
+  }),
 })
 
 export default limiter

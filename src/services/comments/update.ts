@@ -1,15 +1,15 @@
 import prisma from 'clients/prisma-client'
 
-async function commentUpdateService (
+async function commentUpdateService(
   content: string,
   authorId: string,
-  commentId: string
+  commentId: string,
 ): Promise<Record<string, unknown> | Error> {
   const comment = await prisma.comments.findFirst({
     where: {
       id: commentId,
-      userId: authorId
-    }
+      userId: authorId,
+    },
   })
 
   if (comment === null) {
@@ -19,10 +19,10 @@ async function commentUpdateService (
   const updatedComment = await prisma.comments.update({
     where: {
       id: comment.id,
-      userId: authorId
+      userId: authorId,
     },
     data: {
-      content
+      content,
     },
     select: {
       id: true,
@@ -33,10 +33,10 @@ async function commentUpdateService (
         select: {
           displayName: true,
           username: true,
-          profileImage: true
-        }
-      }
-    }
+          profileImage: true,
+        },
+      },
+    },
   })
   return updatedComment
 }
