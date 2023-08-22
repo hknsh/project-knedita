@@ -11,9 +11,7 @@ import cookieParser from 'cookie-parser'
 const app = express()
 
 // TODO: test socket io, emit notifications when create one.
-// TODO: test update name, email and password routes.
 // TODO: start to create the client, or a barebone to test socket io
-// TODO: see how we create authentication with socket io.
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
