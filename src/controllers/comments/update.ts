@@ -8,7 +8,7 @@ async function commentUpdateController (
   res: Response
 ): Promise<void> {
   const { commentId, content } = req.body
-  const id = req.user?.id ?? ''
+  const id = res.locals.user.id
 
   if (commentId === undefined) {
     badRequest(res, 'Expected comment content'); return

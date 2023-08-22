@@ -6,7 +6,7 @@ async function userLikeCommentController (
   req: Request,
   res: Response
 ): Promise<void> {
-  const userId = req.user?.id ?? ''
+  const userId = res.locals.user.id
   const { commentId } = req.body
 
   const result = await user.likeComment(commentId, userId)

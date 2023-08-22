@@ -7,7 +7,7 @@ async function userUpdatePasswordController (
   res: Response
 ): Promise<void> {
   const { currentPassword, newPassword } = req.body
-  const id = req.user?.id ?? ''
+  const id = res.locals.user.id
 
   const result = await user.updatePassword(id, currentPassword, newPassword)
 

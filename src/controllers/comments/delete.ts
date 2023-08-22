@@ -8,7 +8,7 @@ async function commentDeleteController (
   res: Response
 ): Promise<void> {
   const { commentId } = req.body
-  const id = req.user?.id ?? ''
+  const id = res.locals.user.id
 
   if (commentId === undefined) {
     badRequest(res, 'Expected comment id'); return

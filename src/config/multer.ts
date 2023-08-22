@@ -15,7 +15,7 @@ const storageTypes = {
     filename: (req: Request, file: Express.Multer.File, callback) => {
       /* eslint-disable */
       const folder = req.body.isProfilePicture ? 'profile_images' : 'media'
-      const fileName: string = `${folder}/${req.user!.id}.webp`
+      const fileName: string = `${folder}/${req.res?.locals.user.id}.webp`
 
       callback(null, fileName)
     },
@@ -35,7 +35,7 @@ const storageTypes = {
         folder = 'media'
       }
 
-      const fileName: string = `${folder}/${req.user!.id}.jpg`
+      const fileName: string = `${folder}/${req.res?.locals.user.id}.jpg`
       callback(null, fileName)
     },
   }),

@@ -7,7 +7,7 @@ async function postDeleteController (
   req: Request,
   res: Response
 ): Promise<void> {
-  const userId = req.user?.id ?? ''
+  const userId = res.locals.user.id
   const postId = req.body.postId
 
   if (postId === undefined) {

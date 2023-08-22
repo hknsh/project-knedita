@@ -8,7 +8,7 @@ function uploadImage (req: Request, res: Response, next: NextFunction): void {
   const upload = multer(multerConfig).single('image')
 
   upload(req, res, async (cb: multer.MulterError | Error | any) => {
-    if (req.user == null) {
+    if (req.res?.locals.user == null) {
       badRequest(
         res,
         'You must be logged in to upload a profile picture'

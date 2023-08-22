@@ -7,7 +7,7 @@ async function userUpdateEmailController (
   res: Response
 ): Promise<void> {
   const { email } = req.body
-  const id = req.user?.id ?? ''
+  const id = res.locals.user.id
 
   const result = await user.updateEmail({ id, email })
 

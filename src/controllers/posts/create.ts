@@ -8,7 +8,7 @@ async function postCreateController (
   res: Response
 ): Promise<void> {
   const { content } = req.body
-  const id: string = req.user?.id ?? ''
+  const id = res.locals.user.id
 
   if (content === undefined) {
     badRequest(res, 'Expected post content'); return

@@ -12,7 +12,7 @@ async function userUploadPictureController (
     badRequest(res, 'Expected a JPG or PNG file'); return
   }
 
-  const userId = req.user?.id ?? ''
+  const userId = res.locals.user.id
 
   let url: string
 

@@ -8,7 +8,7 @@ async function commentCreateController (
   res: Response
 ): Promise<void> {
   const { content, postId } = req.body
-  const id = req.user?.id ?? ''
+  const id = res.locals.user.id
 
   if (postId === undefined) {
     badRequest(res, 'Expected post id'); return

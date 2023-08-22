@@ -6,7 +6,7 @@ async function userDeleteController (
   req: Request,
   res: Response
 ): Promise<void> {
-  const userId = req.user?.id ?? ''
+  const userId = res.locals.user.id
   const result = await user.delete(userId)
 
   handleResponse(res, result)

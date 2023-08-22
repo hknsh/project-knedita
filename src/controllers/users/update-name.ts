@@ -7,7 +7,7 @@ async function userUpdateNameController (
   res: Response
 ): Promise<void> {
   const { displayName, username } = req.body
-  const id = req.user?.id ?? ''
+  const id = res.locals.user.id
 
   const result = await user.updateName({ id, displayName, username })
 

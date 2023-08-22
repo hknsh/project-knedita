@@ -7,7 +7,7 @@ async function postUpdateController (
   res: Response
 ): Promise<void> {
   const { postId, content } = req.body
-  const userId = req.user?.id ?? ''
+  const userId = res.locals.user.id
 
   const result = await post.update(postId, content, userId)
 

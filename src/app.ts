@@ -6,6 +6,7 @@ import express from 'express'
 import limiter from 'middlewares/rate-limit'
 import morganMiddleware from 'middlewares/morgan'
 import router from './routes'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 
@@ -16,6 +17,7 @@ const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser())
 app.use(morganMiddleware)
 app.use(limiter)
 app.use(router)
