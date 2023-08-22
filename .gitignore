@@ -4,7 +4,6 @@ node_modules
 prisma/*.db
 .DS_Store
 prisma/migrations/dev
-client
 dist
 pnpm-lock.yaml
 package_backup.json
