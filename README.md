@@ -1,12 +1,11 @@
-# Project Knedita
-
-An open-source social media.
-
-You can find the front-end [here](https://github.com/CookieDasora/project-knedita-client)
+<p align="center">
+<img src="./banner.svg" alt="LocalStack - A fully functional local cloud stack">
+</p>
 
 ## Stack
 
-**Client**: NextJS, TailwindCSS and Radix UI Icons
+**Client**: NextJS, TailwindCSS and Radix UI Icons.
+You can find the front-end [here](https://github.com/CookieDasora/project-knedita-client)
 
 **Server**: ExpressJS, Jest, Docker, Postgresql, Redis, Prisma, AWS, SWC and Typescript
 
