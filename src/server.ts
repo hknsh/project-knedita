@@ -10,8 +10,7 @@ const server = createServer(app)
 const io = createSocketIOInstance(server)
 
 app.use((req, res, next) => {
-  // @ts-expect-error TODO: add io type
-  req.io = io
+  res.locals.io = io
   next()
 })
 

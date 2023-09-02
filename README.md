@@ -2,9 +2,11 @@
 
 An open-source social media.
 
+You can find the front-end [here](https://github.com/CookieDasora/project-knedita-client)
+
 ## Stack
 
-**Client**: React, TailwindCSS and Radix UI (Primitives and Icons)
+**Client**: NextJS, TailwindCSS and Radix UI Icons
 
 **Server**: ExpressJS, Jest, Docker, Postgresql, Redis, Prisma, AWS, SWC and Typescript
 
