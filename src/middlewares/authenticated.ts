@@ -10,7 +10,7 @@ async function authenticated(
   next: NextFunction,
 ): Promise<void> {
   try {
-    const token = req.cookies.token
+    const token = req.cookies.knedita_token
 
     if (token === undefined) {
       unauthorized(res, 'Missing token')

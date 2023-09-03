@@ -6,7 +6,7 @@ async function userLogoutController(
 ): Promise<void> {
   // @ts-expect-error clearCookie interface does not exists in Response.
   return res
-    .clearCookie('token')
+    .clearCookie('knedita_token')
     .status(200)
     .json({ message: 'Successfully logged out' })
 }

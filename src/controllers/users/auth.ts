@@ -11,7 +11,7 @@ async function userAuthController(req: Request, res: Response): Promise<void> {
     badRequest(res, result.message)
   } else {
     res
-      .cookie('token', result.token, {
+      .cookie('knedita_token', result.token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
       })
