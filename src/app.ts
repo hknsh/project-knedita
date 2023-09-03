@@ -23,7 +23,7 @@ app.use(compression({ level: 9 }))
 app.use(
   cors({
     credentials: true,
-    origin: '*', // TODO: Add client development (and production too) url
+    origin: process.env.CLIENT_URL,
     optionsSuccessStatus: 200,
   }),
 )
