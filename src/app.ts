@@ -6,7 +6,6 @@ import express from 'express'
 import limiter from 'middlewares/rate-limit'
 import morganMiddleware from 'middlewares/morgan'
 import router from './routes'
-import cookieParser from 'cookie-parser'
 
 const app = express()
 
@@ -15,18 +14,19 @@ const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cookieParser())
 app.use(morganMiddleware)
-app.use(limiter)
-app.use(router)
-app.use(compression({ level: 9 }))
+app.options('*', cors())
 app.use(
   cors({
     credentials: true,
     origin: process.env.CLIENT_URL,
+    methods: ['GET', 'POST', 'PUT'],
     optionsSuccessStatus: 200,
   }),
 )
+app.use(limiter)
+app.use(router)
+app.use(compression({ level: 9 }))
 
 app.use((_req, res) => {
   res.status(404).json({

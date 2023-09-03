@@ -5,7 +5,6 @@ import userFetchInfoController from './fetch-info'
 import userFetchPostsController from './fetch-posts'
 import userLikeCommentController from './like-comment'
 import userLikePostController from './like-post'
-import userLogoutController from './logout'
 import userSearchController from './search-user'
 import userSignupController from './signup'
 import userUpdateEmailController from './update-email'
@@ -21,7 +20,6 @@ const user = {
   follow: userFollowController,
   likeComment: userLikeCommentController,
   likePost: userLikePostController,
-  logout: userLogoutController,
   searchUser: userSearchController,
   signup: userSignupController,
   updateEmail: userUpdateEmailController,

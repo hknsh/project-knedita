@@ -13,7 +13,6 @@ const usersRouter = Router()
 usersRouter.get('/fetch-posts', user.fetchPosts)
 usersRouter.get('/info', user.fetchInfo)
 usersRouter.get('/search', user.searchUser)
-usersRouter.get('/logout', authenticated, user.logout)
 
 // POST
 usersRouter.post('/auth', user.auth)
