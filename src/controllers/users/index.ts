@@ -3,6 +3,7 @@ import userDeleteController from './delete'
 import userFollowController from './follow-user'
 import userFetchInfoController from './fetch-info'
 import userFetchPostsController from './fetch-posts'
+import userFetchUserController from './fetch-user'
 import userLikeCommentController from './like-comment'
 import userLikePostController from './like-post'
 import userSearchController from './search-user'
@@ -17,6 +18,7 @@ const user = {
   delete: userDeleteController,
   fetchInfo: userFetchInfoController,
   fetchPosts: userFetchPostsController,
+  fetchUser: userFetchUserController,
   follow: userFollowController,
   likeComment: userLikeCommentController,
   likePost: userLikePostController,

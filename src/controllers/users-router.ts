@@ -17,6 +17,7 @@ usersRouter.get('/search', user.searchUser)
 // POST
 usersRouter.post('/auth', user.auth)
 usersRouter.post('/delete', authenticated, user.delete)
+usersRouter.post('/fetch', authenticated, user.fetchUser)
 usersRouter.post('/follow-user', authenticated, user.follow)
 usersRouter.post('/like-comment', authenticated, user.likeComment)
 usersRouter.post('/like-post', authenticated, user.likePost)

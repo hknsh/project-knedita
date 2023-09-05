@@ -40,6 +40,7 @@ async function userAuthService({
 
   return {
     token: bearer,
+    user: user.username,
   }
 }
 

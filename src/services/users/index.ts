@@ -3,6 +3,7 @@ import userDeleteService from './delete'
 import userFollowService from './follow-user'
 import userFetchPostsService from './fetch-posts'
 import userFetchInfoService from './fetch-info'
+import userFetchUserService from './fetch-user'
 import userLikeCommentService from './like-comment'
 import userLikePostService from './like-post'
 import userSearchService from './search-user'
@@ -17,6 +18,7 @@ const user = {
   delete: userDeleteService,
   fetchInfo: userFetchInfoService,
   fetchPosts: userFetchPostsService,
+  fetchUser: userFetchUserService,
   follow: userFollowService,
   likeComment: userLikeCommentService,
   likePost: userLikePostService,
