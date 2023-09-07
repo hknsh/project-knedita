@@ -13,6 +13,8 @@ async function userFetchUserService(
       displayName: true,
       username: true,
       createdAt: true,
+      followers: true,
+      following: true,
       posts: {
         select: {
           id: true,
@@ -33,7 +35,16 @@ async function userFetchUserService(
     return new Error('User not found')
   }
 
-  return user
+  const followers = user.followers.length
+  const following = user.following.length
+
+  const info = {
+    ...user,
+    followers,
+    following,
+  }
+
+  return info
 }
 
 export default userFetchUserService
