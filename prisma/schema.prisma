@@ -27,14 +27,14 @@ model User {
 }
 
 model Post {
-  id        String    @id @default(uuid())
+  id        String      @id @default(uuid())
   content   String
   authorId  String
-  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author    User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
   likes     PostLike[]
   comments  Comments[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 }
 
 model PostLike {
@@ -49,11 +49,11 @@ model PostLike {
 // I should join these two up? Yeah, but I will not do it since it didn't work on the first time.
 
 model CommentLike {
-  id  String  @id @default(uuid())
+  id        String    @id @default(uuid())
   commentId String
   comment   Comments  @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  userId  String
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime  @default(now())
 }
 
@@ -67,26 +67,26 @@ model Follows {
 }
 
 model Comments {
-  id         String   @id @default(uuid())
+  id         String         @id @default(uuid())
   content    String
   userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   postId     String
-  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post       Post           @relation(fields: [postId], references: [id], onDelete: Cascade)
   likes      CommentLike[]
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt  @default(now())
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt  @default(now())
 }
 
 model Notifications {
-  id            String    @id @default(uuid())
+  id            String             @id @default(uuid())
   type          NotificationType
   content       String
-  createdAt     DateTime  @default(now())
+  createdAt     DateTime           @default(now())
   fromUserId    String
-  fromUser      User?     @relation(name: "fromNotifications", fields: [fromUserId], references: [id], onDelete: Cascade)
+  fromUser      User?              @relation(name: "fromNotifications", fields: [fromUserId], references: [id], onDelete: Cascade)
   toUserId      String
-  toUser        User?     @relation(name: "toNotifications", fields: [toUserId], references: [id], onDelete: Cascade)
+  toUser        User?              @relation(name: "toNotifications", fields: [toUserId], references: [id], onDelete: Cascade)
 }
 
 enum NotificationType {
