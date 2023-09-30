@@ -17,6 +17,7 @@ async function postFetchInfoService(
         select: {
           displayName: true,
           username: true,
+          profileImage: true,
         },
       },
     },

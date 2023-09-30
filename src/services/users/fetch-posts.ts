@@ -15,6 +15,13 @@ async function userFetchPostsService(
       content: true,
       createdAt: true,
       updatedAt: true,
+      author: {
+        select: {
+          displayName: true,
+          username: true,
+          profileImage: true,
+        },
+      },
     },
   })
   return posts
