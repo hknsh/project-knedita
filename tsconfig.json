@@ -13,7 +13,7 @@
       "middlewares/*": ["middlewares/*"],
       "services/*": ["services/*"]
     },
-    "typeRoots": ["./src/@types", "./node_modules/@types"],
+    "typeRoots": ["./src/@types", "./node_modules/@types", "./node_modules/@types/minimist/index.d.ts"],
     "outDir": "./dist",
     "removeComments": true,
     "esModuleInterop": true,

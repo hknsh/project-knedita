@@ -5,7 +5,7 @@ import logger from 'helpers/logger'
 
 let maxConnections
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
   logger.info('Development environment detected. Rate limit is now disabled.')
   maxConnections = 0
 } else {
