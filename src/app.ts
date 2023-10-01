@@ -6,11 +6,13 @@ import express from 'express'
 import limiter from 'middlewares/rate-limit'
 import morganMiddleware from 'middlewares/morgan'
 import router from './routes'
+import swaggerUI from 'swagger-ui-express'
+import swaggerDocument from 'helpers/parse-swagger'
+import swaggerConfig from 'config/swagger'
 
 const app = express()
 
 // TODO: test socket io, emit notifications when create one.
-// TODO: start to create the client, or a barebone to test socket io
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -24,9 +26,19 @@ app.use(
     optionsSuccessStatus: 200,
   }),
 )
+app.use(express.static('public'))
 app.use(limiter)
 app.use(router)
+app.use(
+  '/docs',
+  swaggerUI.serve,
+  swaggerUI.setup(swaggerDocument, swaggerConfig),
+)
 app.use(compression({ level: 9 }))
+
+app.get('/', function (_req, res) {
+  res.redirect('/docs')
+})
 
 app.use((_req, res) => {
   res.status(404).json({

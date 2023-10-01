@@ -45,6 +45,7 @@
     "@types/multer-s3": "^3.0.0",
     "@types/node": "^20.3.1",
     "@types/supertest": "^2.0.12",
+    "@types/swagger-ui-express": "^4.1.4",
     "@types/validator": "^13.7.17",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
@@ -85,7 +86,9 @@
     "redis": "^4.6.7",
     "sharp": "^0.32.3",
     "socket.io": "^4.7.2",
+    "swagger-ui-express": "^5.0.0",
     "validator": "^13.9.0",
-    "winston": "^3.10.0"
+    "winston": "^3.10.0",
+    "yaml": "^2.3.2"
   }
 }
