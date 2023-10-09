@@ -88,7 +88,7 @@
     "socket.io": "^4.7.2",
     "swagger-ui-express": "^5.0.0",
     "validator": "^13.9.0",
-    "winston": "^3.10.0",
+    "winston": "^3.11.0",
     "yaml": "^2.3.2"
   }
 }
