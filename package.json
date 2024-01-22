@@ -43,7 +43,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/morgan": "^1.9.4",
     "@types/multer-s3": "^3.0.0",
-    "@types/node": "^20.3.1",
+    "@types/node": "^20.11.5",
     "@types/supertest": "^2.0.12",
     "@types/swagger-ui-express": "^4.1.4",
     "@types/validator": "^13.7.17",
