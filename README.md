@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./banner.svg" alt="LocalStack - A fully functional local cloud stack">
+<img src="./banner.svg" alt="Project Knedita - An open-source social media">
 </p>
 
 ## Stack
