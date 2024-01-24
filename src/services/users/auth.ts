@@ -1,7 +1,7 @@
-import * as bcrypt from 'bcrypt'
-import jsonwebtoken from 'jsonwebtoken'
-import prisma from 'clients/prisma-client'
-import type User from 'interfaces/user'
+import * as bcrypt from "bcrypt";
+import jsonwebtoken from "jsonwebtoken";
+import prisma from "clients/prisma-client";
+import type User from "interfaces/user";
 
 async function userAuthService({
   email,
@@ -11,37 +11,37 @@ async function userAuthService({
     where: {
       email,
     },
-  })
+  });
 
   if (user == null) {
-    return new Error('Invalid email or password')
+    return new Error("Invalid email or password");
   }
 
   if (email === undefined || password === undefined) {
-    return new Error('Missing fields')
+    return new Error("Missing fields");
   }
 
   const validPassword = await bcrypt.compare(
-    password.replace(/ /g, ''),
-    user.password,
-  )
+    password.replace(/ /g, ""),
+    user.password
+  );
 
   if (!validPassword) {
-    return new Error('Invalid email or password')
+    return new Error("Invalid email or password");
   }
 
-  const { id } = user
+  const { id } = user;
 
   const bearer = jsonwebtoken.sign(
     { id },
-    process.env.JWT_ACCESS_SECRET ?? '',
-    { expiresIn: '1d' },
-  )
+    process.env.JWT_ACCESS_SECRET ?? "",
+    { expiresIn: "1d" }
+  );
 
   return {
     token: bearer,
     user: user.username,
-  }
+  };
 }
 
-export default userAuthService
+export default userAuthService;

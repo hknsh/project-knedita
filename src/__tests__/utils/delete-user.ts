@@ -1,4 +1,4 @@
-import prisma from '../../clients/prisma-client'
+import prisma from "../../clients/prisma-client";
 
 export default async function deleteUser(username: string) {
   await prisma.post.deleteMany({
@@ -7,11 +7,11 @@ export default async function deleteUser(username: string) {
         username,
       },
     },
-  })
+  });
 
   await prisma.user.deleteMany({
     where: {
       username,
     },
-  })
+  });
 }

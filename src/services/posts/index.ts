@@ -1,8 +1,8 @@
-import postCreateService from './create'
-import postDeleteService from './delete'
-import postFetchInfoService from './fetch-info'
-import postFetchLikesService from './fetch-likes'
-import postUpdateService from './update'
+import postCreateService from "./create";
+import postDeleteService from "./delete";
+import postFetchInfoService from "./fetch-info";
+import postFetchLikesService from "./fetch-likes";
+import postUpdateService from "./update";
 
 const post = {
   create: postCreateService,
@@ -10,6 +10,6 @@ const post = {
   fetch: postFetchInfoService,
   fetchLikes: postFetchLikesService,
   update: postUpdateService,
-} as const
+} as const;
 
-export default post
+export default post;

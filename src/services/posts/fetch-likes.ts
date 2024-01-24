@@ -1,4 +1,4 @@
-import prisma from 'clients/prisma-client'
+import prisma from "clients/prisma-client";
 
 async function postFetchLikesService(id: string): Promise<unknown | Error> {
   const post = await prisma.postLike.findMany({
@@ -14,13 +14,13 @@ async function postFetchLikesService(id: string): Promise<unknown | Error> {
         },
       },
     },
-  })
+  });
 
   if (post === null) {
-    return new Error('Post not found')
+    return new Error("Post not found");
   }
 
-  return post
+  return post;
 }
 
-export default postFetchLikesService
+export default postFetchLikesService;

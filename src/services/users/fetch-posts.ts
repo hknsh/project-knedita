@@ -1,7 +1,7 @@
-import prisma from 'clients/prisma-client'
+import prisma from "clients/prisma-client";
 
 async function userFetchPostsService(
-  username: string,
+  username: string
 ): Promise<unknown | Error> {
   const posts = await prisma.post.findMany({
     where: {
@@ -23,8 +23,8 @@ async function userFetchPostsService(
         },
       },
     },
-  })
-  return posts
+  });
+  return posts;
 }
 
-export default userFetchPostsService
+export default userFetchPostsService;

@@ -1,17 +1,17 @@
-import prisma from 'clients/prisma-client'
+import prisma from "clients/prisma-client";
 
 async function commentDeleteService(
   commentId: string,
-  authorId: string,
+  authorId: string
 ): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({
     where: {
       id: authorId,
     },
-  })
+  });
 
   if (user === null) {
-    return new Error('User not found')
+    return new Error("User not found");
   }
 
   const comment = await prisma.comments.findFirst({
@@ -19,10 +19,10 @@ async function commentDeleteService(
       id: commentId,
       userId: user.id,
     },
-  })
+  });
 
   if (comment === null) {
-    return new Error('Comment not found')
+    return new Error("Comment not found");
   }
 
   await prisma.comments.deleteMany({
@@ -30,9 +30,9 @@ async function commentDeleteService(
       id: comment.id,
       userId: user.id,
     },
-  })
+  });
 
-  return {}
+  return {};
 }
 
-export default commentDeleteService
+export default commentDeleteService;

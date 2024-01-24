@@ -1,7 +1,7 @@
-import prisma from 'clients/prisma-client'
+import prisma from "clients/prisma-client";
 
 async function commentFetchService(
-  commentId: string,
+  commentId: string
 ): Promise<Record<string, unknown> | Error> {
   const comment = await prisma.comments.findFirst({
     where: {
@@ -21,13 +21,13 @@ async function commentFetchService(
         },
       },
     },
-  })
+  });
 
   if (comment === null) {
-    return new Error('Comment not found')
+    return new Error("Comment not found");
   }
 
-  return comment
+  return comment;
 }
 
-export default commentFetchService
+export default commentFetchService;

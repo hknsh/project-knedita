@@ -1,37 +1,36 @@
-import app from '../../app'
-import { describe, beforeAll, afterAll, it } from 'vitest'
-import request from 'supertest'
-import signUpNewUser from '../utils/create-user'
-import deleteUser from '../utils/delete-user'
-import type User from 'interfaces/user'
+import app from "../../app";
+import { describe, beforeAll, afterAll, it } from "vitest";
+import request from "supertest";
+import signUpNewUser from "../utils/create-user";
+import deleteUser from "../utils/delete-user";
+import type User from "interfaces/user";
 
-let user: User
+let user: User;
 
-describe('DELETE /post/delete', () => {
+describe("DELETE /post/delete", () => {
   beforeAll(async () => {
-    user = await signUpNewUser()
-  })
+    user = await signUpNewUser();
+  });
 
   afterAll(async () => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    await deleteUser(user.username!)
-  })
+    await deleteUser(user.username as string); // TODO: here too
+  });
 
-  it('should delete the post successfully', async () => {
+  it("should delete the post successfully", async () => {
     const response = await request(app)
-      .post('/post/create')
+      .post("/post/create")
       .send({
-        content: 'lorem ipsum',
+        content: "lorem ipsum",
       })
-      .set('Authorization', `Bearer ${user.token ?? ''}`)
-      .expect(200)
+      .set("Authorization", `Bearer ${user.token ?? ""}`)
+      .expect(200);
 
     await request(app)
-      .post('/post/delete')
+      .post("/post/delete")
       .send({
         postId: response.body.id,
       })
-      .set('Authorization', `Bearer ${user.token ?? ''}`)
-      .expect(200)
-  })
-})
+      .set("Authorization", `Bearer ${user.token ?? ""}`)
+      .expect(200);
+  });
+});

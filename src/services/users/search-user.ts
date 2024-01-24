@@ -1,4 +1,4 @@
-import prisma from 'clients/prisma-client'
+import prisma from "clients/prisma-client";
 
 async function userSearchService(username: string): Promise<unknown | Error> {
   const users = await prisma.user.findMany({
@@ -13,8 +13,8 @@ async function userSearchService(username: string): Promise<unknown | Error> {
       profileImage: true,
     },
     take: 10,
-  })
-  return users
+  });
+  return users;
 }
 
-export default userSearchService
+export default userSearchService;

@@ -1,13 +1,13 @@
-import prisma from 'clients/prisma-client'
+import prisma from "clients/prisma-client";
 
 async function postCreateService(
   content: string,
-  authorId: string,
+  authorId: string
 ): Promise<Record<string, unknown> | Error> {
-  const user = await prisma.user.findFirst({ where: { id: authorId } })
+  const user = await prisma.user.findFirst({ where: { id: authorId } });
 
   if (user === null) {
-    return new Error("This user doesn't exists")
+    return new Error("This user doesn't exists");
   }
 
   const post = await prisma.post.create({
@@ -15,9 +15,9 @@ async function postCreateService(
       content,
       authorId,
     },
-  })
+  });
 
-  return post
+  return post;
 }
 
-export default postCreateService
+export default postCreateService;

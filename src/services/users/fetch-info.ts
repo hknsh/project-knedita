@@ -1,7 +1,7 @@
-import prisma from 'clients/prisma-client'
+import prisma from "clients/prisma-client";
 
 async function userFetchInfoService(
-  username: string,
+  username: string
 ): Promise<Record<string, unknown> | Error> {
   const user = await prisma.user.findFirst({
     where: {
@@ -29,22 +29,22 @@ async function userFetchInfoService(
         },
       },
     },
-  })
+  });
 
   if (user === null) {
-    return new Error('User not found')
+    return new Error("User not found");
   }
 
-  const followers = user.followers.length
-  const following = user.following.length
+  const followers = user.followers.length;
+  const following = user.following.length;
 
   const info = {
     ...user,
     followers,
     following,
-  }
+  };
 
-  return info
+  return info;
 }
 
-export default userFetchInfoService
+export default userFetchInfoService;

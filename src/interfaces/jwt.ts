@@ -1,7 +1,7 @@
 interface jwtPayload {
-  id: string
-  iat: number
-  exp: number
+  id: string;
+  iat: number;
+  exp: number;
 }
 
-export default jwtPayload
+export default jwtPayload;

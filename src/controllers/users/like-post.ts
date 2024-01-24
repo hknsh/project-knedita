@@ -1,17 +1,17 @@
-import user from 'services/users'
-import type { Request, Response } from 'express'
-import handleResponse from 'helpers/handle-response'
+import user from "services/users";
+import type { Request, Response } from "express";
+import handleResponse from "helpers/handle-response";
 
 async function userLikePostController(
   req: Request,
-  res: Response,
+  res: Response
 ): Promise<void> {
-  const userId = res.locals.user.id
-  const { postId } = req.body
+  const userId = res.locals.user.id;
+  const { postId } = req.body;
 
-  const result = await user.likePost(postId, userId)
+  const result = await user.likePost(postId, userId);
 
-  handleResponse(res, result)
+  handleResponse(res, result);
 }
 
-export default userLikePostController
+export default userLikePostController;

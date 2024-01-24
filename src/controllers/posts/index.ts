@@ -1,8 +1,8 @@
-import postCreateController from './create'
-import postDeleteController from './delete'
-import postFetchInfoController from './fetch-info'
-import postUpdateController from './update'
-import postFetchLikesController from './fetch-likes'
+import postCreateController from "./create";
+import postDeleteController from "./delete";
+import postFetchInfoController from "./fetch-info";
+import postUpdateController from "./update";
+import postFetchLikesController from "./fetch-likes";
 
 const post = {
   create: postCreateController,
@@ -10,6 +10,6 @@ const post = {
   fetch: postFetchInfoController,
   fetchLikes: postFetchLikesController,
   update: postUpdateController,
-} as const
+} as const;
 
-export default post
+export default post;

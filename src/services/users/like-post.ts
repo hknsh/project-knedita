@@ -1,31 +1,31 @@
-import prisma from 'clients/prisma-client'
+import prisma from "clients/prisma-client";
 
 async function userLikePostService(
   postId: string,
-  userId: string,
+  userId: string
 ): Promise<Record<string, unknown> | Error> {
   if (postId === undefined || userId === undefined) {
-    return new Error('Missing fields')
+    return new Error("Missing fields");
   }
 
   const post = await prisma.post.findFirst({
     where: {
       id: postId,
     },
-  })
+  });
 
   if (post === null) {
-    return new Error('Post not found')
+    return new Error("Post not found");
   }
 
   const user = await prisma.user.findFirst({
     where: {
       id: userId,
     },
-  })
+  });
 
   if (user === null) {
-    return new Error('User not found')
+    return new Error("User not found");
   }
 
   const alreadyLiked = await prisma.postLike.findFirst({
@@ -33,7 +33,7 @@ async function userLikePostService(
       postId: post.id,
       userId: user.id,
     },
-  })
+  });
 
   if (alreadyLiked !== null) {
     await prisma.postLike.deleteMany({
@@ -41,8 +41,8 @@ async function userLikePostService(
         postId: post.id,
         userId: user.id,
       },
-    })
-    return {}
+    });
+    return {};
   }
 
   const like = await prisma.postLike.create({
@@ -50,9 +50,9 @@ async function userLikePostService(
       postId: post.id,
       userId: user.id,
     },
-  })
+  });
 
-  return like
+  return like;
 }
 
-export default userLikePostService
+export default userLikePostService;

@@ -1,7 +1,7 @@
-import prisma from 'clients/prisma-client'
+import prisma from "clients/prisma-client";
 
 async function postFetchInfoService(
-  id: string,
+  id: string
 ): Promise<Record<string, unknown> | Error> {
   const post = await prisma.post.findFirst({
     where: {
@@ -21,13 +21,13 @@ async function postFetchInfoService(
         },
       },
     },
-  })
+  });
 
   if (post === null) {
-    return new Error('Post not found')
+    return new Error("Post not found");
   }
 
-  return post
+  return post;
 }
 
-export default postFetchInfoService
+export default postFetchInfoService;

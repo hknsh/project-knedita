@@ -1,4 +1,4 @@
-import prisma from 'clients/prisma-client'
+import prisma from "clients/prisma-client";
 
 async function commentFetchLikesService(id: string): Promise<unknown | Error> {
   const post = await prisma.commentLike.findMany({
@@ -14,13 +14,13 @@ async function commentFetchLikesService(id: string): Promise<unknown | Error> {
         },
       },
     },
-  })
+  });
 
   if (post === null) {
-    return new Error('Comment not found')
+    return new Error("Comment not found");
   }
 
-  return post
+  return post;
 }
 
-export default commentFetchLikesService
+export default commentFetchLikesService;

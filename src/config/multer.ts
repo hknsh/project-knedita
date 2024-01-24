@@ -1,45 +1,44 @@
-import multer from 'multer'
-import { type Request } from 'express'
-import path from 'path'
-import s3 from 'clients/s3-client'
-import multerS3 from 'multer-s3'
+import multer from "multer";
+import { type Request } from "express";
+import path from "path";
+import s3 from "clients/s3-client";
+import multerS3 from "multer-s3";
 
-const tempFolder = path.resolve(__dirname, '..', '..', 'temp', 'uploads')
+const tempFolder = path.resolve(__dirname, "..", "..", "temp", "uploads");
 
 const storageTypes = {
   local: multer.diskStorage({
     destination: (req: Request, file: Express.Multer.File, callback) => {
-      callback(null, tempFolder)
+      callback(null, tempFolder);
     },
 
     filename: (req: Request, file: Express.Multer.File, callback) => {
-      /* eslint-disable */
-      const folder = req.body.isProfilePicture ? 'profile_images' : 'media'
-      const fileName: string = `${folder}/${req.res?.locals.user.id}.webp`
+      const folder = req.body.isProfilePicture ? "profile_images" : "media";
+      const fileName: string = `${folder}/${req.res?.locals.user.id}.webp`;
 
-      callback(null, fileName)
+      callback(null, fileName);
     },
   }),
 
   s3: multerS3({
     s3,
-    bucket: process.env.AWS_BUCKET ?? '',
+    bucket: process.env.AWS_BUCKET ?? "",
     contentType: multerS3.AUTO_CONTENT_TYPE,
-    acl: 'public-read',
+    acl: "public-read",
     key: (req: Request, file: Express.Multer.File, callback) => {
-      let folder
+      let folder: string;
 
-      if (req.body.isProfilePicture === 'true') {
-        folder = 'profile_images'
+      if (req.body.isProfilePicture === "true") {
+        folder = "profile_images";
       } else {
-        folder = 'media'
+        folder = "media";
       }
 
-      const fileName: string = `${folder}/${req.res?.locals.user.id}.jpg`
-      callback(null, fileName)
+      const fileName: string = `${folder}/${req.res?.locals.user.id}.jpg`;
+      callback(null, fileName);
     },
   }),
-}
+};
 
 const multerConfig = {
   dest: tempFolder,
@@ -50,16 +49,16 @@ const multerConfig = {
   fileFilter: (
     req: Request,
     file: Express.Multer.File,
-    callback: multer.FileFilterCallback,
+    callback: multer.FileFilterCallback
   ) => {
-    const allowedMimes = ['image/jpeg', 'image/png']
+    const allowedMimes = ["image/jpeg", "image/png"];
 
     if (allowedMimes.includes(file.mimetype)) {
-      callback(null, true)
+      callback(null, true);
     } else {
-      callback(new Error('Filetype not allowed'))
+      callback(new Error("Filetype not allowed"));
     }
   },
-}
+};
 
-export default multerConfig
+export default multerConfig;

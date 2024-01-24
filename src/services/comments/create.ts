@@ -1,28 +1,28 @@
-import prisma from 'clients/prisma-client'
+import prisma from "clients/prisma-client";
 
 async function commentCreateService(
   postId: string,
   content: string,
-  authorId: string,
+  authorId: string
 ): Promise<Record<string, unknown> | Error> {
   const post = await prisma.post.findFirst({
     where: {
       id: postId,
     },
-  })
+  });
 
   if (post === null) {
-    return new Error('Post not found')
+    return new Error("Post not found");
   }
 
   const user = await prisma.user.findFirst({
     where: {
       id: authorId,
     },
-  })
+  });
 
   if (user === null) {
-    return new Error('User not found')
+    return new Error("User not found");
   }
 
   const comment = await prisma.comments.create({
@@ -31,9 +31,9 @@ async function commentCreateService(
       postId,
       userId: authorId,
     },
-  })
+  });
 
-  return comment
+  return comment;
 }
 
-export default commentCreateService
+export default commentCreateService;

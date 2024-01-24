@@ -1,22 +1,22 @@
-import { Router } from 'express'
+import { Router } from "express";
 
 // Controllers
-import comments from './comments'
+import comments from "./comments";
 
 // Middlewares
-import authenticated from 'middlewares/authenticated'
+import authenticated from "middlewares/authenticated";
 
-const commentsRouter = Router()
+const commentsRouter = Router();
 
 // GET
-commentsRouter.get('/fetch-likes', comments.fetchLikes)
-commentsRouter.get('/info', comments.fetch)
+commentsRouter.get("/fetch-likes", comments.fetchLikes);
+commentsRouter.get("/info", comments.fetch);
 
 // POST
-commentsRouter.post('/create', authenticated, comments.create)
-commentsRouter.post('/delete', authenticated, comments.delete)
+commentsRouter.post("/create", authenticated, comments.create);
+commentsRouter.post("/delete", authenticated, comments.delete);
 
 // PUT
-commentsRouter.put('/update', authenticated, comments.update)
+commentsRouter.put("/update", authenticated, comments.update);
 
-export default commentsRouter
+export default commentsRouter;

@@ -1,22 +1,22 @@
-import { Router } from 'express'
+import { Router } from "express";
 
 // Controllers
-import post from './posts'
+import post from "./posts";
 
 // Middlewares
-import authenticated from 'middlewares/authenticated'
+import authenticated from "middlewares/authenticated";
 
-const postsRouter = Router()
+const postsRouter = Router();
 
 // GET
-postsRouter.get('/fetch-likes', post.fetchLikes)
-postsRouter.get('/info', post.fetch)
+postsRouter.get("/fetch-likes", post.fetchLikes);
+postsRouter.get("/info", post.fetch);
 
 // POST
-postsRouter.post('/create', authenticated, post.create)
-postsRouter.post('/delete', authenticated, post.delete)
+postsRouter.post("/create", authenticated, post.create);
+postsRouter.post("/delete", authenticated, post.delete);
 
 // PUT
-postsRouter.put('/update', authenticated, post.update)
+postsRouter.put("/update", authenticated, post.update);
 
-export default postsRouter
+export default postsRouter;

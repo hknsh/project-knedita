@@ -1,47 +1,46 @@
-import app from '../../app'
-import { expect, describe, beforeAll, afterAll, it } from 'vitest'
-import request from 'supertest'
-import signUpNewUser from '../utils/create-user'
-import deleteUser from '../utils/delete-user'
-import type User from 'interfaces/user'
+import app from "../../app";
+import { expect, describe, beforeAll, afterAll, it } from "vitest";
+import request from "supertest";
+import signUpNewUser from "../utils/create-user";
+import deleteUser from "../utils/delete-user";
+import type User from "interfaces/user";
 
-let user: User
+let user: User;
 
-describe('PUT /post/update', () => {
+describe("PUT /post/update", () => {
   beforeAll(async () => {
-    user = await signUpNewUser()
-  })
+    user = await signUpNewUser();
+  });
 
   afterAll(async () => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    await deleteUser(user.username!)
-  })
+    await deleteUser(user.username as string); // TODO: well, here too
+  });
 
-  it('should create a new post and update the content of it', async () => {
+  it("should create a new post and update the content of it", async () => {
     const post = await request(app)
-      .post('/post/create')
+      .post("/post/create")
       .send({
-        content: 'Lorem',
+        content: "Lorem",
       })
-      .set('Authorization', `Bearer ${user.token ?? ''}`)
-      .expect(200)
+      .set("Authorization", `Bearer ${user.token ?? ""}`)
+      .expect(200);
 
-    expect(post.body).toHaveProperty('id')
+    expect(post.body).toHaveProperty("id");
 
     const fieldsToUpdate = {
       postId: post.body.id,
-      content: 'Lorem ipsum',
-    }
+      content: "Lorem ipsum",
+    };
 
     const response = await request(app)
-      .put('/post/update')
+      .put("/post/update")
       .send(fieldsToUpdate)
-      .set('Authorization', `Bearer ${user.token ?? ''}`)
-      .expect(200)
+      .set("Authorization", `Bearer ${user.token ?? ""}`)
+      .expect(200);
 
     // Post content should be Lorem Ipsum
     if (post.body.content === response.body.content) {
-      throw new Error("Post didn't update")
+      throw new Error("Post didn't update");
     }
 
     expect(response.body).toEqual(
@@ -51,7 +50,7 @@ describe('PUT /post/update', () => {
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
         author: expect.any(Object),
-      }),
-    )
-  })
-})
+      })
+    );
+  });
+});

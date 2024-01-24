@@ -1,8 +1,8 @@
-import commentCreateController from './create'
-import commentDeleteController from './delete'
-import commentFetchController from './fetch-info'
-import commentFetchLikesController from './fetch-likes'
-import commentUpdateController from './update'
+import commentCreateController from "./create";
+import commentDeleteController from "./delete";
+import commentFetchController from "./fetch-info";
+import commentFetchLikesController from "./fetch-likes";
+import commentUpdateController from "./update";
 
 const comments = {
   create: commentCreateController,
@@ -10,6 +10,6 @@ const comments = {
   fetch: commentFetchController,
   fetchLikes: commentFetchLikesController,
   update: commentUpdateController,
-} as const
+} as const;
 
-export default comments
+export default comments;

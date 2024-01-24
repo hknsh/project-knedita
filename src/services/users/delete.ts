@@ -1,25 +1,25 @@
-import prisma from 'clients/prisma-client'
+import prisma from "clients/prisma-client";
 
 async function userDeleteService(
-  userId: string,
+  userId: string
 ): Promise<Record<string, unknown> | Error> {
-  const user = await prisma.user.findFirst({ where: { id: userId } })
+  const user = await prisma.user.findFirst({ where: { id: userId } });
 
   if (user === null) {
-    return new Error('User not found')
+    return new Error("User not found");
   }
 
   if (user.id !== userId) {
-    return new Error('Forbidden')
+    return new Error("Forbidden");
   }
 
   await prisma.user.deleteMany({
     where: {
       id: userId,
     },
-  })
+  });
 
-  return {}
+  return {};
 }
 
-export default userDeleteService
+export default userDeleteService;

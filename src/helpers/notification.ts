@@ -1,11 +1,11 @@
-import { type NotificationType } from '@prisma/client'
-import prisma from 'clients/prisma-client'
+import { type NotificationType } from "@prisma/client";
+import prisma from "clients/prisma-client";
 
 export async function createNotification(
   fromUserId: string,
   toUserId: string,
   content: string,
-  type: NotificationType,
+  type: NotificationType
 ): Promise<Record<never, never> | Error> {
   try {
     await prisma.notifications.create({
@@ -25,25 +25,25 @@ export async function createNotification(
           },
         },
       },
-    })
-    return {}
+    });
+    return {};
   } catch (_) {
-    return new Error('Error while creating notification')
+    return new Error("Error while creating notification");
   }
 }
 
 export async function countNotifications(
-  toUserId: string,
+  toUserId: string
 ): Promise<number | Error> {
   try {
     const count = await prisma.notifications.count({
       where: {
         toUserId,
       },
-    })
+    });
 
-    return count
+    return count;
   } catch (_) {
-    return new Error('Error while counting user notifications')
+    return new Error("Error while counting user notifications");
   }
 }
