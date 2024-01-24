@@ -17,8 +17,8 @@ model User {
   profileImage        String?
   likedPosts          PostLike[]
   likedComments       CommentLike[]
-  followers           Follows[]         @relation("following")
-  following           Follows[]         @relation("follower")
+  followers           Follows[]         @relation("follower")
+  following           Follows[]         @relation("following")
   postComments        Comments[]
   fromNotifications   Notifications[]   @relation("fromNotifications")
   toNotifications     Notifications[]   @relation("toNotifications")
