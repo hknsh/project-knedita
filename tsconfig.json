@@ -1,25 +1,21 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
     "module": "commonjs",
-    "rootDir": "./",
-    "baseUrl": "./src",
-    "paths": {
-      "clients/*": ["clients/*"],
-      "config/*": ["config/*"],
-      "controllers/*": ["controllers/*"],
-      "interfaces/*": ["interfaces/*"],
-      "helpers/*": ["helpers/*"],
-      "middlewares/*": ["middlewares/*"],
-      "services/*": ["services/*"]
-    },
-    "typeRoots": ["./src/@types", "./node_modules/@types", "./node_modules/@types/minimist/index.d.ts"],
-    "outDir": "./dist",
+    "declaration": true,
     "removeComments": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false
   }
 }
