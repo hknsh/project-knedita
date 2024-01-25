@@ -31,11 +31,11 @@ import { ThrottlerStorageRedisService } from "nestjs-throttler-storage-redis";
     },
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard,
+      useClass: ThrottlerGuard,
     },
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard,
+      useClass: JwtAuthGuard,
     },
   ],
 })
