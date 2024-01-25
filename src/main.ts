@@ -2,9 +2,16 @@ import { NestFactory } from "@nestjs/core";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
 import { patchNestJsSwagger } from "nestjs-zod";
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from "@nestjs/platform-fastify";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter({ logger: true }),
+  );
 
   patchNestJsSwagger();
 
@@ -14,15 +21,27 @@ async function bootstrap() {
     .setTitle("Project Knedita")
     .setDescription("An open-source social media")
     .setVersion("1.0")
-    .addTag("User")
-    .addTag("Post")
+    .addBearerAuth(
+      {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        name: "JWT",
+        description: "Enter JWT Token",
+        in: "header",
+      },
+      "JWT",
+    )
+    .addTag("Auth")
     .addTag("Comment")
+    .addTag("Post")
+    .addTag("User")
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup("/", app, document);
 
-  await app.listen(3000);
+  await app.listen(3000, "0.0.0.0");
 }
 bootstrap();
