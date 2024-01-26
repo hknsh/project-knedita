@@ -24,7 +24,7 @@ export class AuthController {
 
   @Public()
   @UseGuards(LocalAuthGuard)
-  @Post("/login")
+  @Post("/")
   @ApiOperation({ summary: "Authenticates a user" })
   @ApiOkResponse({ status: 200, description: "Authenticated successfully" })
   @ApiUnauthorizedResponse({ description: "Wrong username or password" })

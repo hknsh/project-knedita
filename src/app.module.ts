@@ -1,18 +1,17 @@
 import { Module } from "@nestjs/common";
-import { UserModule } from "./user/user.module";
+import { UserModule } from "./users/users.module";
 import { APP_GUARD, APP_PIPE } from "@nestjs/core";
 import { ZodValidationPipe } from "nestjs-zod";
-import { PostModule } from "./post/post.module";
 import { AuthModule } from "./auth/auth.module";
 import { ConfigModule } from "@nestjs/config";
 import { JwtAuthGuard } from "./auth/jwt-auth.guard";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { ThrottlerStorageRedisService } from "nestjs-throttler-storage-redis";
+import { KweeksModule } from './kweeks/kweeks.module';
 
 @Module({
   imports: [
     UserModule,
-    PostModule,
     AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
@@ -23,6 +22,7 @@ import { ThrottlerStorageRedisService } from "nestjs-throttler-storage-redis";
         `redis://:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}/0`,
       ),
     }),
+    KweeksModule,
   ],
   providers: [
     {

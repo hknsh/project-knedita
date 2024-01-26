@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { UserService } from "src/user/user.service";
+import { UserService } from "src/users/users.service";
 import * as bcrypt from "bcrypt";
-import { UserModel } from "src/user/models/user.model";
+import { UserModel } from "src/users/models/user.model";
 import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
@@ -15,7 +15,7 @@ export class AuthService {
     username: string,
     password: string,
   ): Promise<UserModel | null> {
-    const user = await this.userService.search(username);
+    const user = await this.userService.auth_search(username);
 
     if (user === undefined) {
       return null;

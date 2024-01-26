@@ -34,9 +34,8 @@ async function bootstrap() {
       "JWT",
     )
     .addTag("Auth")
-    .addTag("Comment")
-    .addTag("Post")
-    .addTag("User")
+    .addTag("Kweeks")
+    .addTag("Users")
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
