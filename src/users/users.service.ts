@@ -101,6 +101,35 @@ export class UserService {
     return user;
   }
 
+  async updateEmail(
+    loggedUser: User,
+    email: string,
+  ): Promise<{ message: string }> {
+    const user = await this.prisma.user.findFirst({
+      where: { id: loggedUser.id },
+    });
+
+    if (email !== undefined && email.trim() !== user.email) {
+      const isAlreadyInUse = await this.prisma.user.findFirst({
+        where: { email },
+      });
+      if (isAlreadyInUse != null && isAlreadyInUse.email !== user.email) {
+        throw new BadRequestException("Email already in use");
+      }
+
+      await this.prisma.user.update({
+        where: {
+          id: loggedUser.id,
+        },
+        data: {
+          email: email ?? user.email,
+        },
+      });
+
+      return { message: "Email updated successfully" };
+    }
+  }
+
   async updateName(
     loggedUser: User,
     username: string | undefined,
@@ -132,5 +161,37 @@ export class UserService {
         username: true,
       },
     });
+  }
+
+  async updatePassword(
+    loggedUser: User,
+    old_password: string,
+    new_password: string,
+  ): Promise<{ message: string }> {
+    const id = loggedUser.id;
+
+    const user = await this.prisma.user.findFirst({
+      where: { id },
+    });
+
+    const validatePassword = await bcrypt.compare(old_password, user.password);
+
+    if (!validatePassword) {
+      throw new BadRequestException("Wrong password");
+    }
+
+    const salt = await bcrypt.genSalt(15);
+    const hash = await bcrypt.hash(new_password, salt);
+
+    await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        password: hash,
+      },
+    });
+
+    return { message: "Password updated successfully" };
   }
 }

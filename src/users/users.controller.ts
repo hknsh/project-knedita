@@ -23,6 +23,8 @@ import { CreateUserDTO } from "./dto/create-user.dto";
 import { Public } from "src/public.decorator";
 import { UpdateNameDTO } from "./dto/update-name.dto";
 import { User } from "./types/user.type";
+import { UpdateEmailDTO } from "./dto/update-email.dto";
+import { UpdatePasswordDTO } from "./dto/update-password.dto";
 
 @ApiTags("Users")
 @Controller("users")
@@ -49,7 +51,7 @@ export class UserController {
     description: "Not authenticated / Invalid JWT Token",
   })
   me(@Request() req) {
-    return req.user; // TODO: Add typing to req.user
+    return req.user;
   }
 
   @Public()
@@ -74,12 +76,23 @@ export class UserController {
   @Patch("/email")
   @ApiOperation({ summary: "Updates the email of a logged user" })
   @ApiBearerAuth("JWT")
-  updateEmail() {}
+  updateEmail(@Body() body: UpdateEmailDTO, @Request() req) {
+    return this.userService.updateEmail(req.user as User, body.email);
+  }
 
   @Patch("/password")
   @ApiOperation({ summary: "Updates the password of a logged user" })
   @ApiBearerAuth("JWT")
-  updatePassword() {}
+  updatePassword(
+    @Body() { old_password, new_password }: UpdatePasswordDTO,
+    @Request() req,
+  ) {
+    return this.userService.updatePassword(
+      req.user as User,
+      old_password,
+      new_password,
+    );
+  }
 
   @Patch("/image")
   @ApiOperation({ summary: "Add a profile image" })
