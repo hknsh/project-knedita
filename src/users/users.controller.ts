@@ -2,12 +2,9 @@ import {
   Body,
   Controller,
   Delete,
-  FileTypeValidator,
   Get,
   HttpCode,
-  MaxFileSizeValidator,
   Param,
-  ParseFilePipe,
   Patch,
   Post,
   Request,
@@ -34,6 +31,8 @@ import { UpdateEmailDTO } from "./dto/update-email.dto";
 import { UpdatePasswordDTO } from "./dto/update-password.dto";
 import { File, FileInterceptor } from "@nest-lab/fastify-multer";
 import { BufferValidator } from "src/validators/buffer-validator.pipe";
+import UploadImageSchema from "./schemas/upload-image.schema";
+import UploadImageValidator from "src/validators/upload-image.validator";
 
 @ApiTags("Users")
 @Controller("users")
@@ -110,29 +109,10 @@ export class UserController {
   @ApiBearerAuth("JWT")
   @UseInterceptors(FileInterceptor("image"))
   @ApiConsumes("multipart/form-data")
-  @ApiBody({
-    required: true,
-    schema: {
-      type: "object",
-      properties: {
-        image: {
-          type: "string",
-          format: "binary",
-        },
-      },
-    },
-  })
+  @ApiBody(UploadImageSchema)
   uploadProfileImage(
     @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new MaxFileSizeValidator({
-            maxSize: 15 * 1024 * 1024,
-            message: "File too big. Max 1MB.",
-          }),
-          new FileTypeValidator({ fileType: /^image\/(jpeg|png|webp)$/ }), // File extension validation
-        ],
-      }),
+      UploadImageValidator,
       new BufferValidator(), // Magic number validation
     )
     image: File,
