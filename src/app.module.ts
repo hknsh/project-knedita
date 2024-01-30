@@ -7,7 +7,9 @@ import { ConfigModule } from "@nestjs/config";
 import { JwtAuthGuard } from "./auth/jwt-auth.guard";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { ThrottlerStorageRedisService } from "nestjs-throttler-storage-redis";
-import { KweeksModule } from './kweeks/kweeks.module';
+import { KweeksModule } from "./kweeks/kweeks.module";
+import { FastifyMulterModule } from "@nest-lab/fastify-multer";
+import { S3Module } from "nestjs-s3";
 
 @Module({
   imports: [
@@ -23,6 +25,18 @@ import { KweeksModule } from './kweeks/kweeks.module';
       ),
     }),
     KweeksModule,
+    FastifyMulterModule,
+    S3Module.forRoot({
+      config: {
+        credentials: {
+          accessKeyId: process.env.MINIO_ROOT_USER, // CHANGE WHEN PRODUCTION TO S3
+          secretAccessKey: process.env.MINIO_ROOT_PASSWORD,
+        },
+        region: "us-east-1",
+        endpoint: process.env.MINIO_ENDPOINT,
+        forcePathStyle: true,
+      },
+    }),
   ],
   providers: [
     {

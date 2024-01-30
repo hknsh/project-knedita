@@ -8,10 +8,15 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { UserModel } from "./models/user.model";
 import * as bcrypt from "bcrypt";
 import { User } from "./types/user.type";
+import { File } from "@nest-lab/fastify-multer";
+import { S3Service } from "./s3.service";
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private s3: S3Service,
+  ) {}
   async auth_search(username: string): Promise<UserModel> {
     const user = await this.prisma.user.findFirst({
       where: {
@@ -193,5 +198,24 @@ export class UserService {
     });
 
     return { message: "Password updated successfully" };
+  }
+
+  async uploadImage(authenticatedUser: User, image: File) {
+    const url = await this.s3.uploadImageToMinio(
+      authenticatedUser.id,
+      image.buffer,
+    );
+
+    return await this.prisma.user.update({
+      where: {
+        id: authenticatedUser.id,
+      },
+      data: {
+        profileImage: url,
+      },
+      select: {
+        profileImage: true,
+      },
+    });
   }
 }

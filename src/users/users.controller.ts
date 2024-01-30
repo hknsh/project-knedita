@@ -2,16 +2,23 @@ import {
   Body,
   Controller,
   Delete,
+  FileTypeValidator,
   Get,
   HttpCode,
+  MaxFileSizeValidator,
   Param,
+  ParseFilePipe,
   Patch,
   Post,
   Request,
+  UploadedFile,
+  UseInterceptors,
 } from "@nestjs/common";
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOperation,
@@ -25,6 +32,8 @@ import { UpdateNameDTO } from "./dto/update-name.dto";
 import { User } from "./types/user.type";
 import { UpdateEmailDTO } from "./dto/update-email.dto";
 import { UpdatePasswordDTO } from "./dto/update-password.dto";
+import { File, FileInterceptor } from "@nest-lab/fastify-multer";
+import { BufferValidator } from "src/validators/buffer-validator.pipe";
 
 @ApiTags("Users")
 @Controller("users")
@@ -95,9 +104,42 @@ export class UserController {
   }
 
   @Patch("/image")
-  @ApiOperation({ summary: "Add a profile image" })
+  @ApiOperation({
+    summary: "Add a profile image",
+  })
   @ApiBearerAuth("JWT")
-  uploadProfileImage() {}
+  @UseInterceptors(FileInterceptor("image"))
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    required: true,
+    schema: {
+      type: "object",
+      properties: {
+        image: {
+          type: "string",
+          format: "binary",
+        },
+      },
+    },
+  })
+  uploadProfileImage(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 15 * 1024 * 1024,
+            message: "File too big. Max 1MB.",
+          }),
+          new FileTypeValidator({ fileType: /^image\/(jpeg|png|webp)$/ }), // File extension validation
+        ],
+      }),
+      new BufferValidator(), // Magic number validation
+    )
+    image: File,
+    @Request() req,
+  ) {
+    return this.userService.uploadImage(req.user, image);
+  }
 
   // DELETE
   @Delete()

@@ -4,6 +4,9 @@ networks:
   localstack-net:
     name: localstack-net
     driver: bridge
+  minio_network:
+    name: minio_network
+    driver: bridge
 
 services:
   api:
@@ -32,20 +35,18 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
 
-  localstack:
-    image: localstack/localstack
-    container_name: localstack_main
+  minio:
+    image: bitnami/minio
     restart: unless-stopped
-    networks:
-      - localstack-net
     ports:
-      - 4566:4566
-      - 4572:4572
+      - '9000:9000'
+      - '9001:9001'
+    networks:
+      - minio_network
+    volumes:
+      - 'minio_data:/data'
     env_file:
       - docker.env
-    volumes:
-      - localstack:/data
-      - '/var/run/docker.sock:/var/run/docker.sock'
 
   redis:
     image: redis:alpine
@@ -62,4 +63,5 @@ volumes:
     name: backend-db
   redis:
     driver: local
-  localstack:
+  minio_data:
+    driver: local

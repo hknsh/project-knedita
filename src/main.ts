@@ -8,6 +8,8 @@ import {
 } from "@nestjs/platform-fastify";
 import * as helmet from "@fastify/helmet";
 
+// TODO: File Upload (Posts and User Profile Image)
+
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
