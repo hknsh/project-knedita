@@ -40,3 +40,5 @@ old_port
 prisma/*.db
 prisma/migrations/dev
 docker.env
+package_copy.json
+package-lock_copy.json
