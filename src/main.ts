@@ -46,6 +46,6 @@ async function bootstrap() {
 
   await app.register(helmet);
 
-  await app.listen(3000, "0.0.0.0");
+  await app.listen(process.env.SERVER_PORT, process.env.SERVER_HOST);
 }
 bootstrap();
