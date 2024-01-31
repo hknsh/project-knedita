@@ -9,21 +9,6 @@ networks:
     driver: bridge
 
 services:
-  api:
-    container_name: api
-    restart: unless-stopped
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 8080:8080
-    depends_on:
-      - postgres
-      - redis
-      - localstack
-    env_file:
-      - docker.env
-
   postgres:
     image: postgres:alpine
     restart: unless-stopped
@@ -57,6 +42,21 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass not_a_production_pass
     volumes:
       - redis:/data
+
+  api:
+    container_name: api
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+      - redis
+      - minio
+    env_file:
+      - docker.env
 
 volumes:
   postgres:

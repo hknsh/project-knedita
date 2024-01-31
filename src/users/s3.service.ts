@@ -8,7 +8,7 @@ export class S3Service {
   constructor(@InjectS3() private readonly s3: S3) {}
 
   /**
-   * Returns the image url if the upload to minio as successful. Otherwise returns `false`.
+   * Returns the image url if the upload to minio was successful.
    */
   async uploadImageToMinio(userID: string, buffer: Buffer): Promise<string> {
     const compressedBuffer = await sharp(buffer)
