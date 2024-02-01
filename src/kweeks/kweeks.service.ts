@@ -1,15 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { CreateKweekDto } from './dto/create-kweek.dto';
-import { UpdateKweekDto } from './dto/update-kweek.dto';
+import { Injectable } from "@nestjs/common";
+import { CreateKweekDTO } from "./dto/create-kweek.dto";
+import { UpdateKweekDto } from "./dto/update-kweek.dto";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class KweeksService {
-  create(createKweekDto: CreateKweekDto) {
-    return 'This action adds a new kweek';
-  }
-
-  findAll() {
-    return `This action returns all kweeks`;
+  constructor(private readonly prisma: PrismaService) {}
+  create(createKweekDto: CreateKweekDTO) {
+    return "This action adds a new kweek";
   }
 
   findOne(id: number) {

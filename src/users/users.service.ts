@@ -14,8 +14,8 @@ import { S3Service } from "./s3.service";
 @Injectable()
 export class UserService {
   constructor(
-    private prisma: PrismaService,
-    private s3: S3Service,
+    private readonly prisma: PrismaService,
+    private readonly s3: S3Service,
   ) {}
   async auth_search(username: string): Promise<UserModel> {
     const user = await this.prisma.user.findFirst({

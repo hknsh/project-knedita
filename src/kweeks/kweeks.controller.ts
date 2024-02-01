@@ -6,12 +6,21 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFiles,
+  Request,
 } from "@nestjs/common";
 import { KweeksService } from "./kweeks.service";
-import { CreateKweekDto } from "./dto/create-kweek.dto";
+import { CreateKweekDTO } from "./dto/create-kweek.dto";
 import { UpdateKweekDto } from "./dto/update-kweek.dto";
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from "@nestjs/swagger";
 import { Public } from "src/public.decorator";
+import { FilesInterceptor } from "@nest-lab/fastify-multer";
 
 @ApiTags("Kweeks")
 @Controller("kweeks")
@@ -21,7 +30,13 @@ export class KweeksController {
   @Post()
   @ApiOperation({ summary: "Creates a kweek" })
   @ApiBearerAuth("JWT")
-  create(@Body() createKweekDto: CreateKweekDto) {
+  @ApiConsumes("multipart/form-data")
+  @UseInterceptors(FilesInterceptor("attachments", 4))
+  create(
+    @Body() createKweekDto: CreateKweekDTO,
+    @UploadedFiles() attachments: File,
+    @Request() req,
+  ) {
     return this.kweeksService.create(createKweekDto);
   }
 
