@@ -12,6 +12,7 @@
     "docker:build": "docker build -t api . && docker compose up -d",
     "docker:db": "docker compose -f docker-compose.db.yml up -d",
     "docker:seed": "docker exec -it api npm run prisma:seed",
+    "lint": "npx @biomejs/biome check --apply .",
     "migrate:deploy": "prisma migrate deploy",
     "migrate:dev": "prisma migrate dev",
     "migrate:dev:create": "prisma migrate dev --create-only",
