@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateKweekDTO } from "./dto/create-kweek.dto";
-import { UpdateKweekDto } from "./dto/update-kweek.dto";
+import { UpdateKweekDTO } from "./dto/update-kweek.dto";
 
 @Injectable()
 export class KweeksService {
@@ -14,7 +14,7 @@ export class KweeksService {
 		return `This action returns a #${id} kweek`;
 	}
 
-	update(id: number, updateKweekDto: UpdateKweekDto) {
+	update(id: number, updateKweekDto: UpdateKweekDTO) {
 		return `This action updates a #${id} kweek`;
 	}
 

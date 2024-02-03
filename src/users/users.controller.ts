@@ -125,6 +125,6 @@ export class UserController {
 	@ApiOperation({ summary: "Deletes the account of a logged user" })
 	@ApiBearerAuth("JWT")
 	delete(@Request() req) {
-    return this.userService.delete(req.user.id)
-  }
+		return this.userService.delete(req.user.id);
+	}
 }

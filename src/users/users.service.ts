@@ -107,11 +107,11 @@ export class UserService {
 	}
 
 	async updateEmail(
-		loggedUser: User,
+    id: string,
 		email: string,
 	): Promise<{ message: string }> {
 		const user = await this.prisma.user.findFirst({
-			where: { id: loggedUser.id },
+			where: { id },
 		});
 
 		if (email !== undefined && email.trim() !== user.email) {
@@ -124,7 +124,7 @@ export class UserService {
 
 			await this.prisma.user.update({
 				where: {
-					id: loggedUser.id,
+					id,
 				},
 				data: {
 					email: email ?? user.email,
@@ -136,12 +136,12 @@ export class UserService {
 	}
 
 	async updateName(
-		loggedUser: User,
+		id: string,
 		username: string | undefined,
 		displayName: string,
 	): Promise<Pick<User, "username" | "displayName">> {
 		const user = await this.prisma.user.findFirst({
-			where: { id: loggedUser.id },
+			where: { id },
 		});
 
 		if (username !== undefined && username.trim() !== user.username) {
@@ -155,7 +155,7 @@ export class UserService {
 
 		return await this.prisma.user.update({
 			where: {
-				id: loggedUser.id,
+				id
 			},
 			data: {
 				displayName,
