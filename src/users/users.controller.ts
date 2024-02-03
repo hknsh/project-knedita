@@ -31,7 +31,6 @@ import { UpdateEmailDTO } from "./dto/update-email.dto";
 import { UpdateNameDTO } from "./dto/update-name.dto";
 import { UpdatePasswordDTO } from "./dto/update-password.dto";
 import UploadImageSchema from "./schemas/upload-image.schema";
-import { User } from "./types/user.type";
 import { UserService } from "./users.service";
 
 @ApiTags("Users")
@@ -78,14 +77,14 @@ export class UserController {
 	})
 	@ApiBearerAuth("JWT")
 	updateName(@Body() { displayName, username }: UpdateNameDTO, @Request() req) {
-		return this.userService.updateName(req.user as User, username, displayName);
+		return this.userService.updateName(req.user.id, username, displayName);
 	}
 
 	@Patch("/email")
 	@ApiOperation({ summary: "Updates the email of a logged user" })
 	@ApiBearerAuth("JWT")
 	updateEmail(@Body() body: UpdateEmailDTO, @Request() req) {
-		return this.userService.updateEmail(req.user as User, body.email);
+		return this.userService.updateEmail(req.user.id, body.email);
 	}
 
 	@Patch("/password")
@@ -96,7 +95,7 @@ export class UserController {
 		@Request() req,
 	) {
 		return this.userService.updatePassword(
-			req.user as User,
+			req.user.id,
 			old_password,
 			new_password,
 		);
@@ -118,12 +117,14 @@ export class UserController {
 		image: File,
 		@Request() req,
 	) {
-		return this.userService.uploadImage(req.user, image);
+		return this.userService.uploadImage(req.user.id, image);
 	}
 
 	// DELETE
 	@Delete()
 	@ApiOperation({ summary: "Deletes the account of a logged user" })
 	@ApiBearerAuth("JWT")
-	remove() {}
+	delete(@Request() req) {
+    return this.userService.delete(req.user.id)
+  }
 }

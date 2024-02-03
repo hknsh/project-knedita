@@ -169,12 +169,10 @@ export class UserService {
 	}
 
 	async updatePassword(
-		loggedUser: User,
+		id: string,
 		old_password: string,
 		new_password: string,
 	): Promise<{ message: string }> {
-		const id = loggedUser.id;
-
 		const user = await this.prisma.user.findFirst({
 			where: { id },
 		});
@@ -200,15 +198,15 @@ export class UserService {
 		return { message: "Password updated successfully" };
 	}
 
-	async uploadImage(authenticatedUser: User, image: File) {
+	async uploadImage(id: string, image: File) {
 		const url = await this.s3.uploadImageToMinio(
-			authenticatedUser.id,
+			id,
 			image.buffer,
 		);
 
 		return await this.prisma.user.update({
 			where: {
-				id: authenticatedUser.id,
+				id,
 			},
 			data: {
 				profileImage: url,
@@ -218,4 +216,14 @@ export class UserService {
 			},
 		});
 	}
+
+  async delete(id: string) {
+    // TODO: Add validation for safety (like e-mail confirmation or password)
+    try {
+      await this.prisma.user.deleteMany({where: {id}});;
+      return { message: "User deleted"}
+    } catch (e) {
+      throw new BadRequestException('Error while trying to delete user')
+    }
+  }
 }
