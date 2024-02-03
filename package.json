@@ -20,7 +20,7 @@
     "prisma:generate": "npx prisma generate",
     "prisma:seed": "prisma db seed",
     "prisma:studio": "npx prisma studio",
-    "prepare": "husky .husky/install",
+    "prepare": "husky",
     "prod": "npm run migrate:deploy && node dist/main",
     "start": "nest start",
     "test": "jest",
