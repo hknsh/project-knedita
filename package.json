@@ -113,6 +113,6 @@
     "testEnvironment": "node"
   },
   "lint-staged": {
-    "**.js|ts|json": "biome check --apply --no-errors-on-unmatched"
+    "**/*.@(js|ts|json)": "biome check --apply --no-errors-on-unmatched"
   }
 }
