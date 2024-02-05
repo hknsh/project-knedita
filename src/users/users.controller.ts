@@ -23,8 +23,8 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import { Public } from "src/public.decorator";
-import { BufferValidator } from "src/validators/buffer-validator.pipe";
+import { Public } from "src/decorators/public.decorator";
+import { BufferValidator } from "src/validators/buffer.validator";
 import UploadImageValidator from "src/validators/upload-image.validator";
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { UpdateEmailDTO } from "./dto/update-email.dto";

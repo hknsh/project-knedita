@@ -12,9 +12,9 @@ export class BufferValidator implements PipeTransform {
 		) as Promise<typeof import("file-type")>);
 
 		const ALLOWED_MIMES = ["image/jpeg", "image/png", "image/webp"];
-		const Type = await fileTypeFromBuffer(value.buffer);
+		const buffer_type = await fileTypeFromBuffer(value.buffer);
 
-		if (!Type || !ALLOWED_MIMES.includes(Type.mime)) {
+		if (!buffer_type || !ALLOWED_MIMES.includes(buffer_type.mime)) {
 			throw new BadRequestException(
 				"Invalid file type. Should be jpeg, png or webp",
 			);

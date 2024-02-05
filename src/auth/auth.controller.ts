@@ -12,7 +12,7 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import { Public } from "src/public.decorator";
+import { Public } from "src/decorators/public.decorator";
 import { AuthService } from "./auth.service";
 import { LoginUserDTO } from "./dto/login.dto";
 import { LocalAuthGuard } from "./local-auth.guard";

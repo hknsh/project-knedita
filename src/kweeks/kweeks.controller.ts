@@ -1,4 +1,4 @@
-import { FilesInterceptor } from "@nest-lab/fastify-multer";
+import { File, FilesInterceptor } from "@nest-lab/fastify-multer";
 import {
 	Body,
 	Controller,
@@ -17,8 +17,9 @@ import {
 	ApiOperation,
 	ApiTags,
 } from "@nestjs/swagger";
-import { Public } from "src/public.decorator";
-import { CreateKweekDTO } from "./dto/create-kweek.dto";
+import { ApiCreateKweek } from "src/decorators/create-kweek.decorator";
+import { Public } from "src/decorators/public.decorator";
+import { MultiFileValidation } from "src/validators/multi-file.validator";
 import { UpdateKweekDTO } from "./dto/update-kweek.dto";
 import { KweeksService } from "./kweeks.service";
 
@@ -28,17 +29,17 @@ export class KweeksController {
 	constructor(private readonly kweeksService: KweeksService) {}
 
 	@Post()
+	@ApiConsumes("multipart/form-data")
+	@ApiCreateKweek("attachments")
+	@UseInterceptors(FilesInterceptor("attachments", 4))
 	@ApiOperation({ summary: "Creates a kweek" })
 	@ApiBearerAuth("JWT")
-	@ApiConsumes("multipart/form-data")
-	@UseInterceptors(FilesInterceptor("attachments", 4))
 	create(
-		@Body() createKweekDto: CreateKweekDTO,
-		@UploadedFiles() attachments: File,
+		@UploadedFiles(new MultiFileValidation()) attachments: Array<File>,
+		@Body() body,
 		@Request() req,
 	) {
-    // TODO: Find a way to handle multiple files with Swagger
-		return this.kweeksService.create(createKweekDto);
+		return this.kweeksService.create(body.content, req.user.id, attachments);
 	}
 
 	@Public()
@@ -51,7 +52,7 @@ export class KweeksController {
 	@Patch(":id")
 	@ApiOperation({ summary: "Updates a kweek content" })
 	@ApiBearerAuth("JWT")
-	update(@Param("id") id: string, @Body() updateKweekDto: UpdateKweekDTO ) {
+	update(@Param("id") id: string, @Body() updateKweekDto: UpdateKweekDTO) {
 		return this.kweeksService.update(+id, updateKweekDto);
 	}
 

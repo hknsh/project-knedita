@@ -5,10 +5,10 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
-import { PrismaService } from "src/prisma/prisma.service";
+import { PrismaService } from "src/services/prisma/prisma.service";
+import { S3Service } from "src/services/s3/s3.service";
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { UserModel } from "./models/user.model";
-import { S3Service } from "./s3.service";
 import { User } from "./types/user.type";
 
 @Injectable()
@@ -53,6 +53,7 @@ export class UserService {
 					select: {
 						id: true,
 						content: true,
+            attachments: true,
 						createdAt: true,
 						updatedAt: true,
 					},
@@ -106,10 +107,7 @@ export class UserService {
 		return user;
 	}
 
-	async updateEmail(
-    id: string,
-		email: string,
-	): Promise<{ message: string }> {
+	async updateEmail(id: string, email: string): Promise<{ message: string }> {
 		const user = await this.prisma.user.findFirst({
 			where: { id },
 		});
@@ -155,7 +153,7 @@ export class UserService {
 
 		return await this.prisma.user.update({
 			where: {
-				id
+				id,
 			},
 			data: {
 				displayName,
@@ -199,10 +197,7 @@ export class UserService {
 	}
 
 	async uploadImage(id: string, image: File) {
-		const url = await this.s3.uploadImageToMinio(
-			id,
-			image.buffer,
-		);
+		const url = await this.s3.uploadImageToMinio(id, image.buffer);
 
 		return await this.prisma.user.update({
 			where: {
@@ -217,13 +212,13 @@ export class UserService {
 		});
 	}
 
-  async delete(id: string) {
-    // TODO: Add validation for safety (like e-mail confirmation or password)
-    try {
-      await this.prisma.user.deleteMany({where: {id}});;
-      return { message: "User deleted"}
-    } catch (e) {
-      throw new BadRequestException('Error while trying to delete user')
-    }
-  }
+	async delete(id: string) {
+		// TODO: Add validation for safety (like e-mail confirmation or password)
+		try {
+			await this.prisma.user.deleteMany({ where: { id } });
+			return { message: "User deleted" };
+		} catch (e) {
+			throw new BadRequestException("Error while trying to delete user");
+		}
+	}
 }

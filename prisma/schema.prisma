@@ -27,14 +27,15 @@ model User {
 }
 
 model Kweek {
-  id        String      @id @default(uuid())
-  content   String
-  authorId  String
-  author    User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  likes     KweekLike[]
-  comments  Comments[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id            String      @id @default(uuid())
+  content       String
+  authorId      String
+  author        User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes         KweekLike[]
+  comments      Comments[]
+  attachments   String[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
 model KweekLike {
