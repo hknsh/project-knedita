@@ -1,7 +1,7 @@
 import { PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
-import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
-import { InjectS3, S3 } from "nestjs-s3";
 import { File } from "@nest-lab/fastify-multer";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { InjectS3, S3 } from "nestjs-s3";
 import sharp from "sharp";
 
 @Injectable()
@@ -37,38 +37,40 @@ export class S3Service {
 		);
 	}
 
-  async multiImageUploadToMinio(id: string, files: Array<File>) {
-    const buffers: Buffer[] = [];
+	async multiImageUploadToMinio(id: string, files: Array<File>) {
+		const buffers: Buffer[] = [];
 
-    if (files.length === 0) {
-      return [];
-    }
+		if (files.length === 0) {
+			return [];
+		}
 
-    for (let i = 0; i < files.length; i++) {
-      const { buffer } = files[i];
+		for (let i = 0; i < files.length; i++) {
+			const { buffer } = files[i];
 
-      const compressedBuffers = await sharp(buffer).webp({quality: 70}).toBuffer();
-      buffers.push(compressedBuffers);
-    }
-    
-    const uploadPromises = buffers.map(async (buffer, index) => {
-      return await this.multiUploadToMinio(buffer, id, index + 1);
-    });
+			const compressedBuffers = await sharp(buffer)
+				.webp({ quality: 70 })
+				.toBuffer();
+			buffers.push(compressedBuffers);
+		}
 
-    return Promise.all(uploadPromises);
-  }
-  
-  private async multiUploadToMinio(buffer: Buffer, id: string, index: number) {
-    const Key = `posts/${id}/${index}.webp`;
+		const uploadPromises = buffers.map(async (buffer, index) => {
+			return await this.multiUploadToMinio(buffer, id, index + 1);
+		});
 
-    const params: PutObjectCommandInput = {
-      Bucket: process.env.MINIO_DEFAULT_BUCKETS,
-      Key,
-      Body: buffer,
-      ContentType: 'image/webp',
-    };
+		return Promise.all(uploadPromises);
+	}
 
-    await this.s3.send(new PutObjectCommand(params))
-    return `${process.env.MINIO_ENDPOINT}/${process.env.MINIO_DEFAULT_BUCKETS}/${Key}`
-  }
+	private async multiUploadToMinio(buffer: Buffer, id: string, index: number) {
+		const Key = `posts/${id}/${index}.webp`;
+
+		const params: PutObjectCommandInput = {
+			Bucket: process.env.MINIO_DEFAULT_BUCKETS,
+			Key,
+			Body: buffer,
+			ContentType: "image/webp",
+		};
+
+		await this.s3.send(new PutObjectCommand(params));
+		return `${process.env.MINIO_ENDPOINT}/${process.env.MINIO_DEFAULT_BUCKETS}/${Key}`;
+	}
 }

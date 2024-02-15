@@ -20,7 +20,6 @@ import {
 import { ApiCreateKweek } from "src/decorators/create-kweek.decorator";
 import { Public } from "src/decorators/public.decorator";
 import { MultiFileValidation } from "src/validators/multi-file.validator";
-import { UpdateKweekDTO } from "./dto/update-kweek.dto";
 import { KweeksService } from "./kweeks.service";
 
 @ApiTags("Kweeks")
@@ -46,21 +45,21 @@ export class KweeksController {
 	@Get(":id")
 	@ApiOperation({ summary: "Retrieves information about a kweek" })
 	findOne(@Param("id") id: string) {
-		return this.kweeksService.findOne(+id);
+		return this.kweeksService.findOne(id);
 	}
 
-	@Patch(":id")
+	@Patch()
 	@ApiOperation({ summary: "Updates a kweek content" })
 	@ApiBearerAuth("JWT")
-	update(@Param("id") id: string, @Body() updateKweekDto: UpdateKweekDTO) {
-		return this.kweeksService.update(+id, updateKweekDto);
+	update(@Body() body: { id: string; content: string }) {
+		return this.kweeksService.update(body.id, body.content);
 	}
 
 	@Delete(":id")
 	@ApiOperation({ summary: "Deletes a kweek" })
 	@ApiBearerAuth("JWT")
 	remove(@Param("id") id: string) {
-		return this.kweeksService.remove(+id);
+		return this.kweeksService.remove(id);
 	}
 
 	@Post(":id/like")

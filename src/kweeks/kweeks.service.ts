@@ -1,8 +1,11 @@
 import { File } from "@nest-lab/fastify-multer";
-import { Injectable } from "@nestjs/common";
+import {
+	BadRequestException,
+	Injectable,
+	NotFoundException,
+} from "@nestjs/common";
 import { PrismaService } from "src/services/prisma/prisma.service";
 import { S3Service } from "src/services/s3/s3.service";
-import { UpdateKweekDTO } from "./dto/update-kweek.dto";
 
 @Injectable()
 export class KweeksService {
@@ -11,36 +14,71 @@ export class KweeksService {
 		private readonly s3: S3Service,
 	) {}
 	async create(content: string, authorId: string, files: Array<File>) {
-    const post = await this.prisma.kweek.create({
-      data: {
-        content,
-        authorId,
-      }
-    });
-    
-    const attachments = await this.s3.multiImageUploadToMinio(post.id, files);
+		if (content.length > 300) {
+			throw new BadRequestException(
+				"Content too big. Must have 300 characters or lower",
+			);
+		}
 
-    await this.prisma.kweek.updateMany({
-      where: {
-        id: post.id
-      },
-      data: {
-        attachments
-      },
-    });
+		const { id } = await this.prisma.kweek.create({
+			data: {
+				content,
+				authorId,
+			},
+			select: {
+				id: true,
+			},
+		});
 
-    return await this.prisma.kweek.findUnique({where: {id: post.id}});
+		const attachments = await this.s3.multiImageUploadToMinio(id, files);
+
+		await this.prisma.kweek.update({
+			where: {
+				id,
+			},
+			data: {
+				attachments,
+			},
+		});
+
+		return await this.prisma.kweek.findFirst({ where: { id } });
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} kweek`;
+	async findOne(id: string) {
+		const post = await this.prisma.kweek.findFirst({
+			where: {
+				id,
+			},
+			select: {
+				id: true,
+				content: true,
+				attachments: true,
+				createdAt: true,
+				updatedAt: true,
+				author: {
+					select: {
+						displayName: true,
+						username: true,
+						profileImage: true,
+					},
+				},
+				likes: true,
+				comments: true,
+			},
+		});
+
+		if (post === null) {
+			throw new NotFoundException("Post not found");
+		}
+
+		return post;
 	}
 
-	update(id: number, updateKweekDto: UpdateKweekDTO) {
+	update(id: string, content: string) {
 		return `This action updates a #${id} kweek`;
 	}
 
-	remove(id: number) {
+	remove(id: string) {
 		return `This action removes a #${id} kweek`;
 	}
 }

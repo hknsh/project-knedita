@@ -53,7 +53,7 @@ export class UserService {
 					select: {
 						id: true,
 						content: true,
-            attachments: true,
+						attachments: true,
 						createdAt: true,
 						updatedAt: true,
 					},
