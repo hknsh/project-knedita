@@ -33,6 +33,12 @@ This will start the following services:
  - **Redis**
  - **MinIO**
 
+Apply the migrations to the database with the following command:
+
+```bash
+$ npm run migrate:dev
+```
+
 And now, you can start the server with the command:
 
 ```bash
