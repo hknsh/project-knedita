@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./resources/logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="./resources/logo-light.svg">
+    <source media="(prefers-color-scheme: dark)" srcset="./resources/logo-light.svg">
+    <source media="(prefers-color-scheme: light)" srcset="./resources/logo-dark.svg">
     <img alt="Project Knedita" src="./resources/logo-light.svg" width="700">
   </picture>
 </p>
