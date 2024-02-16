@@ -13,37 +13,38 @@ model User {
   username            String            @unique
   email               String            @unique
   password            String
-  posts               Post[]
+  kweeks              Kweek[]
   profileImage        String?
-  likedPosts          PostLike[]
+  likedKweeks         KweekLike[]
   likedComments       CommentLike[]
-  followers           Follows[]         @relation("following")
-  following           Follows[]         @relation("follower")
-  postComments        Comments[]
+  followers           Follows[]         @relation("follower")
+  following           Follows[]         @relation("following")
+  kweeksComments      Comments[]
   fromNotifications   Notifications[]   @relation("fromNotifications")
   toNotifications     Notifications[]   @relation("toNotifications")
   socketId            String?
   createdAt           DateTime          @default(now())
 }
 
-model Post {
-  id        String      @id @default(uuid())
-  content   String
-  authorId  String
-  author    User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  likes     PostLike[]
-  comments  Comments[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+model Kweek {
+  id            String      @id @default(uuid())
+  content       String
+  authorId      String
+  author        User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes         KweekLike[]
+  comments      Comments[]
+  attachments   String[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
-model PostLike {
-  id        String    @id @default(uuid())
-  postId    String
-  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
-  userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime  @default(now())
+model KweekLike {
+  id         String     @id @default(uuid())
+  kweekId    String
+  kweek      Kweek      @relation(fields: [kweekId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime   @default(now())
 }
 
 // I should join these two up? Yeah, but I will not do it since it didn't work on the first time.
@@ -71,8 +72,8 @@ model Comments {
   content    String
   userId     String
   user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  postId     String
-  post       Post           @relation(fields: [postId], references: [id], onDelete: Cascade)
+  kweekId    String
+  kweek      Kweek          @relation(fields: [kweekId], references: [id], onDelete: Cascade)
   likes      CommentLike[]
   createdAt  DateTime       @default(now())
   updatedAt  DateTime       @updatedAt  @default(now())

@@ -1,34 +1,50 @@
-FROM node:18 as builder
+# LOCAL
+FROM node:20-alpine AS dev
 
-# Create app dir
-WORKDIR /app
+WORKDIR /usr/src/app
 
-COPY package*.json ./
-COPY prisma ./prisma/
-
-RUN npm install -D @swc/cli @swc/core
-RUN npm install
-
-COPY . .
-
-RUN npm run build
-
-# Stage 2
-FROM node:18
-
-WORKDIR /app
-
-RUN npm i pm2 -g
-
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/prisma ./prisma/
-COPY --from=builder /app/dist ./dist/
-COPY --from=builder /app/docker.env ./
-
-RUN mv docker.env .env
+COPY --chown=node:node package*.json ./
+COPY --chown=node:node prisma ./prisma/
 
 RUN npm ci
 
-EXPOSE 8080
+COPY --chown=node:node . .
 
-CMD ["npm", "run", "prod:start"]
+USER node
+
+# BUILD
+FROM node:20-alpine AS build
+
+WORKDIR /usr/src/app
+
+COPY --chown=node:node package*.json ./
+COPY --chown=node:node --from=dev /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=dev /usr/src/app/prisma ./prisma/
+COPY --chown=node:node .husky ./.husky
+COPY --chown=node:node tsconfig.json tsconfig.build.json ./
+COPY --chown=node:node docker.env ./.env
+COPY --chown=node:node . .
+
+RUN npm install husky -g
+
+RUN npm run prisma:generate
+
+RUN npm run build
+
+ENV NODE_ENV production
+
+RUN npm ci --only=production && npm cache clean --force
+
+USER node
+
+# PROD
+FROM node:20-alpine as production
+
+COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+COPY --chown=node:node --from=build /usr/src/app/prisma ./prisma
+COPY --chown=node:node --from=build /usr/src/app/.husky ./.husky
+COPY --chown=node:node --from=build /usr/src/app/.env ./
+COPY --chown=node:node --from=build /usr/src/app/package*.json ./
+
+CMD ["npm", "run" , "prod"]

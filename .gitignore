@@ -1,11 +1,44 @@
+# compiled output
+/dist
+/node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+
+# Tests
+/coverage
+/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+old_port
 .git
-node_modules
 .env
 prisma/*.db
-.DS_Store
 prisma/migrations/dev
-dist
-pnpm-lock.yaml
-package_backup.json
-logs/
 docker.env
+package_copy.json
+package-lock_copy.json

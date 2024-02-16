@@ -1,26 +1,14 @@
 {
-  "jsc": {
-    "parser": {
-      "syntax": "typescript",
-      "tsx": false,
-      "decorators": true,
-      "dynamicImport": true
-    },
-    "target": "es2020",
-    "baseUrl": "./src",
-    "paths": {
-      "clients/*": ["clients/*"],
-      "config/*": ["config/*"],
-      "controllers/*": ["controllers/*"],
-      "interfaces/*": ["interfaces/*"],
-      "helpers/*": ["helpers/*"],
-      "middlewares/*": ["middlewares/*"],
-      "services/*": ["services/*"]
-    }
-  },
-  "exclude": ["@types/", "interfaces/"],
-  "module": {
-    "type": "commonjs"
-  },
-  "minify": true
+	"$schema": "https://json.schemastore.org/swcrc",
+	"sourceMaps": true,
+	"jsc": {
+		"target": "esnext",
+		"parser": {
+			"syntax": "typescript",
+			"decorators": true,
+			"dynamicImport": true
+		},
+		"baseUrl": "./"
+	},
+	"minify": false
 }

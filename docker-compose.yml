@@ -4,23 +4,11 @@ networks:
   localstack-net:
     name: localstack-net
     driver: bridge
+  minio_network:
+    name: minio_network
+    driver: bridge
 
 services:
-  api:
-    container_name: api
-    restart: unless-stopped
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 8080:8080
-    depends_on:
-      - postgres
-      - redis
-      - localstack
-    env_file:
-      - docker.env
-
   postgres:
     image: postgres:alpine
     restart: unless-stopped
@@ -32,20 +20,18 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
 
-  localstack:
-    image: localstack/localstack
-    container_name: localstack_main
+  minio:
+    image: bitnami/minio
     restart: unless-stopped
-    networks:
-      - localstack-net
     ports:
-      - 4566:4566
-      - 4572:4572
+      - '9000:9000'
+      - '9001:9001'
+    networks:
+      - minio_network
+    volumes:
+      - 'minio_data:/data'
     env_file:
       - docker.env
-    volumes:
-      - localstack:/data
-      - '/var/run/docker.sock:/var/run/docker.sock'
 
   redis:
     image: redis:alpine
@@ -57,9 +43,25 @@ services:
     volumes:
       - redis:/data
 
+  api:
+    container_name: api
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+      - redis
+      - minio
+    env_file:
+      - docker.env
+
 volumes:
   postgres:
     name: backend-db
   redis:
     driver: local
-  localstack:
+  minio_data:
+    driver: local
