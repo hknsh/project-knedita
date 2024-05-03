@@ -1,4 +1,5 @@
 // Thanks sandeepsuvit @ https://github.com/nestjs/swagger/issues/417
+// TODO: Remove this decorator.
 
 import { ApiBody } from "@nestjs/swagger";
 

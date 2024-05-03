@@ -8,6 +8,12 @@ import sharp from "sharp";
 export class S3Service {
 	constructor(@InjectS3() private readonly s3: S3) {}
 
+	/*
+    TODO: Remove single image upload since we can use the multiple one.
+    TODO: Find a way to automatically get the image complete URL.
+          -> iirc, S3 api has a function for that.
+  */
+
 	/**
 	 * Returns the image url if the upload to minio was successful.
 	 */
