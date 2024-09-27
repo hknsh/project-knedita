@@ -1,4 +1,4 @@
-import * as helmet from "@fastify/helmet";
+import helmet from "@fastify/helmet";
 import { NestFactory } from "@nestjs/core";
 import {
 	FastifyAdapter,
@@ -7,6 +7,7 @@ import {
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { patchNestJsSwagger } from "nestjs-zod";
 import { AppModule } from "./app.module";
+import { Configuration } from "./configuration";
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestFastifyApplication>(
@@ -44,6 +45,6 @@ async function bootstrap() {
 
 	await app.register(helmet);
 
-	await app.listen(process.env.SERVER_PORT, process.env.SERVER_HOST);
+	await app.listen(Configuration.SERVER_PORT(), Configuration.SERVER_HOST);
 }
 bootstrap();

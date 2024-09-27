@@ -6,16 +6,16 @@
   </picture>
 </p>
 
-A simple RESTful API made with **NestJS** and **Fastify**.  
+A simple RESTful API made with **NestJS** and **Fastify**.
 
-### 🚀 Preparing the environment 
+### 🚀 Preparing the environment
 
 Make sure that you have Node, NPM, Docker and Docker Compose installed on your computer.
 
 First, install the necessary packages with the following commands:
 
 ```bash
-$ npm i 
+$ npm i
 ```
 
 After that, you can update the `.env` and the `docker.env` files. The `.env` file is for development environment and the `docker.env` is for production.
@@ -29,9 +29,10 @@ $ npm run docker:db
 ```
 
 This will start the following services:
- - **PostgreSQL**
- - **Redis**
- - **MinIO**
+
+- **PostgreSQL**
+- **Redis**
+- **MinIO**
 
 Apply the migrations to the database with the following command:
 
@@ -58,16 +59,15 @@ This will start all the previous services and the back-end image.
 ## 🗄️ Stack
 
 This back-end uses the following stack:
- - **Docker**
- - **Fastify**
- - **MinIO**
- - **NestJS**
- - **Passport**
- - **PostgreSQL**
- - **Prisma**
- - **Redis**
- - **Swagger**
- - **Typescript**
+
+- **Fastify**
+- **MinIO**
+- **NestJS**
+- **PostgreSQL**
+- **Prisma**
+- **Redis**
+- **Swagger**
+- **Typescript**
 
 ## License
 

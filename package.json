@@ -43,6 +43,8 @@
     "@nestjs/throttler": "^5.1.1",
     "@prisma/client": "^5.9.1",
     "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "dotenv-expand": "^11.0.6",
     "file-type": "^19.0.0",
     "ioredis": "^5.3.2",
     "nestjs-s3": "^2.0.1",
@@ -53,7 +55,8 @@
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "sharp": "^0.33.2"
+    "sharp": "^0.33.2",
+    "tstl": "^3.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "1.5.3",

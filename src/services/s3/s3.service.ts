@@ -3,6 +3,7 @@ import { File } from "@nest-lab/fastify-multer";
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { InjectS3, S3 } from "nestjs-s3";
 import sharp from "sharp";
+import { Configuration } from "src/configuration";
 
 @Injectable()
 export class S3Service {
@@ -18,7 +19,7 @@ export class S3Service {
 			.toBuffer();
 
 		const params: PutObjectCommandInput = {
-			Bucket: process.env.MINIO_DEFAULT_BUCKETS,
+			Bucket: Configuration.MINIO_DEFAULT_BUCKETS(),
 			Key: `profile_images/${userID}.webp`,
 			Body: compressedBuffer,
 			ContentType: "image/webp",
@@ -29,7 +30,7 @@ export class S3Service {
 		const { ETag } = await this.s3.send(new PutObjectCommand(params));
 
 		if (ETag !== null) {
-			return `${process.env.MINIO_ENDPOINT}/${process.env.MINIO_DEFAULT_BUCKETS}/profile_images/${userID}.webp`;
+			return `${Configuration.MINIO_ENDPOINT}/${Configuration.MINIO_DEFAULT_BUCKETS}/profile_images/${userID}.webp`;
 		}
 
 		throw new InternalServerErrorException(
@@ -64,13 +65,13 @@ export class S3Service {
 		const Key = `posts/${id}/${index}.webp`;
 
 		const params: PutObjectCommandInput = {
-			Bucket: process.env.MINIO_DEFAULT_BUCKETS,
+			Bucket: Configuration.MINIO_DEFAULT_BUCKETS(),
 			Key,
 			Body: buffer,
 			ContentType: "image/webp",
 		};
 
 		await this.s3.send(new PutObjectCommand(params));
-		return `${process.env.MINIO_ENDPOINT}/${process.env.MINIO_DEFAULT_BUCKETS}/${Key}`;
+		return `${Configuration.MINIO_ENDPOINT}/${Configuration.MINIO_DEFAULT_BUCKETS}/${Key}`;
 	}
 }
