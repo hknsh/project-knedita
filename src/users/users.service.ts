@@ -214,6 +214,7 @@ export class UserService {
 
 	async delete(id: string) {
 		// TODO: Add validation for safety (like e-mail confirmation or password)
+		// TODO: Delete the user's attachments when deleting, like Kweeks attachments and profile pictures.
 		try {
 			await this.prisma.user.deleteMany({ where: { id } });
 			return { message: "User deleted" };
