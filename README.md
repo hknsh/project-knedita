@@ -10,12 +10,14 @@ A simple RESTful API made with **NestJS** and **Fastify**.
 
 ### 🚀 Preparing the environment
 
-Make sure that you have Node, NPM, Docker and Docker Compose installed on your computer.
+Make sure that you have Bun, Docker and Docker Compose installed on your computer.
+
+This project also works with Node and Npm.
 
 First, install the necessary packages with the following commands:
 
 ```bash
-$ npm i
+bun i
 ```
 
 After that, you can update the `.env` and the `docker.env` files. The `.env` file is for development environment and the `docker.env` is for production.
@@ -25,7 +27,7 @@ You can find the templates for those files on `.env.example` and `docker.env.exa
 To run the necessary services you can execute the following command:
 
 ```bash
-$ npm run docker:db
+bun docker:db
 ```
 
 This will start the following services:
@@ -37,13 +39,13 @@ This will start the following services:
 Apply the migrations to the database with the following command:
 
 ```bash
-$ npm run migrate:dev
+bun migrate:dev
 ```
 
 And now, you can start the server with the command:
 
 ```bash
-$ npm run dev:start
+bun dev:start
 ```
 
 You can check the documentation accessing the endpoint `/` in your browser
@@ -51,7 +53,7 @@ You can check the documentation accessing the endpoint `/` in your browser
 To run in production you can use the following command:
 
 ```bash
-$ npm run docker
+bun docker
 ```
 
 This will start all the previous services and the back-end image.
@@ -60,11 +62,11 @@ This will start all the previous services and the back-end image.
 
 This back-end uses the following stack:
 
-- **Fastify**
-- **MinIO**
 - **NestJS**
-- **PostgreSQL**
+- **Fastify**
 - **Prisma**
+- **MinIO**
+- **PostgreSQL**
 - **Redis**
 - **Swagger**
 - **Typescript**

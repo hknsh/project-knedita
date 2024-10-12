@@ -1,5 +1,3 @@
-version: '3.8'
-
 networks:
   localstack-net:
     name: localstack-net

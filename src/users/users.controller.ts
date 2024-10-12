@@ -25,12 +25,13 @@ import {
 } from "@nestjs/swagger";
 import { Public } from "src/decorators/public.decorator";
 import { BufferValidator } from "src/validators/buffer.validator";
-import UploadImageValidator from "src/validators/upload-image.validator";
-import { CreateUserDTO } from "./dto/create-user.dto";
-import { UpdateEmailDTO } from "./dto/update-email.dto";
-import { UpdateNameDTO } from "./dto/update-name.dto";
-import { UpdatePasswordDTO } from "./dto/update-password.dto";
-import UploadImageSchema from "./schemas/upload-image.schema";
+import UploadImageValidator from "src/validators/upload_image.validator";
+import { CreateUserDTO } from "./dto/create_user.dto";
+import { FollowUserDTO } from "./dto/follow_user.dto";
+import { UpdateEmailDTO } from "./dto/update_email.dto";
+import { UpdateNameDTO } from "./dto/update_name.dto";
+import { UpdatePasswordDTO } from "./dto/update_password.dto";
+import UploadImageSchema from "./schemas/upload_image.schema";
 import { UserService } from "./users.service";
 
 @ApiTags("Users")
@@ -48,6 +49,15 @@ export class UserController {
 	})
 	create(@Body() createUserDTO: CreateUserDTO) {
 		return this.userService.create(createUserDTO);
+	}
+
+	@Post("/follow")
+	@ApiOperation({ summary: "Follow/unfollow a user" })
+	@ApiCreatedResponse({ description: "Followed/unfollowed successfully" })
+	@ApiNotFoundResponse({ description: "User to follow not found" })
+	@ApiBearerAuth("JWT")
+	follow(@Body() { username }: FollowUserDTO, @Request() req) {
+		return this.userService.follow(req.user.id, username);
 	}
 
 	// GET

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import * as bcrypt from "bcrypt";
+import * as argon2 from "argon2";
 import { UserModel } from "src/users/models/user.model";
 import { UserService } from "src/users/users.service";
 
@@ -21,7 +21,7 @@ export class AuthService {
 			return null;
 		}
 
-		const validation = await bcrypt.compare(password, user.password);
+		const validation = await argon2.verify(user.password, password);
 
 		if (user && validation) {
 			const { password, ...result } = user;

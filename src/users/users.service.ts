@@ -4,10 +4,10 @@ import {
 	Injectable,
 	NotFoundException,
 } from "@nestjs/common";
-import * as bcrypt from "bcrypt";
+import * as argon2 from "argon2";
 import { PrismaService } from "src/services/prisma/prisma.service";
 import { S3Service } from "src/services/s3/s3.service";
-import { CreateUserDTO } from "./dto/create-user.dto";
+import { CreateUserDTO } from "./dto/create_user.dto";
 import { UserModel } from "./models/user.model";
 import { User } from "./types/user.type";
 
@@ -88,8 +88,7 @@ export class UserService {
 		}
 
 		// Password encryption
-		const salt = await bcrypt.genSalt(15);
-		const hash = await bcrypt.hash(password, salt);
+		const hash = await argon2.hash(password);
 
 		const user = await this.prisma.user.create({
 			data: {
@@ -105,6 +104,40 @@ export class UserService {
 		});
 
 		return user;
+	}
+
+	async follow(authenticated_id: string, username: string) {
+		const user_to_follow = await this.prisma.user.findFirst({
+			where: { username },
+		});
+
+		if (user_to_follow === null) {
+			throw new NotFoundException("User to follow not found");
+		}
+
+		const is_already_following = await this.prisma.follows.findFirst({
+			where: {
+				followerId: user_to_follow.id,
+				followingId: authenticated_id,
+			},
+		});
+
+		if (is_already_following !== null) {
+			await this.prisma.follows.deleteMany({
+				where: {
+					followerId: user_to_follow.id,
+					followingId: authenticated_id,
+				},
+			});
+			return {};
+		}
+
+		return await this.prisma.follows.create({
+			data: {
+				followerId: user_to_follow.id,
+				followingId: authenticated_id,
+			},
+		});
 	}
 
 	async updateEmail(id: string, email: string): Promise<{ message: string }> {
@@ -175,14 +208,13 @@ export class UserService {
 			where: { id },
 		});
 
-		const validatePassword = await bcrypt.compare(old_password, user.password);
+		const validatePassword = await argon2.verify(user.password, old_password);
 
 		if (!validatePassword) {
 			throw new BadRequestException("Wrong password");
 		}
 
-		const salt = await bcrypt.genSalt(15);
-		const hash = await bcrypt.hash(new_password, salt);
+		const hash = await argon2.hash(new_password);
 
 		await this.prisma.user.update({
 			where: {
@@ -197,7 +229,7 @@ export class UserService {
 	}
 
 	async uploadImage(id: string, image: File) {
-		const url = await this.s3.uploadImageToMinio(id, image.buffer);
+		const url = await this.s3.uploadImage(id, image.buffer);
 
 		return await this.prisma.user.update({
 			where: {
