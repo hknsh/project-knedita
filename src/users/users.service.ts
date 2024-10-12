@@ -56,6 +56,12 @@ export class UserService {
 						attachments: true,
 						createdAt: true,
 						updatedAt: true,
+						_count: {
+							select: {
+								comments: true,
+								likes: true,
+							},
+						},
 					},
 				},
 			},
