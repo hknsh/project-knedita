@@ -12,15 +12,18 @@ import {
 	UseInterceptors,
 } from "@nestjs/common";
 import {
+	ApiBadRequestResponse,
 	ApiBearerAuth,
+	ApiBody,
 	ApiConsumes,
 	ApiOperation,
 	ApiTags,
 } from "@nestjs/swagger";
-import { ApiCreateKweek } from "src/decorators/create-kweek.decorator";
 import { Public } from "src/decorators/public.decorator";
-import { MultiFileValidation } from "src/validators/multi-file.validator";
+import { MultiFileValidation } from "src/validators/multi_file.validator";
+import { UpdateKweekDTO } from "./dto/kweeks/update_kweek.dto";
 import { KweeksService } from "./kweeks.service";
+import { AttachmentsSchema } from "./schemas/attachments.schema";
 
 @ApiTags("Kweeks")
 @Controller("kweeks")
@@ -29,10 +32,11 @@ export class KweeksController {
 
 	@Post()
 	@ApiConsumes("multipart/form-data")
-	@ApiCreateKweek("attachments")
+	@ApiBody(AttachmentsSchema)
 	@UseInterceptors(FilesInterceptor("attachments", 4))
 	@ApiOperation({ summary: "Creates a kweek" })
 	@ApiBearerAuth("JWT")
+	@ApiBadRequestResponse({ description: "Content too long" })
 	create(
 		@UploadedFiles(new MultiFileValidation()) attachments: Array<File>,
 		@Body() body,
@@ -51,44 +55,21 @@ export class KweeksController {
 	@Patch()
 	@ApiOperation({ summary: "Updates a kweek content" })
 	@ApiBearerAuth("JWT")
-	update(@Body() body: { id: string; content: string }) {
-		return this.kweeksService.update(body.id, body.content);
+	update(@Body() body: UpdateKweekDTO, @Request() req) {
+		return this.kweeksService.update(req.user.id, body.post_id, body.content);
 	}
 
 	@Delete(":id")
 	@ApiOperation({ summary: "Deletes a kweek" })
 	@ApiBearerAuth("JWT")
-	remove(@Param("id") id: string) {
-		return this.kweeksService.remove(id);
+	remove(@Param("id") id: string, @Request() req) {
+		return this.kweeksService.remove(req.user.id, id);
 	}
 
 	@Post(":id/like")
 	@ApiOperation({ summary: "Likes a kweek" })
 	@ApiBearerAuth("JWT")
-	likeKweek() {}
-
-	@Public()
-	@Get(":id/comments")
-	@ApiOperation({ summary: "Retrieves comments of a kweek" })
-	comments() {}
-
-	@Public()
-	@Get(":id/comments/:comment_id")
-	@ApiOperation({ summary: "Retrieves information about a comment" })
-	comment() {}
-
-	@Patch(":id/comments/:comment_id")
-	@ApiOperation({ summary: "Updates a comment content" })
-	@ApiBearerAuth("JWT")
-	updateComment() {}
-
-	@Delete(":id/comments/:comment_id")
-	@ApiOperation({ summary: "Deletes a comment" })
-	@ApiBearerAuth("JWT")
-	removeComment() {}
-
-	@Post(":id/comments/:comment_id/like")
-	@ApiOperation({ summary: "Likes a comment" })
-	@ApiBearerAuth("JWT")
-	likeComment() {}
+	likeKweek(@Param("id") kweek_id: string, @Request() req) {
+		return this.kweeksService.like(req.user.id, kweek_id);
+	}
 }

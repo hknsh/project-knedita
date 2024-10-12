@@ -1,24 +1,38 @@
-import { PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
+import {
+	DeleteObjectsCommand,
+	PutObjectCommand,
+	PutObjectCommandInput,
+} from "@aws-sdk/client-s3";
 import { File } from "@nest-lab/fastify-multer";
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { InjectS3, S3 } from "nestjs-s3";
 import sharp from "sharp";
+import { Configuration } from "src/configuration";
 
 @Injectable()
 export class S3Service {
+	private bucket: string = Configuration.MINIO_DEFAULT_BUCKETS();
+	private endpoint: string = Configuration.MINIO_ENDPOINT();
+
 	constructor(@InjectS3() private readonly s3: S3) {}
 
+	/*
+    TODO: Remove single image upload since we can use the multiple one.
+    TODO: Find a way to automatically get the image complete URL.
+          -> iirc, S3 api has a function for that.
+  */
+
 	/**
-	 * Returns the image url if the upload to minio was successful.
+	 * Returns the image url if the upload was successful.
 	 */
-	async uploadImageToMinio(userID: string, buffer: Buffer): Promise<string> {
+	async uploadImage(userID: string, buffer: Buffer): Promise<string> {
 		const compressedBuffer = await sharp(buffer)
 			.resize(200, 200)
 			.webp({ quality: 70 })
 			.toBuffer();
 
 		const params: PutObjectCommandInput = {
-			Bucket: process.env.MINIO_DEFAULT_BUCKETS,
+			Bucket: this.bucket,
 			Key: `profile_images/${userID}.webp`,
 			Body: compressedBuffer,
 			ContentType: "image/webp",
@@ -29,7 +43,7 @@ export class S3Service {
 		const { ETag } = await this.s3.send(new PutObjectCommand(params));
 
 		if (ETag !== null) {
-			return `${process.env.MINIO_ENDPOINT}/${process.env.MINIO_DEFAULT_BUCKETS}/profile_images/${userID}.webp`;
+			return `${this.endpoint}/${this.bucket}/profile_images/${userID}.webp`;
 		}
 
 		throw new InternalServerErrorException(
@@ -37,7 +51,7 @@ export class S3Service {
 		);
 	}
 
-	async multiImageUploadToMinio(id: string, files: Array<File>) {
+	async multiImageUpload(id: string, files: Array<File>) {
 		const buffers: Buffer[] = [];
 
 		if (files.length === 0) {
@@ -54,23 +68,60 @@ export class S3Service {
 		}
 
 		const uploadPromises = buffers.map(async (buffer, index) => {
-			return await this.multiUploadToMinio(buffer, id, index + 1);
+			return await this.multiUpload(buffer, id, index + 1);
 		});
 
 		return Promise.all(uploadPromises);
 	}
 
-	private async multiUploadToMinio(buffer: Buffer, id: string, index: number) {
+	private async multiUpload(buffer: Buffer, id: string, index: number) {
 		const Key = `posts/${id}/${index}.webp`;
 
 		const params: PutObjectCommandInput = {
-			Bucket: process.env.MINIO_DEFAULT_BUCKETS,
+			Bucket: this.bucket,
 			Key,
 			Body: buffer,
 			ContentType: "image/webp",
 		};
 
 		await this.s3.send(new PutObjectCommand(params));
-		return `${process.env.MINIO_ENDPOINT}/${process.env.MINIO_DEFAULT_BUCKETS}/${Key}`;
+		return `${this.endpoint}/${this.bucket}/${Key}`;
+	}
+
+	async deleteFiles(attachments: string[]) {
+		if (attachments.length === 0) {
+			return;
+		}
+
+		const keys = attachments.map((url) => {
+			try {
+				const parsed_url = new URL(url);
+				let key = parsed_url.pathname.substring(1);
+
+				if (key.startsWith(`${this.bucket}/`)) {
+					key = key.replace(`${this.bucket}`, "");
+				}
+
+				return key;
+			} catch (e) {
+				throw new InternalServerErrorException("Failed to parse URL");
+			}
+		});
+
+		const command = new DeleteObjectsCommand({
+			Bucket: this.bucket,
+			Delete: {
+				Objects: keys.map((key) => ({ Key: key })),
+			},
+		});
+
+		try {
+			await this.s3.send(command);
+		} catch (error) {
+			throw new InternalServerErrorException(
+				"Failed to delete files from S3:",
+				error,
+			);
+		}
 	}
 }
