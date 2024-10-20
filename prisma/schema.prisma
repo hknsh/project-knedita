@@ -1,5 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-kysely"
+  output = "../src/db"
+  fileName = "types.ts"
 }
 
 datasource db {
@@ -39,23 +41,25 @@ model Kweek {
 }
 
 model KweekLike {
-  id         String     @id @default(uuid())
   kweekId    String
   kweek      Kweek      @relation(fields: [kweekId], references: [id], onDelete: Cascade)
   userId     String
   user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt  DateTime   @default(now())
+  
+  @@id([kweekId, userId])
 }
 
 // I should join these two up? Yeah, but I will not do it since it didn't work on the first time.
 
 model CommentLike {
-  id        String    @id @default(uuid())
   commentId String
   comment   Comments  @relation(fields: [commentId], references: [id], onDelete: Cascade)
   userId    String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime  @default(now())
+  
+  @@id([commentId, userId])
 }
 
 model Follows {

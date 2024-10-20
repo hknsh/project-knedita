@@ -7,11 +7,15 @@ import {
 } from "@nestjs/common";
 import { PrismaService } from "src/services/prisma/prisma.service";
 import { S3Service } from "src/services/s3/s3.service";
+import { CommentsRepository } from "./repository/comments.repository";
+import { KweeksRepository } from "./repository/kweeks.repository";
 import { selectCommentsWithReplies } from "./schemas/prisma_queries.schema";
 
 @Injectable()
 export class CommentsService {
 	constructor(
+		private readonly commentsRepository: CommentsRepository,
+		private readonly kweeksRepository: KweeksRepository,
 		private readonly prisma: PrismaService,
 		private readonly s3: S3Service,
 	) {}
@@ -29,33 +33,24 @@ export class CommentsService {
 		}
 
 		// Verifies if the kweek_id is a kweek or a comment
-		const parentComment = await this.prisma.comments.findUnique({
-			where: { id: kweek_id },
-		});
+		const parentComment = await this.commentsRepository.findOne(kweek_id);
 
-		let kweek = null;
+		let kweek = undefined;
 
-		if (parentComment === null) {
-			kweek = await this.prisma.kweek.findFirst({
-				where: { id: kweek_id },
-			});
+		if (parentComment === undefined) {
+			kweek = await this.kweeksRepository.findOne(kweek_id);
 
-			if (kweek === null) {
+			if (kweek === undefined) {
 				throw new NotFoundException("Kweek/Comment not found");
 			}
 		}
 
-		const { id } = await this.prisma.comments.create({
-			data: {
-				content,
-				userId: user_id,
-				kweekId: kweek ? kweek.id : null,
-				parentId: parentComment ? parentComment.id : null,
-			},
-			select: {
-				id: true,
-			},
-		});
+		const { id } = await this.commentsRepository.create(
+			content,
+			user_id,
+			kweek ? kweek.id : null,
+			parentComment ? parentComment.id : null,
+		);
 
 		let attachments = [];
 
@@ -63,41 +58,34 @@ export class CommentsService {
 			attachments = await this.s3.multiImageUpload(id, files);
 		}
 
-		await this.prisma.comments.update({
-			where: {
-				id,
-			},
-			data: {
-				attachments,
-			},
-		});
+		await this.commentsRepository.addAttachments(id, attachments);
 
-		return await this.prisma.comments.findFirst({ where: { id } });
+		return await this.commentsRepository.findOne(id);
 	}
 
 	async info(comment_id: string) {
-		const comment = await this.prisma.comments.findUnique({
-			where: { id: comment_id },
-			select: {
-				...selectCommentsWithReplies,
-			},
-		});
+		const comment = await this.commentsRepository.findOne(comment_id);
 
-		if (comment === null) {
+		if (comment === undefined) {
 			throw new NotFoundException("Comment not found");
 		}
 
-		return comment;
+		const likes = await this.commentsRepository.countLikes(comment.id);
+		const comments = await this.commentsRepository.countComments(comment.id);
+
+		return {
+			...comment,
+			count: {
+				likes,
+				comments,
+			},
+		};
 	}
 
 	async update(comment_id: string, user_id: string, content: string) {
-		let new_content = content;
+		const comment = await this.commentsRepository.findOne(comment_id);
 
-		const comment = await this.prisma.comments.findFirst({
-			where: { id: comment_id },
-		});
-
-		if (comment === null) {
+		if (comment === undefined) {
 			throw new NotFoundException("Comment not found");
 		}
 
@@ -105,29 +93,16 @@ export class CommentsService {
 			throw new UnauthorizedException("Forbidden");
 		}
 
-		if (comment.content === content.trim()) {
-			new_content = comment.content;
-		}
+		const new_content =
+			comment.content === content.trim() ? comment.content : content;
 
-		return await this.prisma.comments.update({
-			where: {
-				id: comment_id,
-			},
-			data: {
-				content: new_content,
-			},
-			select: {
-				...selectCommentsWithReplies,
-			},
-		});
+		return await this.commentsRepository.update(comment_id, new_content);
 	}
 
 	async delete(comment_id: string, user_id: string) {
-		const comment = await this.prisma.comments.findFirst({
-			where: { id: comment_id },
-		});
+		const comment = await this.commentsRepository.findOne(comment_id);
 
-		if (comment === null) {
+		if (comment === undefined) {
 			throw new NotFoundException("Comment not found");
 		}
 
@@ -137,49 +112,28 @@ export class CommentsService {
 
 		await this.s3.deleteFiles(comment.attachments);
 
-		await this.prisma.comments.delete({
-			where: {
-				id: comment_id,
-			},
-		});
+		await this.commentsRepository.delete(comment.id);
 
 		return {};
 	}
 
 	async like(comment_id: string, user_id: string) {
-		const comment = await this.prisma.comments.findFirst({
-			where: {
-				id: comment_id,
-			},
-		});
+		const comment = await this.commentsRepository.findOne(comment_id);
 
-		if (comment === null) {
+		if (comment === undefined) {
 			throw new NotFoundException("Comment not found");
 		}
 
-		const is_comment_already_liked = await this.prisma.commentLike.findFirst({
-			where: {
-				commentId: comment.id,
-				userId: user_id,
-			},
-		});
+		const is_comment_already_liked =
+			await this.commentsRepository.isAlreadyLiked(comment.id, user_id);
 
-		if (is_comment_already_liked !== null) {
-			await this.prisma.commentLike.deleteMany({
-				where: {
-					commentId: comment.id,
-					userId: user_id,
-				},
-			});
+		console.log(is_comment_already_liked);
 
+		if (is_comment_already_liked) {
+			await this.commentsRepository.dislike(comment.id, user_id);
 			return {};
 		}
 
-		return await this.prisma.commentLike.create({
-			data: {
-				commentId: comment.id,
-				userId: user_id,
-			},
-		});
+		return await this.commentsRepository.like(user_id, comment.id);
 	}
 }

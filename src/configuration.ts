@@ -11,4 +11,9 @@ export namespace Configuration {
 	export const MINIO_DEFAULT_BUCKETS = () =>
 		Environment.env.MINIO_DEFAULT_BUCKETS;
 	export const MINIO_ENDPOINT = () => Environment.env.MINIO_ENDPOINT;
+	export const POSTGRES_HOST = () => Environment.env.POSTGRES_HOST;
+	export const POSTGRES_PORT = () => Environment.env.POSTGRES_PORT;
+	export const POSTGRES_USER = () => Environment.env.POSTGRES_USER;
+	export const POSTGRES_PASSWORD = () => Environment.env.POSTGRES_PASSWORD;
+	export const POSTGRES_DB = () => Environment.env.POSTGRES_DB;
 }

@@ -20,6 +20,8 @@ import { Configuration } from "./configuration";
   TODO: Create the chat system.
         -> Initialize the websocket system first.
   TODO: Create a TOS.
+  TODO: Improve Kysely Queries.
+  TODO: Fix Docker Image.
 */
 
 async function bootstrap() {

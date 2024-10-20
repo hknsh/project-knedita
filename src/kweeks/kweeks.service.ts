@@ -5,14 +5,13 @@ import {
 	NotFoundException,
 	UnauthorizedException,
 } from "@nestjs/common";
-import { PrismaService } from "src/services/prisma/prisma.service";
 import { S3Service } from "src/services/s3/s3.service";
-import { selectComments, selectUser } from "./schemas/prisma_queries.schema";
+import { KweeksRepository } from "./repository/kweeks.repository";
 
 @Injectable()
 export class KweeksService {
 	constructor(
-		private readonly prisma: PrismaService,
+		private readonly kweekRepository: KweeksRepository,
 		private readonly s3: S3Service,
 	) {}
 	async create(content: string, authorId: string, files: Array<File>) {
@@ -22,15 +21,7 @@ export class KweeksService {
 			);
 		}
 
-		const { id } = await this.prisma.kweek.create({
-			data: {
-				content,
-				authorId,
-			},
-			select: {
-				id: true,
-			},
-		});
+		const { id } = await this.kweekRepository.create(content, authorId);
 
 		let attachments = [];
 
@@ -38,46 +29,34 @@ export class KweeksService {
 			attachments = await this.s3.multiImageUpload(id, files);
 		}
 
-		await this.prisma.kweek.update({
-			where: {
-				id,
-			},
-			data: {
-				attachments,
-			},
-		});
+		await this.kweekRepository.addAttachments(id, attachments);
 
-		return await this.prisma.kweek.findFirst({ where: { id } });
+		return await this.kweekRepository.findOne(id);
 	}
 
 	async findOne(id: string) {
-		const post = await this.prisma.kweek.findFirst({
-			where: {
-				id,
-			},
-			include: {
-				author: selectUser,
-				_count: {
-					select: { comments: true, likes: true },
-				},
-				likes: true,
-				comments: selectComments,
-			},
-		});
+		const post = await this.kweekRepository.findOne(id);
 
-		if (post === null) {
+		if (post === undefined) {
 			throw new NotFoundException("Post not found");
 		}
 
-		return post;
+		const likes = await this.kweekRepository.countLikes(post.id);
+		const comments = await this.kweekRepository.countComments(post.id);
+
+		return {
+			...post,
+			count: {
+				likes,
+				comments,
+			},
+		};
 	}
 
 	async update(user_id: string, post_id: string, content: string) {
-		let new_content = content;
+		const post = await this.kweekRepository.findOne(post_id);
 
-		const post = await this.prisma.kweek.findFirst({ where: { id: post_id } });
-
-		if (post === null) {
+		if (post === undefined) {
 			throw new NotFoundException("Post not found");
 		}
 
@@ -85,37 +64,16 @@ export class KweeksService {
 			throw new UnauthorizedException("Forbidden");
 		}
 
-		if (post.content === content.trim()) {
-			new_content = post.content;
-		}
+		const new_content =
+			post.content === content.trim() ? post.content : content;
 
-		return await this.prisma.kweek.update({
-			where: {
-				id: post_id,
-			},
-			data: {
-				content: new_content,
-			},
-			select: {
-				id: true,
-				content: true,
-				attachments: true,
-				createdAt: true,
-				updatedAt: true,
-				author: {
-					select: {
-						displayName: true,
-						username: true,
-					},
-				},
-			},
-		});
+		return await this.kweekRepository.update(post_id, new_content);
 	}
 
 	async remove(user_id: string, id: string) {
-		const post = await this.prisma.kweek.findFirst({ where: { id } });
+		const post = await this.kweekRepository.findOne(id);
 
-		if (post === null) {
+		if (post === undefined) {
 			throw new NotFoundException("Post not found");
 		}
 
@@ -125,49 +83,29 @@ export class KweeksService {
 
 		await this.s3.deleteFiles(post.attachments);
 
-		await this.prisma.kweek.delete({
-			where: {
-				id,
-			},
-		});
+		await this.kweekRepository.delete(id);
 
 		return {};
 	}
 
 	async like(user_id: string, kweek_id: string) {
-		const kweek = await this.prisma.kweek.findFirst({
-			where: {
-				id: kweek_id,
-			},
-		});
+		const kweek = await this.kweekRepository.findOne(kweek_id);
 
-		if (kweek === null) {
+		if (kweek === undefined) {
 			throw new NotFoundException("Post not found");
 		}
 
-		const is_kweek_already_liked = await this.prisma.kweekLike.findFirst({
-			where: {
-				kweekId: kweek.id,
-				userId: user_id,
-			},
-		});
+		const is_kweek_already_liked = await this.kweekRepository.isAlreadyLiked(
+			kweek.id,
+			user_id,
+		);
 
-		if (is_kweek_already_liked !== null) {
-			await this.prisma.kweekLike.deleteMany({
-				where: {
-					kweekId: kweek.id,
-					userId: user_id,
-				},
-			});
+		if (is_kweek_already_liked) {
+			await this.kweekRepository.dislike(kweek.id, user_id);
 
 			return {};
 		}
 
-		return await this.prisma.kweekLike.create({
-			data: {
-				kweekId: kweek.id,
-				userId: user_id,
-			},
-		});
+		return await this.kweekRepository.like(user_id, kweek.id);
 	}
 }
