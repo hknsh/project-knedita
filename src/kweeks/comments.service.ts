@@ -127,8 +127,6 @@ export class CommentsService {
 		const is_comment_already_liked =
 			await this.commentsRepository.isAlreadyLiked(comment.id, user_id);
 
-		console.log(is_comment_already_liked);
-
 		if (is_comment_already_liked) {
 			await this.commentsRepository.dislike(comment.id, user_id);
 			return {};
