@@ -1,4 +1,9 @@
 import { Injectable } from "@nestjs/common";
+import {
+	jsonArrayFrom,
+	jsonBuildObject,
+	jsonObjectFrom,
+} from "kysely/helpers/postgres";
 import { Database } from "src/services/kysely/kysely.service";
 import { v4 as uuid } from "uuid";
 
@@ -38,19 +43,57 @@ export class CommentsRepository {
 			.executeTakeFirst();
 	}
 
-	async findOne(id: string) {
+	async findOne(id: string, withUserId: boolean) {
 		return await this.database
 			.selectFrom("Comments")
-			.select([
+			.select((eq) => [
 				"id",
 				"content",
 				"attachments",
 				"createdAt",
-				"userId",
 				"updatedAt",
+				jsonObjectFrom(
+					eq
+						.selectFrom("User")
+						.select(["displayName", "username", "profileImage"])
+						.whereRef("id", "=", "Comments.userId"),
+				).as("author"),
+				jsonBuildObject({
+					likes: eq
+						.selectFrom("CommentLike")
+						.whereRef("commentId", "=", "Comments.id")
+						.select(eq.fn.countAll<number>().as("likes")),
+					replies: eq
+						.selectFrom("Comments")
+						.where((qb) =>
+							qb("Comments.kweekId", "=", id).or("parentId", "=", id),
+						)
+						.select(eq.fn.countAll<number>().as("replies")),
+				}).as("count"),
+				jsonArrayFrom(
+					eq
+						.selectFrom("Comments")
+						.select((qb) => [
+							"id",
+							"content",
+							"attachments",
+							"createdAt",
+							"updatedAt",
+							jsonObjectFrom(
+								qb
+									.selectFrom("User")
+									.select(["displayName", "username", "profileImage"])
+									.whereRef("id", "=", "Comments.userId"),
+							).as("author"),
+							"kweekId",
+							"parentId",
+						])
+						.where("Comments.parentId", "=", id),
+				).as("replies"),
 				"kweekId",
 				"parentId",
 			])
+			.$if(withUserId, (qb) => qb.select("userId"))
 			.where("id", "=", id)
 			.executeTakeFirst();
 	}
@@ -93,25 +136,5 @@ export class CommentsRepository {
 			.set({ attachments })
 			.returningAll()
 			.executeTakeFirst();
-	}
-
-	async countLikes(id: string) {
-		const count = await this.database
-			.selectFrom("CommentLike")
-			.where("commentId", "=", id)
-			.select(this.database.fn.countAll<number>().as("count"))
-			.executeTakeFirstOrThrow();
-
-		return count.count ?? 0;
-	}
-
-	async countComments(id: string) {
-		const count = await this.database
-			.selectFrom("Comments")
-			.where((qb) => qb("kweekId", "=", id).or("parentId", "=", id))
-			.select(this.database.fn.countAll<number>().as("count"))
-			.executeTakeFirstOrThrow();
-
-		return count.count ?? 0;
 	}
 }

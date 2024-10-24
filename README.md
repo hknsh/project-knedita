@@ -65,6 +65,7 @@ This back-end uses the following stack:
 - **NestJS**
 - **Fastify**
 - **Prisma**
+- **Kysely**
 - **MinIO**
 - **PostgreSQL**
 - **Redis**

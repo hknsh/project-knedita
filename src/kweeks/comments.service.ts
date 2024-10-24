@@ -5,18 +5,15 @@ import {
 	NotFoundException,
 	UnauthorizedException,
 } from "@nestjs/common";
-import { PrismaService } from "src/services/prisma/prisma.service";
 import { S3Service } from "src/services/s3/s3.service";
 import { CommentsRepository } from "./repository/comments.repository";
 import { KweeksRepository } from "./repository/kweeks.repository";
-import { selectCommentsWithReplies } from "./schemas/prisma_queries.schema";
 
 @Injectable()
 export class CommentsService {
 	constructor(
 		private readonly commentsRepository: CommentsRepository,
 		private readonly kweeksRepository: KweeksRepository,
-		private readonly prisma: PrismaService,
 		private readonly s3: S3Service,
 	) {}
 
@@ -33,12 +30,15 @@ export class CommentsService {
 		}
 
 		// Verifies if the kweek_id is a kweek or a comment
-		const parentComment = await this.commentsRepository.findOne(kweek_id);
+		const parentComment = await this.commentsRepository.findOne(
+			kweek_id,
+			false,
+		);
 
 		let kweek = undefined;
 
 		if (parentComment === undefined) {
-			kweek = await this.kweeksRepository.findOne(kweek_id);
+			kweek = await this.kweeksRepository.findOne(kweek_id, false);
 
 			if (kweek === undefined) {
 				throw new NotFoundException("Kweek/Comment not found");
@@ -60,30 +60,21 @@ export class CommentsService {
 
 		await this.commentsRepository.addAttachments(id, attachments);
 
-		return await this.commentsRepository.findOne(id);
+		return await this.commentsRepository.findOne(id, false);
 	}
 
 	async info(comment_id: string) {
-		const comment = await this.commentsRepository.findOne(comment_id);
+		const comment = await this.commentsRepository.findOne(comment_id, false);
 
 		if (comment === undefined) {
 			throw new NotFoundException("Comment not found");
 		}
 
-		const likes = await this.commentsRepository.countLikes(comment.id);
-		const comments = await this.commentsRepository.countComments(comment.id);
-
-		return {
-			...comment,
-			count: {
-				likes,
-				comments,
-			},
-		};
+		return comment;
 	}
 
 	async update(comment_id: string, user_id: string, content: string) {
-		const comment = await this.commentsRepository.findOne(comment_id);
+		const comment = await this.commentsRepository.findOne(comment_id, true);
 
 		if (comment === undefined) {
 			throw new NotFoundException("Comment not found");
@@ -100,7 +91,7 @@ export class CommentsService {
 	}
 
 	async delete(comment_id: string, user_id: string) {
-		const comment = await this.commentsRepository.findOne(comment_id);
+		const comment = await this.commentsRepository.findOne(comment_id, true);
 
 		if (comment === undefined) {
 			throw new NotFoundException("Comment not found");
@@ -118,7 +109,7 @@ export class CommentsService {
 	}
 
 	async like(comment_id: string, user_id: string) {
-		const comment = await this.commentsRepository.findOne(comment_id);
+		const comment = await this.commentsRepository.findOne(comment_id, true);
 
 		if (comment === undefined) {
 			throw new NotFoundException("Comment not found");

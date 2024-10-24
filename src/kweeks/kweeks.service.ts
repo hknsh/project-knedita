@@ -31,30 +31,21 @@ export class KweeksService {
 
 		await this.kweekRepository.addAttachments(id, attachments);
 
-		return await this.kweekRepository.findOne(id);
+		return await this.kweekRepository.findOne(id, false);
 	}
 
 	async findOne(id: string) {
-		const post = await this.kweekRepository.findOne(id);
+		const post = await this.kweekRepository.findOne(id, false);
 
 		if (post === undefined) {
 			throw new NotFoundException("Post not found");
 		}
 
-		const likes = await this.kweekRepository.countLikes(post.id);
-		const comments = await this.kweekRepository.countComments(post.id);
-
-		return {
-			...post,
-			count: {
-				likes,
-				comments,
-			},
-		};
+		return post;
 	}
 
 	async update(user_id: string, post_id: string, content: string) {
-		const post = await this.kweekRepository.findOne(post_id);
+		const post = await this.kweekRepository.findOne(post_id, true);
 
 		if (post === undefined) {
 			throw new NotFoundException("Post not found");
@@ -71,7 +62,7 @@ export class KweeksService {
 	}
 
 	async remove(user_id: string, id: string) {
-		const post = await this.kweekRepository.findOne(id);
+		const post = await this.kweekRepository.findOne(id, true);
 
 		if (post === undefined) {
 			throw new NotFoundException("Post not found");
@@ -89,7 +80,7 @@ export class KweeksService {
 	}
 
 	async like(user_id: string, kweek_id: string) {
-		const kweek = await this.kweekRepository.findOne(kweek_id);
+		const kweek = await this.kweekRepository.findOne(kweek_id, true);
 
 		if (kweek === undefined) {
 			throw new NotFoundException("Post not found");

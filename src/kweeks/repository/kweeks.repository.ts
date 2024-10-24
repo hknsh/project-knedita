@@ -1,4 +1,10 @@
 import { Injectable } from "@nestjs/common";
+import { Expression } from "kysely";
+import {
+	jsonArrayFrom,
+	jsonBuildObject,
+	jsonObjectFrom,
+} from "kysely/helpers/postgres";
 import { Database } from "src/services/kysely/kysely.service";
 import { v4 as uuid } from "uuid";
 
@@ -31,10 +37,61 @@ export class KweeksRepository {
 			.executeTakeFirst();
 	}
 
-	async findOne(id: string) {
+	async findOne(id: string, withUserId: boolean) {
 		return await this.database
 			.selectFrom("Kweek")
-			.selectAll()
+			.select((eq) => [
+				"id",
+				"content",
+				"attachments",
+				"createdAt",
+				"updatedAt",
+				jsonBuildObject({
+					likes: eq
+						.selectFrom("KweekLike")
+						.whereRef("kweekId", "=", "Kweek.id")
+						.select(eq.fn.countAll<number>().as("likes")),
+					comments: eq
+						.selectFrom("Comments")
+						.where("kweekId", "=", id)
+						.select(eq.fn.countAll<number>().as("comments")),
+				}).as("count"),
+				jsonObjectFrom(
+					eq
+						.selectFrom("User")
+						.select(["displayName", "username", "profileImage"])
+						.whereRef("id", "=", "authorId"),
+				).as("author"),
+				jsonArrayFrom(
+					eq
+						.selectFrom("Comments")
+						.select((qb) => [
+							"id",
+							"content",
+							"attachments",
+							"createdAt",
+							"updatedAt",
+							jsonBuildObject({
+								likes: qb
+									.selectFrom("CommentLike")
+									.whereRef("commentId", "=", "Comments.id")
+									.select(qb.fn.countAll<number>().as("likes")),
+								replies: qb
+									.selectFrom("Comments as Reply")
+									.whereRef("Reply.parentId", "=", "Comments.id")
+									.select(qb.fn.countAll<number>().as("replies")),
+							}).as("count"),
+							jsonObjectFrom(
+								qb
+									.selectFrom("User")
+									.select(["displayName", "username", "profileImage"])
+									.whereRef("id", "=", "Comments.userId"),
+							).as("author"),
+						])
+						.whereRef("Comments.kweekId", "=", "Kweek.id"),
+				).as("comments"),
+			])
+			.$if(withUserId, (qb) => qb.select("authorId"))
 			.where("id", "=", id)
 			.executeTakeFirst();
 	}
@@ -77,23 +134,5 @@ export class KweeksRepository {
 			.set({ attachments })
 			.returningAll()
 			.executeTakeFirst();
-	}
-
-	async countLikes(id: string) {
-		const count = await this.database
-			.selectFrom("KweekLike")
-			.where("kweekId", "=", id)
-			.select(this.database.fn.countAll<number>().as("count"))
-			.executeTakeFirstOrThrow();
-		return count.count ?? 0;
-	}
-
-	async countComments(id: string) {
-		const count = await this.database
-			.selectFrom("Comments")
-			.where("kweekId", "=", id)
-			.select(this.database.fn.countAll<number>().as("count"))
-			.executeTakeFirstOrThrow();
-		return count.count ?? 0;
 	}
 }

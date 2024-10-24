@@ -12,15 +12,11 @@ import { Configuration } from "./configuration";
 /*
   --- Present ---
 
-	TODO: Finish some routes.
-        -> Delete User service needs more protection.
-  TODO: Add `user` type to @nestjs/common ---> Request.
   TODO: Add a authorization system.
   TODO: Send e-mails to the user when something happens to his account.
   TODO: Create the chat system.
         -> Initialize the websocket system first.
   TODO: Create a TOS.
-  TODO: Improve Kysely Queries.
   TODO: Fix Docker Image.
 */
 
