@@ -1,6 +1,6 @@
 import { Public } from "@common/decorators/public.decorator";
-import { MultiFileValidation } from "@common/validators/multi_file.validator";
-import { File, FilesInterceptor } from "@nest-lab/fastify-multer";
+import { MultiFileValidation } from "@common/validators/multi-file.validator";
+import { type File, FilesInterceptor } from "@nest-lab/fastify-multer";
 import {
 	Body,
 	Controller,
@@ -21,8 +21,8 @@ import {
 	ApiOperation,
 	ApiTags,
 } from "@nestjs/swagger";
-import { CommentsService } from "./comments.service";
-import { UpdateCommentDTO } from "./dto/comments/update_comment.dto";
+import type { CommentsService } from "./comments.service";
+import type { UpdateCommentDTO } from "./dto/comments/update_comment.dto";
 import { AttachmentsSchema } from "./schemas/attachments.schema";
 
 @ApiTags("Kweeks")

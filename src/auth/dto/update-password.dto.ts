@@ -1,31 +1,10 @@
+import { passwordSchema } from "@/common/shared/common.schema";
 import { createZodDto } from "nestjs-zod";
-import { z } from "nestjs-zod/z";
+import { z } from "zod";
 
-export const UpdatePasswordSchema = z
-	.object({
-		old_password: z
-			.password({
-				required_error: "Password is required",
-			})
-			.min(8)
-			.max(32)
-			.atLeastOne("digit")
-			.atLeastOne("uppercase")
-			.atLeastOne("lowercase")
-			.atLeastOne("special")
-			.transform((value) => value.replace(/\s+/g, "")),
-		new_password: z
-			.password({
-				required_error: "Password is required",
-			})
-			.min(8)
-			.max(32)
-			.atLeastOne("digit")
-			.atLeastOne("uppercase")
-			.atLeastOne("lowercase")
-			.atLeastOne("special")
-			.transform((value) => value.replace(/\s+/g, "")),
-	})
-	.required();
+export const UpdatePasswordSchema = z.object({
+	old_password: passwordSchema,
+	new_password: passwordSchema,
+});
 
 export class UpdatePasswordDTO extends createZodDto(UpdatePasswordSchema) {}

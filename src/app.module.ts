@@ -2,7 +2,6 @@ import { KyselyModule } from "@common/modules/kysely/kysely.module";
 import { MailModule } from "@common/modules/mail/mail.module";
 import { QueueModule } from "@common/modules/queue/queue.module";
 import { StorageModule } from "@common/modules/s3/s3.module";
-import { FastifyMulterModule } from "@nest-lab/fastify-multer";
 import { ThrottlerStorageRedisService } from "@nest-lab/throttler-storage-redis";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
@@ -51,7 +50,6 @@ import { UserModule } from "./users/users.module";
 			isGlobal: true,
 		}),
 		MailModule,
-		FastifyMulterModule,
 		UserModule,
 		KweeksModule,
 		AuthModule,

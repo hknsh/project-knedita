@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import dotEnvExpand from "dotenv-expand";
 import { Singleton } from "tstl";
 
-import { z } from "nestjs-zod/z";
+import { z } from "zod";
 
 /**
  * Global variables of the server.

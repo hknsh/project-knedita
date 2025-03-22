@@ -19,12 +19,12 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import { AuthService } from "./auth.service";
-import { RefreshTokenDTO } from "./dto/refresh-token.dto";
-import { SignInUserDTO } from "./dto/sign-in.dto";
-import { SignUpUserDTO } from "./dto/sign-up.dto";
-import { UpdateEmailDTO } from "./dto/update-email.dto";
-import { UpdatePasswordDTO } from "./dto/update-password.dto";
+import type { AuthService } from "./auth.service";
+import type { RefreshTokenDTO } from "./dto/refresh-token.dto";
+import type { SignInUserDTO } from "./dto/sign-in.dto";
+import type { SignUpUserDTO } from "./dto/sign-up.dto";
+import type { UpdateEmailDTO } from "./dto/update-email.dto";
+import type { UpdatePasswordDTO } from "./dto/update-password.dto";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
 import {
 	InvalidTokenResponse,
@@ -52,7 +52,6 @@ export class AuthController {
 		`,
 	})
 	@ApiOkResponse({
-		status: 200,
 		description: "Authenticated successfully",
 		example: LoginResponse,
 	})
@@ -72,7 +71,6 @@ export class AuthController {
 		description: "Generates a new 'accessToken' using a valid 'refreshToken'",
 	})
 	@ApiOkResponse({
-		status: 200,
 		description: "Access token refreshed successfully",
 		example: LoginResponse,
 	})

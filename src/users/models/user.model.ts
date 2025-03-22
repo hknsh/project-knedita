@@ -1,5 +1,5 @@
 import { createZodDto } from "nestjs-zod";
-import { z } from "nestjs-zod/z";
+import { z } from "zod";
 
 export const UserSchema = z
 	.object({
@@ -7,7 +7,7 @@ export const UserSchema = z
 		displayName: z.string().optional(),
 		username: z.string(),
 		email: z.string().email(),
-		password: z.password(),
+		password: z.string(),
 		kweeks: z.array(z.object({})).optional(),
 		profileImage: z.string().url().optional(),
 		followers: z.number(),

@@ -1,5 +1,5 @@
 import { createZodDto } from "nestjs-zod";
-import { z } from "nestjs-zod/z";
+import { z } from "zod";
 
 export const RefreshTokenSchema = z.object({
 	refreshToken: z.string({

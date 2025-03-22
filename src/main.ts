@@ -1,10 +1,11 @@
 import { Environment } from "@/environment";
 import helmet from "@fastify/helmet";
+import multipart from "@fastify/multipart";
 import { VersioningType } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import {
 	FastifyAdapter,
-	NestFastifyApplication,
+	type NestFastifyApplication,
 } from "@nestjs/platform-fastify";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { Logger } from "nestjs-pino";
@@ -39,7 +40,6 @@ async function bootstrap() {
 	});
 
 	patchNestJsSwagger();
-
 	app.enableCors();
 
 	const config = new DocumentBuilder()
@@ -67,6 +67,12 @@ async function bootstrap() {
 	SwaggerModule.setup("/", app, document);
 
 	await app.register(helmet);
+	await app.register(multipart, {
+		limits: {
+			fields: 3,
+			files: 4,
+		},
+	});
 
 	await app.listen(Environment.env.SERVER_PORT, Environment.env.SERVER_HOST);
 }
