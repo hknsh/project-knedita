@@ -19,6 +19,7 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
+import { FastifyRequest } from "fastify";
 import { AuthService } from "./auth.service";
 import { RefreshTokenDTO } from "./dto/refresh-token.dto";
 import { SignInUserDTO } from "./dto/sign-in.dto";
@@ -60,7 +61,7 @@ export class AuthController {
 		example: UnauthorizedResponse,
 	})
 	@HttpCode(200)
-	async signIn(@Request() req, @Body() _: SignInUserDTO) {
+	async signIn(@Request() req: FastifyRequest, @Body() _: SignInUserDTO) {
 		return this.authService.login(req.user);
 	}
 
@@ -78,7 +79,10 @@ export class AuthController {
 		description: "Invalid or expired refresh token",
 		example: InvalidTokenResponse,
 	})
-	async refresh(@Request() req, @Body() { refreshToken }: RefreshTokenDTO) {
+	async refresh(
+		@Request() req: FastifyRequest,
+		@Body() { refreshToken }: RefreshTokenDTO,
+	) {
 		return this.authService.refresh(refreshToken);
 	}
 
@@ -129,7 +133,10 @@ export class AuthController {
 		example: UnauthorizedResponse,
 	})
 	@ApiBearerAuth("JWT")
-	async updateEmail(@Body() { email }: UpdateEmailDTO, @Request() req) {
+	async updateEmail(
+		@Body() { email }: UpdateEmailDTO,
+		@Request() req: FastifyRequest,
+	) {
 		return this.authService.updateEmail(req.user.id, email);
 	}
 
@@ -144,7 +151,7 @@ export class AuthController {
 	@ApiBearerAuth("JWT")
 	async updatePassword(
 		@Body() { old_password, new_password }: UpdatePasswordDTO,
-		@Request() req,
+		@Request() req: FastifyRequest,
 	) {
 		return this.authService.updatePassword(
 			req.user.id,

@@ -45,7 +45,7 @@ async function bootstrap() {
 	const config = new DocumentBuilder()
 		.setTitle("Project Knedita")
 		.setDescription("An open-source social media")
-		.setVersion("1.1a")
+		.setVersion("1.1r")
 		.addBearerAuth(
 			{
 				type: "http",

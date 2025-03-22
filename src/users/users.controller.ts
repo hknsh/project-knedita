@@ -27,8 +27,9 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import { FollowUserDTO } from "./dto/follow_user.dto";
-import { UpdateNameDTO } from "./dto/update_name.dto";
+import { FastifyRequest } from "fastify";
+import { FollowUserDTO } from "./dto/follow-user.dto";
+import { UpdateNameDTO } from "./dto/update-name.dto";
 import { UserService } from "./users.service";
 
 @ApiTags("Users")
@@ -42,7 +43,7 @@ export class UserController {
 	@ApiNotFoundResponse({ description: "User to follow not found" })
 	@ApiUnauthorizedResponse({ description: "Missing authentication token" })
 	@ApiBearerAuth("JWT")
-	follow(@Body() { username }: FollowUserDTO, @Request() req) {
+	follow(@Body() { username }: FollowUserDTO, @Request() req: FastifyRequest) {
 		return this.userService.follow(req.user.id, username);
 	}
 
@@ -53,7 +54,7 @@ export class UserController {
 	@ApiUnauthorizedResponse({
 		description: "Missing authentication token",
 	})
-	me(@Request() req) {
+	me(@Request() req: FastifyRequest) {
 		return req.user;
 	}
 
@@ -77,7 +78,10 @@ export class UserController {
 	@ApiOkResponse({ description: "Username updated successfully" })
 	@ApiUnauthorizedResponse({ description: "Missing authentication token" })
 	@ApiBearerAuth("JWT")
-	updateName(@Body() { username, displayName }: UpdateNameDTO, @Request() req) {
+	updateName(
+		@Body() { username, displayName }: UpdateNameDTO,
+		@Request() req: FastifyRequest,
+	) {
 		return this.userService.updateName(req.user.id, username, displayName);
 	}
 
@@ -106,7 +110,7 @@ export class UserController {
 			new BufferValidator(), // Magic number validation
 		)
 		image: File,
-		@Request() req,
+		@Request() req: FastifyRequest,
 	) {
 		return this.userService.uploadImage(req.user.id, image);
 	}
@@ -117,7 +121,7 @@ export class UserController {
 	@ApiOkResponse({ description: "Account deleted successfully" })
 	@ApiUnauthorizedResponse({ description: "Missing authentication token" })
 	@ApiBearerAuth("JWT")
-	delete(@Request() req) {
+	delete(@Request() req: FastifyRequest) {
 		return this.userService.delete(req.user.id);
 	}
 }

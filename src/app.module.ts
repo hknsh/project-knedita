@@ -4,7 +4,6 @@ import { QueueModule } from "@common/modules/queue/queue.module";
 import { StorageModule } from "@common/modules/s3/s3.module";
 import { ThrottlerStorageRedisService } from "@nest-lab/throttler-storage-redis";
 import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
 import { APP_GUARD, APP_PIPE } from "@nestjs/core";
 import { ThrottlerGuard, ThrottlerModule, seconds } from "@nestjs/throttler";
 import { LoggerModule } from "nestjs-pino";
@@ -45,9 +44,6 @@ import { UserModule } from "./users/users.module";
 				password: Environment.env.POSTGRES_PASSWORD,
 				database: Environment.env.POSTGRES_DB,
 			}),
-		}),
-		ConfigModule.forRoot({
-			isGlobal: true,
 		}),
 		MailModule,
 		UserModule,
