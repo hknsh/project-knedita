@@ -1,4 +1,6 @@
-import { File, FilesInterceptor } from "@nest-lab/fastify-multer";
+import { Public } from "@common/decorators/public.decorator";
+import { MultiFileValidation } from "@common/validators/multi-file.validator";
+import { type File, FilesInterceptor } from "@nest-lab/fastify-multer";
 import {
 	Body,
 	Controller,
@@ -19,9 +21,9 @@ import {
 	ApiOperation,
 	ApiTags,
 } from "@nestjs/swagger";
-import { Public } from "src/decorators/public.decorator";
-import { MultiFileValidation } from "src/validators/multi_file.validator";
-import { UpdateKweekDTO } from "./dto/kweeks/update_kweek.dto";
+import { FastifyRequest } from "fastify";
+import { CreateKweekDTO } from "./dto/kweeks/create-kweek.dto";
+import { UpdateKweekDTO } from "./dto/kweeks/update-kweek.dto";
 import { KweeksService } from "./kweeks.service";
 import { AttachmentsSchema } from "./schemas/attachments.schema";
 
@@ -39,8 +41,8 @@ export class KweeksController {
 	@ApiBadRequestResponse({ description: "Content too long" })
 	create(
 		@UploadedFiles(new MultiFileValidation()) attachments: Array<File>,
-		@Body() body,
-		@Request() req,
+		@Body() body: CreateKweekDTO,
+		@Request() req: FastifyRequest,
 	) {
 		return this.kweeksService.create(body.content, req.user.id, attachments);
 	}
@@ -55,21 +57,21 @@ export class KweeksController {
 	@Patch()
 	@ApiOperation({ summary: "Updates a kweek content" })
 	@ApiBearerAuth("JWT")
-	update(@Body() body: UpdateKweekDTO, @Request() req) {
+	update(@Body() body: UpdateKweekDTO, @Request() req: FastifyRequest) {
 		return this.kweeksService.update(req.user.id, body.post_id, body.content);
 	}
 
 	@Delete(":id")
 	@ApiOperation({ summary: "Deletes a kweek" })
 	@ApiBearerAuth("JWT")
-	remove(@Param("id") id: string, @Request() req) {
+	remove(@Param("id") id: string, @Request() req: FastifyRequest) {
 		return this.kweeksService.remove(req.user.id, id);
 	}
 
 	@Post(":id/like")
 	@ApiOperation({ summary: "Likes a kweek" })
 	@ApiBearerAuth("JWT")
-	likeKweek(@Param("id") kweek_id: string, @Request() req) {
+	likeKweek(@Param("id") kweek_id: string, @Request() req: FastifyRequest) {
 		return this.kweeksService.like(req.user.id, kweek_id);
 	}
 }

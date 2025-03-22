@@ -1,50 +1,40 @@
-# LOCAL
-FROM node:20-alpine AS dev
-
+FROM oven/bun:1 AS base
 WORKDIR /usr/src/app
 
-COPY --chown=node:node package*.json ./
-COPY --chown=node:node prisma ./prisma/
+ENV NODE_ENV=production
 
-RUN npm ci
+FROM base AS install
 
-COPY --chown=node:node . .
+RUN mkdir -p /temp/dev
+COPY package.json bun.lockb /temp/dev/
+RUN cd /temp/dev && bun install --frozen-lockfile
 
-USER node
+# Production dependecies
+RUN mkdir -p /temp/prod
+COPY package.json bun.lockb /temp/prod/
 
-# BUILD
-FROM node:20-alpine AS build
+# Stupid thing that doesn't allow the build to proceed
+COPY .husky/ /temp/prod/.husky/
+RUN bun install husky -g
 
-WORKDIR /usr/src/app
+RUN cd /temp/prod && bun install --frozen-lockfile --production
 
-COPY --chown=node:node package*.json ./
-COPY --chown=node:node --from=dev /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node --from=dev /usr/src/app/prisma ./prisma/
-COPY --chown=node:node .husky ./.husky
-COPY --chown=node:node tsconfig.json tsconfig.build.json ./
-COPY --chown=node:node docker.env ./.env
-COPY --chown=node:node . .
+# Preparing code
+FROM base AS prerelease
+COPY --from=install /temp/dev/node_modules node_modules
+COPY . .
 
-RUN npm install husky -g
+RUN bunx prisma generate
+RUN bun run build
 
-RUN npm run prisma:generate
+# Final image
+FROM base AS release
 
-RUN npm run build
+COPY --from=install /temp/prod/node_modules node_modules
+COPY --from=prerelease /usr/src/app/dist dist
+COPY --from=prerelease /usr/src/app/package.json .
+COPY --from=prerelease /usr/src/app/prisma prisma
+COPY --from=prerelease /usr/src/app/.husky .husky
 
-ENV NODE_ENV production
-
-RUN npm ci --only=production && npm cache clean --force
-
-USER node
-
-# PROD
-FROM node:20-alpine as production
-
-COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node --from=build /usr/src/app/dist ./dist
-COPY --chown=node:node --from=build /usr/src/app/prisma ./prisma
-COPY --chown=node:node --from=build /usr/src/app/.husky ./.husky
-COPY --chown=node:node --from=build /usr/src/app/.env ./
-COPY --chown=node:node --from=build /usr/src/app/package*.json ./
-
-CMD ["npm", "run" , "prod"]
+EXPOSE 8080/tcp
+ENTRYPOINT ["bun", "dist/main.js"]

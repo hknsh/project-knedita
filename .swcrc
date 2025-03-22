@@ -1,6 +1,7 @@
 {
 	"$schema": "https://json.schemastore.org/swcrc",
 	"sourceMaps": true,
+	"exclude": ["test/*"],
 	"jsc": {
 		"target": "esnext",
 		"parser": {
@@ -8,7 +9,11 @@
 			"decorators": true,
 			"dynamicImport": true
 		},
-		"baseUrl": "./"
+		"baseUrl": "./",
+		"paths": {
+			"@common/*": ["./src/common/*"],
+			"@/*": ["./src/*"]
+		}
 	},
 	"minify": false
 }

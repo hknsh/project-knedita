@@ -1,23 +1,31 @@
+import { Environment } from "@/environment";
+import { QueueProducer } from "@common/modules/queue/queue.producer";
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
-import { Configuration } from "src/configuration";
-import { UserModule } from "src/users/users.module";
+import { AuthRefreshTokenService } from "./auth-refresh-token.service";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
-import { JwtStrategy } from "./jwt.strategy";
-import { LocalStrategy } from "./local.strategy";
+import { AuthRepository } from "./repositories/auth.repository";
+import { JwtStrategy } from "./strategies/jwt.strategy";
+import { LocalStrategy } from "./strategies/local.strategy";
 
 @Module({
 	controllers: [AuthController],
 	imports: [
-		UserModule,
 		PassportModule,
 		JwtModule.register({
-			secret: Configuration.JWT_ACCESS_SECRET(),
-			signOptions: { expiresIn: "1d" }, // TODO: add refresh tokens
+			secret: Environment.env.JWT_ACCESS_SECRET,
+			signOptions: { expiresIn: "30s" },
 		}),
 	],
-	providers: [AuthService, LocalStrategy, JwtStrategy],
+	providers: [
+		AuthRepository,
+		AuthService,
+		AuthRefreshTokenService,
+		LocalStrategy,
+		JwtStrategy,
+		QueueProducer,
+	],
 })
 export class AuthModule {}

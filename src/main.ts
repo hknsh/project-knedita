@@ -1,41 +1,51 @@
+import { Environment } from "@/environment";
 import helmet from "@fastify/helmet";
+import multipart from "@fastify/multipart";
+import { VersioningType } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import {
 	FastifyAdapter,
-	NestFastifyApplication,
+	type NestFastifyApplication,
 } from "@nestjs/platform-fastify";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { Logger } from "nestjs-pino";
 import { patchNestJsSwagger } from "nestjs-zod";
 import { AppModule } from "./app.module";
-import { Configuration } from "./configuration";
 
 /*
   --- Present ---
 
-	TODO: Finish some routes.
-        -> Delete User service needs more protection.
-  TODO: Add `user` type to @nestjs/common ---> Request.
-  TODO: Add a authorization system.
-  TODO: Send e-mails to the user when something happens to his account.
+  TODO: Improve documentation (specially in Kweek module)
+  TODO: Better authentication (Add OAuth e.g.)
+    - TODO: Send verify and 2 step email
+    - TODO: Send e-mails to the user when something happens to his account.
+  TODO: Add pagination on some queries
+  TODO: Generate a signed url instead of returning a s3 link 
   TODO: Create the chat system.
         -> Initialize the websocket system first.
-  TODO: Create a TOS.
 */
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestFastifyApplication>(
 		AppModule,
-		new FastifyAdapter({ logger: true }),
+		new FastifyAdapter({ logger: Environment.env.NODE_ENV === "dev" }),
+		{ bufferLogs: true },
 	);
 
-	patchNestJsSwagger();
+	app.useLogger(app.get(Logger));
 
+	app.enableVersioning({
+		type: VersioningType.URI,
+		defaultVersion: "1",
+	});
+
+	patchNestJsSwagger();
 	app.enableCors();
 
 	const config = new DocumentBuilder()
 		.setTitle("Project Knedita")
 		.setDescription("An open-source social media")
-		.setVersion("1.0")
+		.setVersion("1.1r")
 		.addBearerAuth(
 			{
 				type: "http",
@@ -57,7 +67,13 @@ async function bootstrap() {
 	SwaggerModule.setup("/", app, document);
 
 	await app.register(helmet);
+	await app.register(multipart, {
+		limits: {
+			fields: 3,
+			files: 4,
+		},
+	});
 
-	await app.listen(Configuration.SERVER_PORT(), Configuration.SERVER_HOST);
+	await app.listen(Environment.env.SERVER_PORT, Environment.env.SERVER_HOST);
 }
 bootstrap();

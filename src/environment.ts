@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import dotEnvExpand from "dotenv-expand";
 import { Singleton } from "tstl";
 
-import { z } from "nestjs-zod/z";
+import { z } from "zod";
 
 /**
  * Global variables of the server.
@@ -47,11 +47,19 @@ const EnvironmentSchema = z.object({
 	SERVER_HOST: z.string(),
 
 	JWT_ACCESS_SECRET: z.string(),
+	ARGON_SECRET: z.string(),
 
 	MINIO_ROOT_USER: z.string(),
 	MINIO_ROOT_PASSWORD: z.string(),
 	MINIO_DEFAULT_BUCKETS: z.string(),
 	MINIO_ENDPOINT: z.string(),
+
+	EMAIL_ID: z.string().email(),
+	EMAIL_PASS: z.string(),
+	EMAIL_HOST: z.string(),
+	EMAIL_PORT: z.string().regex(/^[0-9]+$/),
+
+	RABBITMQ_ENDPOINT: z.string(),
 });
 
 type IEnvironment = z.infer<typeof EnvironmentSchema>;

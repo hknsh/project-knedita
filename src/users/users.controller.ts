@@ -1,3 +1,6 @@
+import { Public } from "@common/decorators/public.decorator";
+import { BufferValidator } from "@common/validators/buffer.validator";
+import { UploadImageValidator } from "@common/validators/upload-image.validator";
 import { File, FileInterceptor } from "@nest-lab/fastify-multer";
 import {
 	Body,
@@ -19,19 +22,14 @@ import {
 	ApiConsumes,
 	ApiCreatedResponse,
 	ApiNotFoundResponse,
+	ApiOkResponse,
 	ApiOperation,
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import { Public } from "src/decorators/public.decorator";
-import { BufferValidator } from "src/validators/buffer.validator";
-import UploadImageValidator from "src/validators/upload_image.validator";
-import { CreateUserDTO } from "./dto/create_user.dto";
-import { FollowUserDTO } from "./dto/follow_user.dto";
-import { UpdateEmailDTO } from "./dto/update_email.dto";
-import { UpdateNameDTO } from "./dto/update_name.dto";
-import { UpdatePasswordDTO } from "./dto/update_password.dto";
-import UploadImageSchema from "./schemas/upload_image.schema";
+import { FastifyRequest } from "fastify";
+import { FollowUserDTO } from "./dto/follow-user.dto";
+import { UpdateNameDTO } from "./dto/update-name.dto";
 import { UserService } from "./users.service";
 
 @ApiTags("Users")
@@ -39,35 +37,24 @@ import { UserService } from "./users.service";
 export class UserController {
 	constructor(private readonly userService: UserService) {}
 	// POST
-	@Public()
-	@Post()
-	@ApiOperation({ summary: "Creates a new account" })
-	@ApiCreatedResponse({ description: "Account created successfully" })
-	@ApiBadRequestResponse({
-		description:
-			"Missing field / Invalid username / Invalid email / Weak password",
-	})
-	create(@Body() createUserDTO: CreateUserDTO) {
-		return this.userService.create(createUserDTO);
-	}
-
 	@Post("/follow")
 	@ApiOperation({ summary: "Follow/unfollow a user" })
 	@ApiCreatedResponse({ description: "Followed/unfollowed successfully" })
 	@ApiNotFoundResponse({ description: "User to follow not found" })
+	@ApiUnauthorizedResponse({ description: "Missing authentication token" })
 	@ApiBearerAuth("JWT")
-	follow(@Body() { username }: FollowUserDTO, @Request() req) {
+	follow(@Body() { username }: FollowUserDTO, @Request() req: FastifyRequest) {
 		return this.userService.follow(req.user.id, username);
 	}
 
 	// GET
 	@Get("/profile")
-	@ApiOperation({ summary: "Returns information about the logged user" })
+	@ApiOperation({ summary: "Returns information about the logged-in user" })
 	@ApiBearerAuth("JWT")
 	@ApiUnauthorizedResponse({
-		description: "Not authenticated / Invalid JWT Token",
+		description: "Missing authentication token",
 	})
-	me(@Request() req) {
+	me(@Request() req: FastifyRequest) {
 		return req.user;
 	}
 
@@ -83,32 +70,19 @@ export class UserController {
 	// PATCH
 	@Patch()
 	@ApiOperation({
-		summary: "Updates the username or display name of a logged user",
+		summary: "Updates the username / display name of the logged-in user",
 	})
+	@ApiBadRequestResponse({
+		description: "Username already in use / Empty field",
+	})
+	@ApiOkResponse({ description: "Username updated successfully" })
+	@ApiUnauthorizedResponse({ description: "Missing authentication token" })
 	@ApiBearerAuth("JWT")
-	updateName(@Body() { displayName, username }: UpdateNameDTO, @Request() req) {
-		return this.userService.updateName(req.user.id, username, displayName);
-	}
-
-	@Patch("/email")
-	@ApiOperation({ summary: "Updates the email of a logged user" })
-	@ApiBearerAuth("JWT")
-	updateEmail(@Body() body: UpdateEmailDTO, @Request() req) {
-		return this.userService.updateEmail(req.user.id, body.email);
-	}
-
-	@Patch("/password")
-	@ApiOperation({ summary: "Updates the password of a logged user" })
-	@ApiBearerAuth("JWT")
-	updatePassword(
-		@Body() { old_password, new_password }: UpdatePasswordDTO,
-		@Request() req,
+	updateName(
+		@Body() { username, displayName }: UpdateNameDTO,
+		@Request() req: FastifyRequest,
 	) {
-		return this.userService.updatePassword(
-			req.user.id,
-			old_password,
-			new_password,
-		);
+		return this.userService.updateName(req.user.id, username, displayName);
 	}
 
 	@Patch("/image")
@@ -118,14 +92,25 @@ export class UserController {
 	@ApiBearerAuth("JWT")
 	@UseInterceptors(FileInterceptor("image"))
 	@ApiConsumes("multipart/form-data")
-	@ApiBody(UploadImageSchema)
+	@ApiBody({
+		required: true,
+		schema: {
+			type: "object",
+			properties: {
+				image: {
+					type: "string",
+					format: "binary",
+				},
+			},
+		},
+	})
 	uploadProfileImage(
 		@UploadedFile(
 			UploadImageValidator,
 			new BufferValidator(), // Magic number validation
 		)
 		image: File,
-		@Request() req,
+		@Request() req: FastifyRequest,
 	) {
 		return this.userService.uploadImage(req.user.id, image);
 	}
@@ -133,8 +118,10 @@ export class UserController {
 	// DELETE
 	@Delete()
 	@ApiOperation({ summary: "Deletes the account of a logged user" })
+	@ApiOkResponse({ description: "Account deleted successfully" })
+	@ApiUnauthorizedResponse({ description: "Missing authentication token" })
 	@ApiBearerAuth("JWT")
-	delete(@Request() req) {
+	delete(@Request() req: FastifyRequest) {
 		return this.userService.delete(req.user.id);
 	}
 }

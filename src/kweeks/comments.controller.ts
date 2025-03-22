@@ -1,4 +1,6 @@
-import { File, FilesInterceptor } from "@nest-lab/fastify-multer";
+import { Public } from "@common/decorators/public.decorator";
+import { MultiFileValidation } from "@common/validators/multi-file.validator";
+import { type File, FilesInterceptor } from "@nest-lab/fastify-multer";
 import {
 	Body,
 	Controller,
@@ -19,10 +21,10 @@ import {
 	ApiOperation,
 	ApiTags,
 } from "@nestjs/swagger";
-import { Public } from "src/decorators/public.decorator";
-import { MultiFileValidation } from "src/validators/multi_file.validator";
+import { FastifyRequest } from "fastify";
 import { CommentsService } from "./comments.service";
-import { UpdateCommentDTO } from "./dto/comments/update_comment.dto";
+import { CreateCommentDTO } from "./dto/comments/create-comment.dto";
+import { UpdateCommentDTO } from "./dto/comments/update-comment.dto";
 import { AttachmentsSchema } from "./schemas/attachments.schema";
 
 @ApiTags("Kweeks")
@@ -39,8 +41,8 @@ export class CommentsController {
 	@ApiBadRequestResponse({ description: "Content too long" })
 	create(
 		@UploadedFiles(new MultiFileValidation()) attachments: Array<File>,
-		@Body() body,
-		@Request() req,
+		@Body() body: CreateCommentDTO,
+		@Request() req: FastifyRequest,
 		@Param("id") id: string,
 	) {
 		return this.commentsService.create(
@@ -63,7 +65,7 @@ export class CommentsController {
 	@ApiBearerAuth("JWT")
 	updateComment(
 		@Param("comment_id") comment_id: string,
-		@Request() req,
+		@Request() req: FastifyRequest,
 		@Body() body: UpdateCommentDTO,
 	) {
 		return this.commentsService.update(comment_id, req.user.id, body.content);
@@ -72,14 +74,20 @@ export class CommentsController {
 	@Delete("comments/:comment_id")
 	@ApiOperation({ summary: "Deletes a comment" })
 	@ApiBearerAuth("JWT")
-	removeComment(@Param("comment_id") comment_id: string, @Request() req) {
+	removeComment(
+		@Param("comment_id") comment_id: string,
+		@Request() req: FastifyRequest,
+	) {
 		return this.commentsService.delete(comment_id, req.user.id);
 	}
 
 	@Post("comments/:comment_id/like")
 	@ApiOperation({ summary: "Likes a comment" })
 	@ApiBearerAuth("JWT")
-	likeComment(@Param("comment_id") comment_id: string, @Request() req) {
+	likeComment(
+		@Param("comment_id") comment_id: string,
+		@Request() req: FastifyRequest,
+	) {
 		return this.commentsService.like(comment_id, req.user.id);
 	}
 }
