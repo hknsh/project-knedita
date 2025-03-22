@@ -1,7 +1,7 @@
 import { Public } from "@common/decorators/public.decorator";
 import { BufferValidator } from "@common/validators/buffer.validator";
 import { UploadImageValidator } from "@common/validators/upload-image.validator";
-import { type File, FileInterceptor } from "@nest-lab/fastify-multer";
+import { File, FileInterceptor } from "@nest-lab/fastify-multer";
 import {
 	Body,
 	Controller,
@@ -27,9 +27,9 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import type { FollowUserDTO } from "./dto/follow_user.dto";
-import type { UpdateNameDTO } from "./dto/update_name.dto";
-import type { UserService } from "./users.service";
+import { FollowUserDTO } from "./dto/follow_user.dto";
+import { UpdateNameDTO } from "./dto/update_name.dto";
+import { UserService } from "./users.service";
 
 @ApiTags("Users")
 @Controller("users")

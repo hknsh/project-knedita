@@ -21,8 +21,8 @@ import {
 	ApiOperation,
 	ApiTags,
 } from "@nestjs/swagger";
-import type { UpdateKweekDTO } from "./dto/kweeks/update_kweek.dto";
-import type { KweeksService } from "./kweeks.service";
+import { UpdateKweekDTO } from "./dto/kweeks/update_kweek.dto";
+import { KweeksService } from "./kweeks.service";
 import { AttachmentsSchema } from "./schemas/attachments.schema";
 
 @ApiTags("Kweeks")

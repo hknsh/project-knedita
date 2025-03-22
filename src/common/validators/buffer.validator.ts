@@ -1,9 +1,5 @@
 import type { File } from "@nest-lab/fastify-multer";
-import {
-	BadRequestException,
-	Injectable,
-	type PipeTransform,
-} from "@nestjs/common";
+import { BadRequestException, Injectable, PipeTransform } from "@nestjs/common";
 import { loadEsm } from "load-esm";
 
 /**

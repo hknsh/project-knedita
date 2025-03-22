@@ -21,8 +21,8 @@ import {
 	ApiOperation,
 	ApiTags,
 } from "@nestjs/swagger";
-import type { CommentsService } from "./comments.service";
-import type { UpdateCommentDTO } from "./dto/comments/update_comment.dto";
+import { CommentsService } from "./comments.service";
+import { UpdateCommentDTO } from "./dto/comments/update_comment.dto";
 import { AttachmentsSchema } from "./schemas/attachments.schema";
 
 @ApiTags("Kweeks")
