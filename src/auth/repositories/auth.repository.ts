@@ -17,6 +17,7 @@ export class AuthRepository {
 			.values({
 				id: uuid(),
 				username: data.username,
+				email: data.email,
 				password: data.password,
 				createdAt: new Date(),
 			})

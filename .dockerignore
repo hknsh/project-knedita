@@ -6,3 +6,4 @@ npm-debug.log
 dist
 package-lock_copy.json
 package_copy.json
+.docker

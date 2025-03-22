@@ -1,6 +1,5 @@
 networks:
   backend-network:
-    driver: bridge
 
 services:
   postgres:
@@ -12,7 +11,7 @@ services:
     env_file:
       - .env
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - ./.docker/postgres:/var/lib/postgresql/data
     networks:
       - backend-network
 
@@ -25,7 +24,7 @@ services:
     networks:
       - backend-network
     volumes:
-      - 'minio_data:/data'
+      - ./.docker/minio:/data
     env_file:
       - .env
 
@@ -37,7 +36,7 @@ services:
       - "6379:6379"
     command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
     volumes:
-      - redis:/data
+      - ./.docker/redis:/data
     networks:
       - backend-network
 
@@ -51,7 +50,7 @@ services:
     env_file:
       - .env
     volumes:
-      - rabbitmq:/var/lib/rabbitmq/data
+      - ./.docker/rabbitmq:/var/lib/rabbitmq/data
 
   api:
     container_name: api
@@ -69,13 +68,3 @@ services:
       - .env
     networks:
       - backend-network
-
-volumes:
-  postgres:
-    driver: local
-  redis:
-    driver: local
-  minio_data:
-    driver: local
-  rabbitmq:
-    driver: local
