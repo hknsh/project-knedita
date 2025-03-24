@@ -42,7 +42,7 @@
     "@nestjs/platform-fastify": "^10.4.4",
     "@nestjs/swagger": "^7.4.2",
     "@nestjs/throttler": "6.2.1",
-    "@prisma/client": "^5.20.0",
+    "@prisma/client": "^6.5.0",
     "argon2": "^0.41.1",
     "dotenv": "^16.4.5",
     "dotenv-expand": "^11.0.6",
